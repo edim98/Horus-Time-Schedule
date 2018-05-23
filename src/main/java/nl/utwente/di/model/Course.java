@@ -4,10 +4,17 @@ public class Course {
 
     private String courseID;
     private String name;
+    private String module;
+    private CourseType type;
+    private enum CourseType {
+        alsf, qefo, qwejf;
+    }
 
-    public Course(String courseID, String name) {
+    public Course(String courseID, String name, String module, String type) {
         this.courseID = courseID;
         this.name = name;
+        this.module = module;
+        this.type = CourseType.valueOf(type);
     }
 
     public void setName(String name) {
@@ -18,6 +25,14 @@ public class Course {
         this.courseID = courseID;
     }
 
+    public void setModule(String module) {
+        this.module = module;
+    }
+
+    public void setType(String type) {
+        this.type = CourseType.valueOf(type);
+    }
+
     public String getName() {
         return name;
     }
@@ -25,4 +40,14 @@ public class Course {
     public String getCourseID() {
         return courseID;
     }
+
+    public String getType() {
+        return type.toString();
+    }
+
+    public String getModule() {
+        return module;
+    }
+
+
 }

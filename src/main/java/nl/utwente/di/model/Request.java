@@ -8,17 +8,22 @@ public class Request {
     private String oldDate;
     private String newDate;
     private String teacherID;
-    private int studentsNumber;
+    private int numberOfStudents;
+    private requestType type;
+    private enum requestType {
+        change, cancel;
+    }
 
     public Request(int id, Room oldRoom, Room newRoom, String oldDate, String newDate,
-                   String teacherID, int studentsNumber) {
+                   String teacherID, int studentsNumber, String type) {
         this.oldDate = oldDate;
         this.newDate = newDate;
         this.id = id;
         this.newRoom = newRoom;
         this.oldRoom = oldRoom;
         this.teacherID = teacherID;
-        this.studentsNumber = studentsNumber;
+        this.numberOfStudents = studentsNumber;
+        this.type = requestType.valueOf(type);
     }
 
     public void setId(int id) {
@@ -45,8 +50,12 @@ public class Request {
         this.teacherID = teacherID;
     }
 
-    public void setStudentsNumber(int studentsNumber) {
-        this.studentsNumber = studentsNumber;
+    public void setNumberOfStudents(int numberOfStudents) {
+        this.numberOfStudents = numberOfStudents;
+    }
+
+    public void setType(String type) {
+        this.type = requestType.valueOf(type);
     }
 
     public int getId() {
@@ -69,11 +78,15 @@ public class Request {
         return newDate;
     }
 
-    public int getStudentsNumber() {
-        return studentsNumber;
+    public int getNumberOfStudents() {
+        return numberOfStudents;
     }
 
     public String getTeacherID() {
         return teacherID;
+    }
+
+    public String getType() {
+        return type.toString();
     }
 }
