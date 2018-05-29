@@ -1,0 +1,23 @@
+.navbar{
+  background-color: #343748;
+}
+
+.navtext {
+  color:white !important;
+}
+
+.logo{
+  background-color: black;
+}
+
+#notification {
+  font-size: 20px;
+  padding-bottom: 5px;
+  color: white;
+}
+
+#profile{
+  font-size: 20px;
+  padding-bottom: 5px;
+  color: white;
+}
