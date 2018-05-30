@@ -40,7 +40,6 @@ public class HorusHTTPRequests {
     @Consumes("application/json")
     public Response addUser(String lecturerString) {
         JSONObject lecturerJson = new JSONObject(lecturerString);
-        System.out.println(lecturerJson);
         String teacherid = lecturerJson.getString("teacherid");
         String name = lecturerJson.getString("name");
         String phone = lecturerJson.getString("phone");

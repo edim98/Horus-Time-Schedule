@@ -20,9 +20,10 @@ $(document).ready(function() {
             "Accept":"application/json",
               "Content-Type":"application/json"
           },
-        success: function(result){
-          if(result.status == 'OK'){
-            window.location.href = "./dashboard.html";
+        complete: function(result){
+          if(result.status == 200){
+            url = "./components/navBar.html";
+            $(location).attr("href", url);
           } else{
             alert("Failed! " + result.status + result.errorMessage);///
             location.reload();
