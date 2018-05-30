@@ -236,6 +236,11 @@ a {
 /*                   OBJECTS                           */
 /*-----------------------------------------------------*/
 /* ----- Section----- */
+    #popup-form {
+        display: none;
+        position: absolute;
+    }
+
 section {
     position: relative;
 }
