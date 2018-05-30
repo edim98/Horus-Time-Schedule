@@ -20,27 +20,15 @@ $(document).ready(function() {
             "Accept":"application/json",
               "Content-Type":"application/json"
           }
-        // success: function(result){
-        //   if(result.tatus == ok){
-        //     window.location.href = "./dashboard.html";
-        //   } else{
-        //     alert("Invalid data!");
-        //     location.reload();
-        //   }
-        // }
+        success: function(result){
+          if(result.status == 'OK'){
+            window.location.href = "./dashboard.html";
+          } else{
+            alert("Failed! " + result.status + result.errorMessage);
+            location.reload();
+          }
+        }
       })
-      .done(function() {
-        console.log("success");
-        var url = "./dashboard.html";
-        $(location).attr('href', url);
-      })
-      .fail(function() {
-        console.log("error");
-        //location.reload();
-      })
-      .always(function() {
-        console.log("complete");
-      });
     } else {
       alert('Please agree with the terms and conditions!');
     }
