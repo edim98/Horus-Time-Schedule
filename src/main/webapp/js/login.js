@@ -8,7 +8,7 @@ $(document).ready(function() {
     };
 
     $.ajax({
-      url: '/Horus/', // de completat
+      url: '/horus/requests/login', // de completat
       type: 'POST',
       dataType: 'json',
       data: formData

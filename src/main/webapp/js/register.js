@@ -3,19 +3,23 @@ $(document).ready(function() {
     event.preventDefault();
 
     if($('#check').is(':checked')) {
-      var formData = {
-        'username' : $('#username').val(), // this can be the teacherID for now
+      var formData = JSON.stringify({
+        'teacherid' : $('#username').val(), // this can be the teacherID for now
         'name' : 'Harry Arts',
         'phone' : '0742069101',
         'email' : $('#email').val(),
         'password' : $('#password').val()
-      };
+      });
 
       $.ajax({
         url: '/horus/requests/register',
         type: 'POST',
         dataType: 'json',
-        data: formData
+        data: formData,
+          headers:{
+            "Accept":"application/json",
+              "Content-Type":"application/json"
+          }
         // success: function(result){
         //   if(result.tatus == ok){
         //     window.location.href = "./dashboard.html";

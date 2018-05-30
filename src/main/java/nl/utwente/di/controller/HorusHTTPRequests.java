@@ -23,8 +23,8 @@ public class HorusHTTPRequests {
     @GET
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
-    public Lecturer logIn(@QueryParam("user") String username,
-                          @QueryParam("password") String password) {
+    public Lecturer logIn(@HeaderParam("user") String username,
+                          @HeaderParam("password") String password) {
         return DatabaseCommunication.getUSer(username, password);
     }
 
