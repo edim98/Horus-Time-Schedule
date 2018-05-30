@@ -187,7 +187,7 @@ public class DatabaseCommunication {
         return -1;
     }
 
-    public static Lecturer getUSer(String id, String password) {
+    public static boolean getUSer(String id, String password) {
         String sql = "SELECT * FROM lecturer WHERE (teacherID = ? OR email = ?) AND password = ?;";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -195,11 +195,12 @@ public class DatabaseCommunication {
             pstmt.setString(2, id);
             pstmt.setString(3, password);
             ResultSet resultSet = pstmt.executeQuery();
+            return resultSet.next();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return false;
     }
 
     public static void main(String[] args) {
