@@ -23,9 +23,8 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" /></link>
 
-    <link rel="stylesheet" href="../../js/jquery.datetimepicker.css" /></link>
-    <script src="../../js/jquery.js"></script>
-    <script src="../../js/jquery.datetimepicker.js"></script>
+    <link rel="stylesheet" href="../../js/jquery.datetimepicker.min.css" />
+
 
 
     <!-- Main CSS-->
@@ -605,10 +604,12 @@
             <input class="form-control" type="search" placeholder="Fill in the room code" id="example-search-input">
           </div>
         </div>
+
+        <!-- IN WORK -->
         <div class="form-group row">
-          <label for="example-search-input" class="col-2 col-form-label">Date and time</label>
+          <label for="datetime" class="col-2 col-form-label">Date and time</label>
           <div class="col-10">
-            <input id="datetime-input">
+            <input class="form-control" id="datetime">
           </div>
         </div>
 
@@ -684,9 +685,12 @@
         </div>
 
         <!-- Jquery JS-->
+
+        <script src="../../js/jquery.js"></script>
+        <script src="../../js/jquery.datetimepicker.full.js"></script>
         <script>
           $("#datetime-input").datetimepicker();
-          </script>
+        </script>
         <script type="text/javascript" src="../../js/main.js"></script>
         <script type="text/javascript" src="../../js/popup-pages.js"></script>
 
