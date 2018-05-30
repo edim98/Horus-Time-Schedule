@@ -138,7 +138,7 @@ public class DatabaseCommunication {
     }
 
     public static boolean getUSer(String id, String password) {
-        String sql = "SELECT * FROM lecturer WHERE (teacherID = ? OR email = ?) AND password = ?;";
+        String sql = "SELECT * FROM public.lecturer as l WHERE (l.teacherID = ? OR l.email = ?) AND l.password = ?;";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
@@ -146,7 +146,6 @@ public class DatabaseCommunication {
             pstmt.setString(3, password);
             ResultSet resultSet = pstmt.executeQuery();
             return resultSet.next();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -168,11 +167,24 @@ public class DatabaseCommunication {
         }
     }
 
+    public static ResultSet getLecturer() {
+        String sql = "SELECT  FROM lecturer;";
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet resultSet = pstmt.executeQuery();
+            return resultSet;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
 //        DatabaseCommunication.generateTables();
 //        System.out.println(DatabaseCommunication.getRequests());
-//        System.out.println(DatabaseCommunication.getId("request"));
+        System.out.println(DatabaseCommunication.getId("request"));
         System.out.println(DatabaseCommunication.getUSer("m2008491", "hashedpass_bitch!"));
+        System.out.println(DatabaseCommunication.getLecturer());
     }
 
 }
