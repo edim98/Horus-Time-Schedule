@@ -202,6 +202,21 @@ public class DatabaseCommunication {
         }
         return false;
     }
+    
+    public static void addNewUser(Lecturer lecturer) {
+        String sql = "INSERT INTO lecturer VALUES(?, ?, ?, ?, ?)";
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, lecturer.getTeacherId());
+            pstmt.setString(2, lecturer.getName());
+            pstmt.setString(3, lecturer.getPhone());
+            pstmt.setString(4, lecturer.getEmail());
+            pstmt.setString(5, lecturer.getPassword());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
 //        DatabaseCommunication.generateTables();

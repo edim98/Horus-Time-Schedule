@@ -1,9 +1,12 @@
 package nl.utwente.di.controller;
 
+import nl.utwente.di.model.Lecturer;
 import nl.utwente.di.model.Request;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 @Path("/requests")
@@ -17,8 +20,11 @@ public class HorusHTTPRequests {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean logIn() {
-        return DatabaseCommunication.getUSer("", "");
+    @Consumes(MediaType.TEXT_PLAIN)
+    public boolean logIn(QueryParam("user") String id,
+                        QueryParam("password") String password,
+                        @Context UriInfo uriInfo) {
+        return DatabaseCommunication.getUSer(id, password);
     }
 
     @POST
@@ -27,5 +33,10 @@ public class HorusHTTPRequests {
         request.setId(DatabaseCommunication.getId("request") + 1);
         DatabaseCommunication.addNewRequest(request);
     }
-
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void addUser(Lecturer lecturer) {
+        DatabaseCommunication.addNewUser(lecturer);
+    }
 }
