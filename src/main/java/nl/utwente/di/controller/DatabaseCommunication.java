@@ -1,23 +1,33 @@
 package nl.utwente.di.controller;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import nl.utwente.di.model.Gps;
+import nl.utwente.di.model.Request;
+import nl.utwente.di.model.Room;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
 
 public class DatabaseCommunication {
 
-    private static final String FILENAME = "horusdb.db";
-    private static final String URL = "jdbc:sqlite:" + FILENAME;
+    private static final String URL = "jdbc:postgresql://farm09.ewi.utwente.nl:7054/docker";
 
     private static Connection connect() {
-        Connection conn = null;
         try {
-            conn = DriverManager.getConnection(URL);
+            Class.forName("org.postgresql.Driver");
+            Connection conn = DriverManager.getConnection(URL, "docker", "YCPP2vGfS");
+            return conn;
+
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
-        return conn;
+        return null;
     }
 
     private static void executeSQL(String sql) {
@@ -40,10 +50,12 @@ public class DatabaseCommunication {
                     "capacity_lecture integer," +
                     "capacity_work integer, " +
                     "capacity_exam integer, " +
-                    "first_row handicapped integer, " +
+                    "capacity_real integer, " +
+                    "first_row_handicapped integer, " +
                     "handicapped integer, " +
                     "furniture text, " +
-                    "gps_coordinates text, " +
+                    "x_axis float, " +
+                    "y_axis float, " +
                     "floor_nr integer" +
                     ");";
         executeSQL(sql);
@@ -77,8 +89,71 @@ public class DatabaseCommunication {
         executeSQL(sql);
     }
 
+    public static Map<String, Room> getRooms() {
+        Map<String, Room> rooms = new HashMap<>();
+        String sql = "SELECT * FROM Room";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet result = pstmt.executeQuery();
+            while(result.next()) {
+                String roomNumber = result.getString(1);
+                String building = result.getString(2);
+                String shortRoomNumber = result.getString(3);
+                String trivialName = result.getString(4);
+                float area = result.getFloat(5);
+                int capacityTimetable = result.getInt(6);
+                int capacityLecture = result.getInt(7);
+                int capacityWork = result.getInt(8);
+                int capacityExam = result.getInt(9);
+                int capacityReal = result.getInt(10);
+                int firstRowHandicapped = result.getInt(11);
+                int handicapped = result.getInt(12);
+                String furniture = result.getString(13);
+                Gps coordinates = new Gps(result.getFloat(14), result.getFloat(15));
+                int floornumber = result.getInt(16);
+                Room room = new Room(roomNumber, building, shortRoomNumber, trivialName, area,
+                        capacityTimetable, capacityLecture, capacityWork, capacityExam, capacityReal,
+                        firstRowHandicapped, handicapped, furniture, coordinates, floornumber);
+                rooms.put(roomNumber, room);
+            }
+            return rooms;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rooms;
+    }
+
+    public static List<Request> getRequests() {
+        List<Request> requests = new ArrayList<>();
+        String sql = "SELECT * FROM request ORDER BY id DESC;";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)){
+            ResultSet result = pstmt.executeQuery();
+            Map<String, Room> rooms = getRooms();
+            while (result.next()) {
+                int id = result.getInt(1);
+                Room oldRoom = rooms.get(result.getString(2));
+                Room newRoom = rooms.get(result.getString(3));
+                String oldDate = result.getString(4);
+                String newDate = result.getString(5);
+                String teacherID = result.getString(6);
+                int numberOfStrudents = result.getInt(7);
+                String type = result.getString(8);
+                Request request = new Request(id, oldRoom, newRoom, oldDate, newDate, teacherID, numberOfStrudents, type);
+                requests.add(request);
+            }
+            return requests;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return requests;
+    }
+
     public static void main(String[] args) {
-        DatabaseCommunication.generateTables();
+//        DatabaseCommunication.generateTables();
+        System.out.println(DatabaseCommunication.getRequests());
     }
 
 }
