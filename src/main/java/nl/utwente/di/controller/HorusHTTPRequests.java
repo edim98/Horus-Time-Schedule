@@ -19,11 +19,11 @@ public class HorusHTTPRequests {
     }
 
     @GET
+    @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
-    public boolean logIn(QueryParam("user") String id,
-                        QueryParam("password") String password,
-                        @Context UriInfo uriInfo) {
+    public boolean logIn(@QueryParam("user") String id,
+                        @QueryParam("password") String password) {
         return DatabaseCommunication.getUSer(id, password);
     }
 

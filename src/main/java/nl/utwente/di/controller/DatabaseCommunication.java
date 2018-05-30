@@ -41,56 +41,6 @@ public class DatabaseCommunication {
         }
     }
 
-//    public static void generateTables() {
-//        String sql = "CREATE TABLE IF NOT EXISTS Room(" +
-//                    "room_number text, " +
-//                    "building text, " +
-//                    "room_nr text, " +
-//                    "trivial_name text, " +
-//                    "area real, " +
-//                    "capacity_timetable integer," +
-//                    "capacity_lecture integer," +
-//                    "capacity_work integer, " +
-//                    "capacity_exam integer, " +
-//                    "capacity_real integer, " +
-//                    "first_row_handicapped integer, " +
-//                    "handicapped integer, " +
-//                    "furniture text, " +
-//                    "x_axis float, " +
-//                    "y_axis float, " +
-//                    "floor_nr integer" +
-//                    ");";
-//        executeSQL(sql);
-//
-//        sql = "CREATE TABLE IF NOT EXISTS Teacher(" +
-//                    "teacherID text, " +
-//                    "name text, " +
-//                    "phone_number text, " +
-//                    "email_address " +
-//                    ");";
-//        executeSQL(sql);
-//
-//        sql = "CREATE TABLE IF NOT EXISTS Course(" +
-//                    "courseID integer, " +
-//                    "name text, " +
-//                    "module text, " +
-//                    "type text" +
-//                    ");";
-//        executeSQL(sql);
-//
-//        sql = "CREATE TABLE IF NOT EXISTS Request(" +
-//                    "id integer, " +
-//                    "old_room text, " +
-//                    "new_room text, " +
-//                    "old_date text, " +
-//                    "new_date text, " +
-//                    "number_of_students integer, " +
-//                    "teacher_id text, " +
-//                    "type_of_request text " +
-//                    ");";
-//        executeSQL(sql);
-//    }
-
     public static Map<String, Room> getRooms() {
         Map<String, Room> rooms = new HashMap<>();
         String sql = "SELECT * FROM Room";
@@ -222,6 +172,7 @@ public class DatabaseCommunication {
 //        DatabaseCommunication.generateTables();
 //        System.out.println(DatabaseCommunication.getRequests());
 //        System.out.println(DatabaseCommunication.getId("request"));
+        System.out.println(DatabaseCommunication.getUSer("m2008491", "hashedpass_bitch!"));
     }
 
 }
