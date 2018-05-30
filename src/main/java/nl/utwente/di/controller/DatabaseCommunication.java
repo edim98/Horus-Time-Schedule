@@ -1,9 +1,11 @@
 package nl.utwente.di.controller;
 
 import nl.utwente.di.model.Gps;
+import nl.utwente.di.model.Lecturer;
 import nl.utwente.di.model.Request;
 import nl.utwente.di.model.Room;
 
+import javax.ws.rs.Consumes;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,55 +41,55 @@ public class DatabaseCommunication {
         }
     }
 
-    public static void generateTables() {
-        String sql = "CREATE TABLE IF NOT EXISTS Room(" +
-                    "room_number text, " +
-                    "building text, " +
-                    "room_nr text, " +
-                    "trivial_name text, " +
-                    "area real, " +
-                    "capacity_timetable integer," +
-                    "capacity_lecture integer," +
-                    "capacity_work integer, " +
-                    "capacity_exam integer, " +
-                    "capacity_real integer, " +
-                    "first_row_handicapped integer, " +
-                    "handicapped integer, " +
-                    "furniture text, " +
-                    "x_axis float, " +
-                    "y_axis float, " +
-                    "floor_nr integer" +
-                    ");";
-        executeSQL(sql);
-
-        sql = "CREATE TABLE IF NOT EXISTS Teacher(" +
-                    "teacherID text, " +
-                    "name text, " +
-                    "phone_number text, " +
-                    "email_address " +
-                    ");";
-        executeSQL(sql);
-
-        sql = "CREATE TABLE IF NOT EXISTS Course(" +
-                    "courseID integer, " +
-                    "name text, " +
-                    "module text, " +
-                    "type text" +
-                    ");";
-        executeSQL(sql);
-
-        sql = "CREATE TABLE IF NOT EXISTS Request(" +
-                    "id integer, " +
-                    "old_room text, " +
-                    "new_room text, " +
-                    "old_date text, " +
-                    "new_date text, " +
-                    "number_of_students integer, " +
-                    "teacher_id text, " +
-                    "type_of_request text " +
-                    ");";
-        executeSQL(sql);
-    }
+//    public static void generateTables() {
+//        String sql = "CREATE TABLE IF NOT EXISTS Room(" +
+//                    "room_number text, " +
+//                    "building text, " +
+//                    "room_nr text, " +
+//                    "trivial_name text, " +
+//                    "area real, " +
+//                    "capacity_timetable integer," +
+//                    "capacity_lecture integer," +
+//                    "capacity_work integer, " +
+//                    "capacity_exam integer, " +
+//                    "capacity_real integer, " +
+//                    "first_row_handicapped integer, " +
+//                    "handicapped integer, " +
+//                    "furniture text, " +
+//                    "x_axis float, " +
+//                    "y_axis float, " +
+//                    "floor_nr integer" +
+//                    ");";
+//        executeSQL(sql);
+//
+//        sql = "CREATE TABLE IF NOT EXISTS Teacher(" +
+//                    "teacherID text, " +
+//                    "name text, " +
+//                    "phone_number text, " +
+//                    "email_address " +
+//                    ");";
+//        executeSQL(sql);
+//
+//        sql = "CREATE TABLE IF NOT EXISTS Course(" +
+//                    "courseID integer, " +
+//                    "name text, " +
+//                    "module text, " +
+//                    "type text" +
+//                    ");";
+//        executeSQL(sql);
+//
+//        sql = "CREATE TABLE IF NOT EXISTS Request(" +
+//                    "id integer, " +
+//                    "old_room text, " +
+//                    "new_room text, " +
+//                    "old_date text, " +
+//                    "new_date text, " +
+//                    "number_of_students integer, " +
+//                    "teacher_id text, " +
+//                    "type_of_request text " +
+//                    ");";
+//        executeSQL(sql);
+//    }
 
     public static Map<String, Room> getRooms() {
         Map<String, Room> rooms = new HashMap<>();
@@ -116,7 +118,7 @@ public class DatabaseCommunication {
                 Room room = new Room(roomNumber, building, shortRoomNumber, trivialName, area,
                         capacityTimetable, capacityLecture, capacityWork, capacityExam, capacityReal,
                         firstRowHandicapped, handicapped, furniture, coordinates, floornumber);
-                rooms.put(roomNumber, room);
+                rooms.put(shortRoomNumber, room);
             }
             return rooms;
         } catch (SQLException e) {
@@ -138,8 +140,8 @@ public class DatabaseCommunication {
                 Room newRoom = rooms.get(result.getString(3));
                 String oldDate = result.getString(4);
                 String newDate = result.getString(5);
-                String teacherID = result.getString(6);
-                int numberOfStrudents = result.getInt(7);
+                String teacherID = result.getString(7);
+                int numberOfStrudents = result.getInt(6);
                 String type = result.getString(8);
                 Request request = new Request(id, oldRoom, newRoom, oldDate, newDate, teacherID, numberOfStrudents, type);
                 requests.add(request);
@@ -151,9 +153,59 @@ public class DatabaseCommunication {
         return requests;
     }
 
+    public static void addNewRequest(Request request) {
+        String sql = "INSERT INTO request VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, request.getId());
+            pstmt.setString(2, request.getOldRoom().getRoomNumber());
+            pstmt.setString(3, request.getNewRoom().getRoomNumber());
+            pstmt.setString(4, request.getOldDate());
+            pstmt.setString(5, request.getNewDate());
+            pstmt.setInt(6, request.getNumberOfStudents());
+            pstmt.setString(7, request.getTeacherID());
+            pstmt.setString(8, request.getType());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static int getId(String table) {
+        String sql = "SELECT id FROM " + table + " t WHERE NOT EXISTS" +
+                "(SELECT id FROM " + table + " WHERE id = t.id + 1) LIMIT 1;";
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public static Lecturer getUSer(String id, String password) {
+        String sql = "SELECT * FROM lecturer WHERE (teacherID = ? OR email = ?) AND password = ?;";
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, id);
+            pstmt.setString(2, id);
+            pstmt.setString(3, password);
+            ResultSet resultSet = pstmt.executeQuery();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
 //        DatabaseCommunication.generateTables();
-        System.out.println(DatabaseCommunication.getRequests());
+//        System.out.println(DatabaseCommunication.getRequests());
+//        System.out.println(DatabaseCommunication.getId("request"));
     }
 
 }
