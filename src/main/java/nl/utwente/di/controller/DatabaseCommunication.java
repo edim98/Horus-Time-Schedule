@@ -137,13 +137,35 @@ public class DatabaseCommunication {
         return -1;
     }
 
-    public static boolean getUSer(String id, String password) {
-        String sql = "SELECT * FROM public.lecturer as l WHERE (l.teacherID = ? OR l.email = ?) AND l.password = ?;";
+    public static Lecturer getUSer(String id, String password) {
+        String sql = "SELECT * FROM lecturer  WHERE (teacherID = ? OR email = ?) AND password = ?;";
+        Lecturer l = null;
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
             pstmt.setString(2, id);
             pstmt.setString(3, password);
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                String id1 = resultSet.getString("teacherid");;
+                String email = resultSet.getString("email");;
+                String password1 = resultSet.getString("password");;
+                String phone = resultSet.getString("phone");;
+                String name = resultSet.getString("name");
+                l = new Lecturer(id1, name, phone, email, password1);
+            }
+            return l;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return l;
+    }
+
+    public static boolean checkExistingUser(String lecturerid) {
+        String sql = "SELECT * FROM lecturer WHERE teacherid = ?;";
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, lecturerid);
             ResultSet resultSet = pstmt.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
@@ -168,7 +190,7 @@ public class DatabaseCommunication {
     }
 
     public static ResultSet getLecturer() {
-        String sql = "SELECT  FROM lecturer;";
+        String sql = "SELECT email FROM lecturer;";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             ResultSet resultSet = pstmt.executeQuery();
@@ -182,9 +204,11 @@ public class DatabaseCommunication {
     public static void main(String[] args) {
 //        DatabaseCommunication.generateTables();
 //        System.out.println(DatabaseCommunication.getRequests());
-        System.out.println(DatabaseCommunication.getId("request"));
-        System.out.println(DatabaseCommunication.getUSer("m2008491", "hashedpass_bitch!"));
-        System.out.println(DatabaseCommunication.getLecturer());
+//        Lecturer l = new Lecturer("m2008491", "Eduard Modreanu", "29763754892984", "email", "hashedpass_bitch!");
+//        DatabaseCommunication.addNewUser(l);
+//        System.out.println(DatabaseCommunication.getId("request"));
+//        System.out.println(DatabaseCommunication.getUSer("m2008491", "hashedpass_bitch!"));
+//        System.out.println(DatabaseCommunication.getLecturer());
     }
 
 }
