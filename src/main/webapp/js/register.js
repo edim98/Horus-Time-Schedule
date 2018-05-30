@@ -19,7 +19,7 @@ $(document).ready(function() {
           headers:{
             "Accept":"application/json",
               "Content-Type":"application/json"
-          }
+          },
         success: function(result){
           if(result.status == 'OK'){
             window.location.href = "./dashboard.html";
