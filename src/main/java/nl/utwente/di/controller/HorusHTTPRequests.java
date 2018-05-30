@@ -16,6 +16,12 @@ public class HorusHTTPRequests {
         return DatabaseCommunication.getRequests();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean logIn() {
+        return DatabaseCommunication.getUSer("", "");
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void addRequest(Request request) {
