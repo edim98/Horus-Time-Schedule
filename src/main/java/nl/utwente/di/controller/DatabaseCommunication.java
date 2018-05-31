@@ -63,8 +63,8 @@ public class DatabaseCommunication {
                 int firstRowHandicapped = result.getInt(11);
                 int handicapped = result.getInt(12);
                 String furniture = result.getString(13);
-                Gps coordinates = new Gps(result.getFloat(14), result.getFloat(15));
-                int floornumber = result.getInt(16);
+                String coordinates = result.getString(14);
+                int floornumber = result.getInt(15);
                 Room room = new Room(roomNumber, building, shortRoomNumber, trivialName, area,
                         capacityTimetable, capacityLecture, capacityWork, capacityExam, capacityReal,
                         firstRowHandicapped, handicapped, furniture, coordinates, floornumber);
