@@ -2,6 +2,7 @@ package nl.utwente.di.controller;
 
 import nl.utwente.di.model.Lecturer;
 import nl.utwente.di.model.Request;
+import nl.utwente.di.model.Room;
 import org.json.JSONObject;
 
 import javax.ws.rs.*;
@@ -9,7 +10,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Path("/requests")
 public class HorusHTTPRequests {
@@ -36,8 +39,18 @@ public class HorusHTTPRequests {
 
     @POST
     @Consumes("application/json")
-    public void addRequest(Request request) {
-        request.setId(DatabaseCommunication.getId("request") + 1);
+    public void addRequest(String requestString) {
+        JSONObject jsonObject = new JSONObject(requestString);
+        Map<String, Room> rooms = DatabaseCommunication.getRooms();
+        int id = DatabaseCommunication.getId("request") + 1;
+        Room oldRoom = rooms.get(jsonObject.getString("oldRoom"));
+        Room newRoom = rooms.get(jsonObject.getString("newRoom"));
+        String oldDate = jsonObject.getString("oldDate");
+        String newDate = jsonObject.getString("newDate");
+        String teacherID = jsonObject.getString("teacherID");
+        int numberOfStudents = jsonObject.getInt("numberOfStudents");
+        String requestType = jsonObject.getString("requestType");
+        Request request = new Request(id, oldRoom, newRoom, oldDate, newDate, teacherID, numberOfStudents, requestType);
         DatabaseCommunication.addNewRequest(request);
     }
     
