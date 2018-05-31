@@ -49,7 +49,7 @@ public class HorusHTTPRequests {
         String newDate = jsonObject.getString("newDate");
         String teacherID = jsonObject.getString("teacherID");
         int numberOfStudents = jsonObject.getInt("numberOfStudents");
-        String requestType = jsonObject.getString("requestType");
+        String requestType = jsonObject.getString("type");
         Request request = new Request(id, oldRoom, newRoom, oldDate, newDate, teacherID, numberOfStudents, requestType);
         DatabaseCommunication.addNewRequest(request);
     }
