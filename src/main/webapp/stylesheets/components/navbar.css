@@ -464,6 +464,19 @@ section {
 /*                   COMPONENTS                        */
 /*-----------------------------------------------------*/
 /* ----- Buttons----- */
+
+.request-button {
+  background-color: white;
+  color: black;
+  border: 2px solid #00001a;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.request-button:hover {
+  background-color: #555555;
+    color: white;
+}
+
 .au-btn {
     line-height: 45px;
     padding: 0 35px;
