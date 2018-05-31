@@ -6,7 +6,7 @@ $(document).ready(function() {
       'newRoom' : 'RA 1501',
       'oldDate' : '69aprilie',
       'newDate' : '31 februarie',
-      'teacherId' : 'm1234567',
+      'teacherID' : 'm1234567',
       'numberOfStudents' : '200',
       'type' : 'reschedule'
     });
@@ -16,6 +16,10 @@ $(document).ready(function() {
       type: 'POST',
       dataType: 'json',
       data: request,
+      headers:{
+        "Accept":"application/json",
+        "Content-Type":"application/json"
+      },
       success : function(data){
           alert('OK!');
       },
