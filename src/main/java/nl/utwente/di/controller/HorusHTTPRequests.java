@@ -23,9 +23,13 @@ public class HorusHTTPRequests {
     @GET
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
-    public Lecturer logIn(@HeaderParam("user") String username,
+    public Response logIn(@HeaderParam("user") String username,
                           @HeaderParam("password") String password) {
-        return DatabaseCommunication.getUSer(username, password);
+        if (DatabaseCommunication.getUSer(username, password) == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } else {
+            return Response.status(Response.Status.OK).build();
+        }
     }
 
     @POST
