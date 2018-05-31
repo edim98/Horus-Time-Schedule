@@ -624,23 +624,24 @@
           </form>
 
       </div>
-      <div id="change-form">
-        <div class="form-group row">
+
+      <form id="change-form">
+        <div class="form-group row" novalidate>
           <label for="desired-room" class="col-2 col-form-label">Desired room</label>
           <div class="col-10">
-            <input class="form-control au-input au-input--full" type="search" placeholder="Fill in the room code" id="desired-room">
+            <input class="form-control au-input au-input--full" type="text" placeholder="Fill in the room code" id="desired-room" required>
           </div>
         </div>
         <div class="form-group row">
           <label for="datetime-change" class="col-2 col-form-label">Date and time</label>
           <div class="col-10">
-            <input class="form-control" placeholder="Click to set date and time" id="datetime-change">
+            <input class="form-control" placeholder="Click to set date and time" id="datetime-change" required>
           </div>
         </div>
         <div class="form-group row">
           <label for="nr-of-students" class="col-2 col-form-label">Number of students</label>
           <div class="col-10">
-            <input class="form-control" type="search" placeholder="nr. of students for the room" id="nr-of-students">
+            <input class="form-control" type="search" placeholder="nr. of students for the room" id="nr-of-students" required>
           </div>
         </div>
         <div class="form-group row">
@@ -649,15 +650,15 @@
             <textarea class="form-control" type="search" placeholder="optional message" id="example-search-input"></textarea>
           </div>
         </div>
+      <button class="btn btn-default request-button" type="submit" id="reschedule-button">Request change</button>
 
-
-        </div>
+      </form>
 
         </div>
         <div class="modal-footer">
           <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
           <button class="btn btn-default request-button" data-dismiss="modal" type="submit" onclick="alert('Request sent!')" id="cancel-button">Cancel class</button>
-          <button class="btn btn-default request-button" type="submit" id="reschedule-button">Request change</button>
+
           <label allign="left" id="incomplete-fields">Complete fields lol</label>
 
         </div>
@@ -716,6 +717,8 @@
         <script>
           $("#datetime-change").datetimepicker();
         </script>
+        <script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
         <script type="text/javascript" src="../../js/main.js"></script>
         <script type="text/javascript" src="../../js/popup-pages.js"></script>
 
