@@ -8,7 +8,7 @@ $(document).ready(function() {
       'newDate' : '31 februarie',
       'teacherId' : 'm1234567',
       'numberOfStudents' : '200',
-      'requestType' : 'reschedule'
+      'type' : 'reschedule'
     });
 
     $.ajax({
