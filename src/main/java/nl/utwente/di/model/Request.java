@@ -11,7 +11,7 @@ public class Request {
     private int numberOfStudents;
     private requestType type;
     private enum requestType {
-        reschedule, cancel;
+        reschedule, cancel
     }
 
     public Request(int id, Room oldRoom, Room newRoom, String oldDate, String newDate,

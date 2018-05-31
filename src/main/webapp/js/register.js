@@ -3,40 +3,33 @@ $(document).ready(function() {
     event.preventDefault();
 
     if($('#check').is(':checked')) {
-      var formData = {
-        'username' : $('#username').val(), // this can be the teacherID for now
+      var formData = JSON.stringify({
+        'teacherid' : $('#username').val(), // this can be the teacherID for now
         'name' : 'Harry Arts',
         'phone' : '0742069101',
         'email' : $('#email').val(),
         'password' : $('#password').val()
-      };
+      });
 
       $.ajax({
         url: '/horus/requests/register',
         type: 'POST',
         dataType: 'json',
-        data: formData
-        // success: function(result){
-        //   if(result.tatus == ok){
-        //     window.location.href = "./dashboard.html";
-        //   } else{
-        //     alert("Invalid data!");
-        //     location.reload();
-        //   }
-        // }
+        data: formData,
+          headers:{
+            "Accept":"application/json",
+              "Content-Type":"application/json"
+          },
+        complete: function(result){
+          if(result.status == 200){
+            url = "./components/navBar.html";
+            $(location).attr("href", url);
+          } else{
+            alert("Failed! " + result.status + result.errorMessage);///
+            location.reload();
+          }
+        }
       })
-      .done(function() {
-        console.log("success");
-        var url = "./dashboard.html";
-        $(location).attr('href', url);
-      })
-      .fail(function() {
-        console.log("error");
-        //location.reload();
-      })
-      .always(function() {
-        console.log("complete");
-      });
     } else {
       alert('Please agree with the terms and conditions!');
     }
