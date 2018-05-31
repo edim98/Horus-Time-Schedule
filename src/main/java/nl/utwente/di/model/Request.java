@@ -14,6 +14,7 @@ public class Request {
         reschedule, cancel
     }
 
+    //TODO add notes and status and type of course
     public Request(int id, Room oldRoom, Room newRoom, String oldDate, String newDate,
                    String teacherID, int studentsNumber, String type) {
         this.oldDate = oldDate;

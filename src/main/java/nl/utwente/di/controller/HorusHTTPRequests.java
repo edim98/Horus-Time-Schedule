@@ -37,6 +37,7 @@ public class HorusHTTPRequests {
         }
     }
 
+    //TODO check for valid room
     @POST
     @Consumes("application/json")
     public void addRequest(String requestString) {
