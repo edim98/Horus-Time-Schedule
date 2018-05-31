@@ -68,7 +68,7 @@ public class DatabaseCommunication {
                 Room room = new Room(roomNumber, building, shortRoomNumber, trivialName, area,
                         capacityTimetable, capacityLecture, capacityWork, capacityExam, capacityReal,
                         firstRowHandicapped, handicapped, furniture, coordinates, floornumber);
-                rooms.put(shortRoomNumber, room);
+                rooms.put(roomNumber, room);
             }
             return rooms;
         } catch (SQLException e) {

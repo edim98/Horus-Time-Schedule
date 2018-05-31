@@ -45,11 +45,14 @@ public class HorusHTTPRequests {
         int id = DatabaseCommunication.getId("request") + 1;
         Room oldRoom = rooms.get(jsonObject.getString("oldRoom"));
         Room newRoom = rooms.get(jsonObject.getString("newRoom"));
+        for (Map.Entry<String, Room> search : rooms.entrySet()) {
+            System.out.println(search.getKey());
+        }
         String oldDate = jsonObject.getString("oldDate");
         String newDate = jsonObject.getString("newDate");
         String teacherID = jsonObject.getString("teacherID");
         int numberOfStudents = jsonObject.getInt("numberOfStudents");
-        String requestType = jsonObject.getString("requestType");
+        String requestType = jsonObject.getString("type");
         Request request = new Request(id, oldRoom, newRoom, oldDate, newDate, teacherID, numberOfStudents, requestType);
         DatabaseCommunication.addNewRequest(request);
     }
