@@ -18,16 +18,23 @@ $('#reschedule-button').click(function(event) {
     type: 'POST',
     dataType: 'json',
     data: request,
-    headers:{
+    headers: {
       "Accept":"application/json",
       "Content-Type":"application/json"
-    },
-    success : function(data){
-        alert('OK!');
-    },
-    complete : function(data) {
-      console.log('Am trimis!');
     }
+  })
+  .done(function(data) {
+    alert('Request submitted!');
+    location.reload();
+    console.log("success");
+  })
+  .fail(function(data) {
+    alert('Error! Please contact tech support!');
+    console.log("error" + data.status + data.errorMessage);
+  })
+  .always(function() {
+    console.log("complete");
   });
-});
+
+  });
 });
