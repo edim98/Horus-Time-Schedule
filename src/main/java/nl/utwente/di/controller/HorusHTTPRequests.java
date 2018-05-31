@@ -45,9 +45,6 @@ public class HorusHTTPRequests {
         int id = DatabaseCommunication.getId("request") + 1;
         Room oldRoom = rooms.get(jsonObject.getString("oldRoom"));
         Room newRoom = rooms.get(jsonObject.getString("newRoom"));
-        for (Map.Entry<String, Room> search : rooms.entrySet()) {
-            System.out.println(search.getKey());
-        }
         String oldDate = jsonObject.getString("oldDate");
         String newDate = jsonObject.getString("newDate");
         String teacherID = jsonObject.getString("teacherID");
