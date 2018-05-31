@@ -20,11 +20,13 @@ public class HorusHTTPRequests {
         return DatabaseCommunication.getRequests();
     }
 
-    @GET
+    @POST
     @Path("/login")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response logIn(@HeaderParam("user") String username,
-                          @HeaderParam("password") String password) {
+    @Produces("application/json")
+    public Response logIn(String loginString) {
+        JSONObject loginJson = new JSONObject(loginString);
+        String username = loginJson.getString("user");
+        String password = loginJson.getString("password");
         if (DatabaseCommunication.getUSer(username, password) == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         } else {

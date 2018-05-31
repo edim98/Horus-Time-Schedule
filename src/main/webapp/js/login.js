@@ -2,22 +2,22 @@ $(document).ready(function() {
   $('.login-form').on('submit', function(event) {
     event.preventDefault();
 
-    var formData = {
-      'email' : 'input[name=email]',
-      'password' : 'input[name=password]'
-    };
+    var formData = JSON.stringify({
+      'user' : $('#email').val(),
+      'password' : $('#password').val()
+    });
 
     $.ajax({
       url: '/horus/requests/login', // de completat
       type: 'POST',
       dataType: 'json',
       data: formData,
-      headers :{
+      headers : {
         'Accept' : 'application/json',
         'Content-Type' : 'application/json'
-      }
+      },
 
-      complete(function(result) {
+      complete: function(result) {
         if(result.status == 200) {
           url='./components/navBar.html';
           $(location).attr('href', url);
@@ -25,7 +25,7 @@ $(document).ready(function() {
           alert('Failed!' + result.status + result.errorMessage);
           location.reload();
         }
-      })
+      }
 
     });
 
