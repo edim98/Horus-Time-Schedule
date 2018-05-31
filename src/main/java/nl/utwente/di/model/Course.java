@@ -7,7 +7,7 @@ public class Course {
     private String module;
     private CourseType type;
     private enum CourseType {
-        alsf, qefo, qwejf;
+        lecture, colstruction, exam, seminar, practical, project;
     }
 
     public Course(String courseID, String name, String module, String type) {

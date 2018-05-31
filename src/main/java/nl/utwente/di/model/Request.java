@@ -10,12 +10,13 @@ public class Request {
     private String teacherID;
     private int numberOfStudents;
     private requestType type;
+    private String notes;
     private enum requestType {
         reschedule, cancel;
     }
 
     public Request(int id, Room oldRoom, Room newRoom, String oldDate, String newDate,
-                   String teacherID, int studentsNumber, String type) {
+                   String teacherID, int studentsNumber, String type, String notes) {
         this.oldDate = oldDate;
         this.newDate = newDate;
         this.id = id;
@@ -24,6 +25,7 @@ public class Request {
         this.teacherID = teacherID;
         this.numberOfStudents = studentsNumber;
         this.type = requestType.valueOf(type);
+        this.notes = notes;
     }
 
     public void setId(int id) {
@@ -52,6 +54,14 @@ public class Request {
 
     public void setNumberOfStudents(int numberOfStudents) {
         this.numberOfStudents = numberOfStudents;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getNotes() {
+        return notes;
     }
 
     public void setType(String type) {

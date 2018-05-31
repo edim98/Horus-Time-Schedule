@@ -2,10 +2,10 @@ package nl.utwente.di.model;
 
 public class Gps {
 
-    private float xAxis;
-    private float yAxis;
+    private double xAxis;
+    private double yAxis;
 
-    public Gps(float x, float y) {
+    public Gps(double x, double y) {
         this.xAxis = x;
         this.yAxis = y;
     }
@@ -18,11 +18,11 @@ public class Gps {
         this.yAxis = yAxis;
     }
 
-    public float getxAxis() {
+    public double getxAxis() {
         return xAxis;
     }
 
-    public float getyAxis() {
+    public double getyAxis() {
         return yAxis;
     }
 }
