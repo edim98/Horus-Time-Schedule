@@ -19,7 +19,7 @@ public class Room {
 
     public Room(String roomNumber, String building, String shortRoomNumber, String trivialName, float area,
                 int capacityTimetable, int capacityLecture, int capacityWork, int capacityExam, int capacityReal,
-                int firstRowHandicapped, int handicapped, String furniture, String coordinates, int floorNumber) {
+                int firstRowHandicapped, int handicapped, String furniture, Gps coordinates, int floorNumber) {
         this.roomNumber = roomNumber;
         this.building = building;
         this.shortRoomNumber = shortRoomNumber;
@@ -33,9 +33,7 @@ public class Room {
         this.firstRowHandicapped = firstRowHandicapped;
         this.handicapped = handicapped;
         this.furniture = furniture;
-
-        String[] splitted = coordinates.split(",");
-        this.coordinates = new Gps(Double.parseDouble(splitted[0]), Double.parseDouble(splitted[1]));
+        this.coordinates = coordinates;
         this.floorNumber = floorNumber;
     }
 

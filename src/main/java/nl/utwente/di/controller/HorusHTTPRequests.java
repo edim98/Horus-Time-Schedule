@@ -5,21 +5,24 @@ import nl.utwente.di.model.Request;
 import org.json.JSONObject;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 @Path("/requests")
 public class HorusHTTPRequests {
 
     @GET
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public List<Request> getRequests() {
         return DatabaseCommunication.getRequests();
     }
 
-    @POST
+    @GET
     @Path("/login")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response logIn(@HeaderParam("user") String username,
                           @HeaderParam("password") String password) {
         if (DatabaseCommunication.getUSer(username, password) == null) {

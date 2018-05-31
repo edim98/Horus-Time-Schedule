@@ -5,6 +5,7 @@ import nl.utwente.di.model.Lecturer;
 import nl.utwente.di.model.Request;
 import nl.utwente.di.model.Room;
 
+import javax.ws.rs.Consumes;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,9 +32,19 @@ public class DatabaseCommunication {
         return null;
     }
 
+    private static void executeSQL(String sql) {
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static Map<String, Room> getRooms() {
         Map<String, Room> rooms = new HashMap<>();
         String sql = "SELECT * FROM Room";
+
         try {
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -52,12 +63,12 @@ public class DatabaseCommunication {
                 int firstRowHandicapped = result.getInt(11);
                 int handicapped = result.getInt(12);
                 String furniture = result.getString(13);
-                String coordinates = result.getString(14);
-                int floornumber = result.getInt(15);
+                Gps coordinates = new Gps(result.getFloat(14), result.getFloat(15));
+                int floornumber = result.getInt(16);
                 Room room = new Room(roomNumber, building, shortRoomNumber, trivialName, area,
                         capacityTimetable, capacityLecture, capacityWork, capacityExam, capacityReal,
                         firstRowHandicapped, handicapped, furniture, coordinates, floornumber);
-                rooms.put(roomNumber, room);
+                rooms.put(shortRoomNumber, room);
             }
             return rooms;
         } catch (SQLException e) {
@@ -82,8 +93,7 @@ public class DatabaseCommunication {
                 String teacherID = result.getString(7);
                 int numberOfStrudents = result.getInt(6);
                 String type = result.getString(8);
-//                String notes = result.getString(9);
-                Request request = new Request(id, oldRoom, newRoom, oldDate, newDate, teacherID, numberOfStrudents, type, "");
+                Request request = new Request(id, oldRoom, newRoom, oldDate, newDate, teacherID, numberOfStrudents, type);
                 requests.add(request);
             }
             return requests;
@@ -94,7 +104,7 @@ public class DatabaseCommunication {
     }
 
     public static void addNewRequest(Request request) {
-        String sql = "INSERT INTO request VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO request VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, request.getId());
@@ -105,7 +115,6 @@ public class DatabaseCommunication {
             pstmt.setInt(6, request.getNumberOfStudents());
             pstmt.setString(7, request.getTeacherID());
             pstmt.setString(8, request.getType());
-            pstmt.setString(9, request.getNotes());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -180,15 +189,16 @@ public class DatabaseCommunication {
         }
     }
 
-    public static void updateRooms() {
-        String sql = "UPDATE room SET furniture = 'los' " +
-                " WHERE furniture IS NULL";
-        try(Connection connection = connect();
-                PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.executeUpdate();
+    public static ResultSet getLecturer() {
+        String sql = "SELECT email FROM lecturer;";
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet resultSet = pstmt.executeQuery();
+            return resultSet;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public static void main(String[] args) {
@@ -198,11 +208,7 @@ public class DatabaseCommunication {
 //        DatabaseCommunication.addNewUser(l);
 //        System.out.println(DatabaseCommunication.getId("request"));
 //        System.out.println(DatabaseCommunication.getUSer("m2008491", "hashedpass_bitch!"));
-//        String coordinates = "52.9888, 60.8999";
-//        System.out.println(coordinates.split(","));
-//        String[] splitted = coordinates.split(",");
-//        System.out.println(Double.parseDouble(splitted[0]) + " " + Double.parseDouble(splitted[1]));
-        DatabaseCommunication.updateRooms();
+//        System.out.println(DatabaseCommunication.getLecturer());
     }
 
 }
