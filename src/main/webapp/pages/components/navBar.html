@@ -27,6 +27,12 @@
     <script src="../../js/jquery.js"></script>
     <script src="../../js/jquery.datetimepicker.full.js"></script>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.bundle.min.js"></script>
+
 
     <!-- Main CSS-->
     <link href="../../stylesheets/components/navbar.css" rel="stylesheet" media="all">
@@ -573,44 +579,34 @@
         </div>
     <div class="modal-body">
           <div>
-            <div class="form-group row">
-          <label for="example-text-input" class="col-2 col-form-label">First name</label>
+        <div class="form-group row">
+        <label for="faculty-select" class="col-2 col-form-label">Faculty</label>
         <div class="col-10">
-          <input class="form-control" type="text" placeholder="First name" id="first-name-text-input">
+          <div class="form-group">
+            <!-- TODO: Make this select work! -->
+            <select class="selectpicker">
+  <option>Mustard</option>
+  <option>Ketchup</option>
+  <option>Relish</option>
+</select>
+
+            </div>
         </div>
         </div>
         <div class="form-group row">
-          <label for="example-text-input" class="col-2 col-form-label">Last name</label>
-        <div class="col-10">
-          <input class="form-control" type="text" placeholder="Last name" id="last-name-text-input">
+          <h1 class="col-10">Current class details</h1>
         </div>
-        </div>
+
         <div class="form-group row">
-          <h1>Current class details</h1>
-      </div>
-      <div class="form-group row">
-        <label for="example-text-input" class="col-2 col-form-label"> Type of course</label>
-        <div class="col-10">
-          <form action="">
-        <input type="radio" name="type-of-course" value="lecture"> Lecture<br>
-        <input type="radio" name="type-of-course" value="colstruction"> Colstruction<br>
-        <input type="radio" name="type-of-course" value="exam"> Exam<br>
-        <input type="radio" name="type-of-course" value="seminar"> Seminar<br>
-        <input type="radio" name="type-of-course" value="practical"> Practical<br>
-        <input type="radio" name="type-of-course" value="project"> Project<br>
-        </form>
-      </div>
-    </div>
-        <div class="form-group row">
-          <label for="example-search-input" class="col-2 col-form-label">Current room</label>
+          <label for="current-room" class="col-2 col-form-label">Current room</label>
           <div class="col-10">
-            <input class="form-control" type="search" placeholder="Fill in the room code" id="example-search-input">
+            <input class="form-control" type="search" placeholder="Fill in the room code" id="current-room" required> <!--TODO: Tell Edi about the id change.-->
           </div>
         </div>
         <div class="form-group row">
           <label for="datetime" class="col-2 col-form-label">Date and time</label>
           <div class="col-10">
-            <input class="form-control" id="datetime-request">
+            <input class="form-control" id="datetime-request" required>
           </div>
         </div>
 
@@ -626,41 +622,29 @@
       </div>
 
       <form id="change-form">
-        <div class="form-group row" novalidate>
-          <label for="desired-room" class="col-2 col-form-label">Desired room</label>
-          <div class="col-10">
-            <input class="form-control au-input au-input--full" type="text" placeholder="Fill in the room code" id="desired-room" required>
-          </div>
-        </div>
         <div class="form-group row">
           <label for="datetime-change" class="col-2 col-form-label">Date and time</label>
           <div class="col-10">
-            <input class="form-control" placeholder="Click to set date and time" id="datetime-change" required>
+            <input class="form-control" type="text" placeholder="Click to set date and time" id="datetime-change" required>
           </div>
         </div>
         <div class="form-group row">
           <label for="nr-of-students" class="col-2 col-form-label">Number of students</label>
           <div class="col-10">
-            <input class="form-control" type="search" placeholder="nr. of students for the room" id="nr-of-students" required>
+            <input class="form-control" type="text" placeholder="nr. of students" id="nr-of-students" required>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="example-search-input" class="col-2 col-form-label">Notes</label>
+        <div class="form-group row" novalidate>
+          <label for="notes-input" class="col-2 col-form-label">Notes</label>
           <div class="col-10">
-            <textarea class="form-control" type="search" placeholder="optional message" id="example-search-input"></textarea>
+            <textarea class="form-control au-input au-input--full" type="search" placeholder="(optional message / preferences)" id="notes-input"></textarea> <!--TODO: Tell Edi about the id change.-->
           </div>
         </div>
-      <button class="btn btn-default request-button" type="submit" id="reschedule-button">Request change</button>
-
-      </form>
-
         </div>
         <div class="modal-footer">
-          <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
-          <button class="btn btn-default request-button" data-dismiss="modal" type="submit" onclick="alert('Request sent!')" id="cancel-button">Cancel class</button>
-
-          <label allign="left" id="incomplete-fields">Complete fields lol</label>
-
+          <button class="btn btn-default btn-block request-button" type="submit" id="reschedule-button">Request change</button>
+        </form>
+          <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" onclick="alert('Request sent!')" id="cancel-button">Cancel class</button>
         </div>
         </div>
 
@@ -670,12 +654,17 @@
 
 
         <!-- Jquery JS-->
+
         <script>
         $("#change-form").hide();
         $("#cancel-button").hide();
         $('#reschedule-button').hide();
         $('#incomplete-fields').hide();
         $(this).prop(':checked', false);
+        $('.selectpicker').selectpicker({
+        style: 'btn-info',
+    	   size: 6
+    });
         </script>
 
         <script>
@@ -711,19 +700,35 @@
           });
         </script>
 
+
+        <script>
+        $( document ).ready(function() {
+                var isChange = !$('#change-radio').prop('checked');
+                var isCancel = !$('#cancel-radio').prop('checked');
+
+                if(!isChange){
+                  $('#cancel-button').hide();
+                    $('#change-form').show();
+                    $('#reschedule-button').show();
+                }
+                 if(!isCancel){
+                  console.log( "CANCEL BUTTON ON!" );
+                  $('#change-form').hide();
+                  $('#reschedule-button').hide();
+                    $('#cancel-button').show();
+                }
+            });
+        </script>
         <script>
           $("#datetime-request").datetimepicker();
         </script>
         <script>
           $("#datetime-change").datetimepicker();
         </script>
-        <script>
-// Example starter JavaScript for disabling form submissions if there are invalid fields
+
+<!-- // Example starter JavaScript for disabling form submissions if there are invalid fields -->
         <script type="text/javascript" src="../../js/main.js"></script>
         <script type="text/javascript" src="../../js/popup-pages.js"></script>
-
-        <script type="text/javascript" src="../../js/moment.js"></script>
-        <script type="text/javascript" src="../../js/bootstrap.js"></script>
 
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
