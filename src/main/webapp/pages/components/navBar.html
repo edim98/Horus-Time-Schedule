@@ -573,6 +573,7 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
+<<<<<<< HEAD
 	<div class="modal-body" style="padding: 40px">
 		<form class="form-style-7" name="clearForm">
 		<ul>
@@ -625,6 +626,76 @@
           <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" onclick="alert('Request sent!')" id="cancel-button">Cancel class</button>
         </div>
     </div>
+=======
+    <div class="modal-body">
+          <div>
+        <div class="form-group row">
+        <label for="faculty-select" class="col-2 col-form-label">Faculty</label>
+        <div class="col-10">
+        <div class="styled-select">
+            <select>
+  <option value="0">Mustard</option>
+  <option value="1">Ketchup</option>
+  <option value="2">Relish</option>
+</select>
+</div>
+        </div>
+        </div>
+        <div class="form-group row">
+          <h1 class="col-10">Current class details</h1>
+        </div>
+
+        <div class="form-group row">
+          <label for="current-room" class="col-2 col-form-label">Current room</label>
+          <div class="col-10">
+            <input class="form-control" type="search" placeholder="Fill in the room code" id="current-room" required> <!--TODO: Tell Edi about the id change.-->
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="datetime" class="col-2 col-form-label">Date and time</label>
+          <div class="col-10">
+            <input class="form-control" id="datetime-request" required>
+          </div>
+        </div>
+
+        <h1 for="type-of-request"> Type of request</h1>
+        <div class="col-10">
+
+
+            <form action="">
+          <input type="radio" name="type-of-request" value="RESCHEDULE" id="change-radio"> Reschedule<br>
+          <input type="radio" name="type-of-request" value="CANCEL" id="cancel-radio"> Cancel<br>
+          </form>
+
+      </div>
+
+      <form id="change-form">
+        <div class="form-group row">
+          <label for="datetime-change" class="col-2 col-form-label">Date and time</label>
+          <div class="col-10">
+            <input class="form-control" type="text" placeholder="Click to set date and time" id="datetime-change" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="nr-of-students" class="col-2 col-form-label">Number of students</label>
+          <div class="col-10">
+            <input class="form-control" type="text" placeholder="nr. of students" id="nr-of-students" required>
+          </div>
+        </div>
+        <div class="form-group row" novalidate>
+          <label for="notes-input" class="col-2 col-form-label">Notes</label>
+          <div class="col-10">
+            <textarea class="form-control au-input au-input--full" type="search" placeholder="(optional message / preferences)" id="notes-input"></textarea> <!--TODO: Tell Edi about the id change.-->
+          </div>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-default btn-block request-button" type="submit" id="reschedule-button">Request change</button>
+        </form>
+          <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" onclick="alert('Request sent!')" id="cancel-button">Cancel class</button>
+        </div>
+        </div>
+>>>>>>> 447598581a698d2f9eefb67b186ef18d9ec9a52d
 
         </div>
         </div>
