@@ -7,10 +7,14 @@
     <link href="../../stylesheets/css/font-face.css" rel="stylesheet" media="all">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <link href="../../vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
 
     <!-- Bootstrap CSS-->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <!-- Vendor CSS-->
+    <!-- Form CSS -->
+	<link href="../../stylesheets/css/form.css" rel="stylesheet" media="all">
+	<!-- Vendor CSS-->
     <link href="../../vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
     <link href="../../vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet" media="all">
     <link href="../../vendor/wow/animate.css" rel="stylesheet" media="all">
@@ -19,11 +23,18 @@
     <link href="../../vendor/select2/select2.min.css" rel="stylesheet" media="all">
     <link href="../../vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" /></link>
+
+    <link rel="stylesheet" href="../../js/jquery.datetimepicker.min.css" />
+    <script src="../../js/jquery.js"></script>
+    <script src="../../js/jquery.datetimepicker.full.js"></script>
+
+
     <!-- Main CSS-->
     <link href="../../stylesheets/components/navbar.css" rel="stylesheet" media="all">
-    <title></title>
+    <!-- <title></title> -->
   </head>
-  <body class="animsition">
+  <body class="animsition" onload="clearForm.reset();">
 
     <div class="page-wrapper">
         <!-- HEADER MOBILE-->
@@ -87,7 +98,7 @@
                       </li>
 
                       <li>
-                          <a  href="#" type="button" data-toggle="modal" data-target="#myModal">
+                          <a  href="#" data-toggle="modal" data-target="#myModal">
                               <i class="fas fa-file"></i>Requests</a>
                       </li>
                       <li>
@@ -555,30 +566,153 @@
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
 
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
         </div>
-        <div class="modal-body">
-          <div>
-
-          </div>
-        </div>
+	<div class="modal-body" style="padding: 40px">
+		<form class="form-style-7" name="clearForm">
+		<ul>
+		<li>
+			<label for="faculty">Faculty</label>
+			<div class="ui-select">
+			<select name="faculty">
+			<option value="0">Faculty A</option>
+			<option value="1">Faculty B</option>
+			<option value="2">Faculty C</option>
+			</select>
+			</div>
+			<span>Please select your faculty</span>
+		</li>
+		<li>
+			<label for="current-room">Current room</label>
+			<input type="text" maxlength="20" id="current-room">
+			<span>Please specify for which room your current class is scheduled</span>
+		</li>
+		<li>
+			<label for="datetime-request">Date and time</label>
+			<input type="text" id="datetime-request">
+			<span>The date and time at which your class starts</span>
+		</li>
+		<input type="radio" name="type-of-request" value="RESCHEDULE" id="change-radio"> Make a schedule change<br>
+		<input type="radio" name="type-of-request" value="CANCEL" id="cancel-radio"> Cancel the class<br>
+		</ul>
+		</form>
+		<form id="change-form" class="form-style-7">
+		<ul>
+		<li>
+			<label for="datetime-change">Date and time</label>
+			<input type="text" id="datetime-change">
+			<span>The new date and time for your class</span>
+		</li>
+		<li>
+			<label for="nr-of-students">Number of students</label>
+			<input type="text" maxlength="4" id="nr-of-students">
+			<span>The number of students that will be attending this class</span>
+		</li>
+		<li>
+			<label for="notes-input">Notes</label>
+			<textarea id="notes-input" onkeyup="adjust_textarea(this)"></textarea>
+			<span>If you have any comments for the scheduler please specifiy them here</span>
+		</li>
+		</ul>
+		</form>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button class="btn btn-default btn-block request-button" type="submit" id="reschedule-button">Request change</button>
+          <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" onclick="alert('Request sent!')" id="cancel-button">Cancel class</button>
+        </div>
+    </div>
+
+        </div>
         </div>
       </div>
 
-    </div>
-  </div>
 
         <!-- Jquery JS-->
-        <script src="../../vendor/jquery-3.2.1.min.js"></script>
-        <!-- Bootstrap JS-->
+
+        <script>
+        $("#change-form").hide();
+        $("#cancel-button").hide();
+        $('#reschedule-button').hide();
+        $('#incomplete-fields').hide();
+        $(this).prop(':checked', false);
+        $('.selectpicker').selectpicker({
+        style: 'btn-info',
+    	   size: 6
+    });
+        </script>
+
+        <script>
+        $('#reschedule-button').click(function(){
+          if ($('#desired-room').val().length === 0 || $('#datetime-change').val().length === 0 || $('#nr-of-students').val().length === 0){
+            $('#incomplete-fields').show();
+          } else {
+            $('#incomplete-fields').hide();
+          }
+        });
+        </script>
+        <script>
+          $('#change-radio').on('click', function(){
+            $('#cancel-button').hide();
+            if($(this).prop(':checked')){
+                $('#change-form').hide();
+                $('#reschedule-button').hide();
+            } else {
+                $('#change-form').show();
+                $('#reschedule-button').show();
+            }
+          });
+        </script>
+        <script>
+          $('#cancel-radio').on('click', function(){
+            $('#change-form').hide();
+            $('#reschedule-button').hide();
+            if($(this).prop(':checked')){
+                $('#cancel-button').hide();
+            } else {
+                $('#cancel-button').show();
+            }
+          });
+        </script>
+
+
+        <script>
+        $( document ).ready(function() {
+                var isChange = !$('#change-radio').prop('checked');
+                var isCancel = !$('#cancel-radio').prop('checked');
+
+                if(!isChange){
+                  $('#cancel-button').hide();
+                    $('#change-form').show();
+                    $('#reschedule-button').show();
+                }
+                 if(!isCancel){
+                  console.log( "CANCEL BUTTON ON!" );
+                  $('#change-form').hide();
+                  $('#reschedule-button').hide();
+                    $('#cancel-button').show();
+                }
+            });
+        </script>
+        <script>
+          $("#datetime-request").datetimepicker();
+        </script>
+        <script>
+          $("#datetime-change").datetimepicker();
+        </script>
+
+<!-- // Example starter JavaScript for disabling form submissions if there are invalid fields -->
+        <script type="text/javascript" src="../../js/main.js"></script>
+        <script type="text/javascript" src="../../js/popup-pages.js"></script>
+
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
         <script src="../../vendor/bootstrap-4.1/popper.min.js"></script>
         <script src="../../vendor/bootstrap-4.1/bootstrap.min.js"></script>
         <!-- Vendor JS       -->
@@ -597,9 +731,19 @@
         <script src="../../vendor/select2/select2.min.js">
         </script>
 
+        <!--Date picker -->
+          <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
         <!-- Popup JS-->
         <script src="../../js/popup-pages.js"></script>
         <!-- Main JS-->
         <script src="../../js/main.js"></script>
+		<!-- Form JS-->
+		<script type="text/javascript">
+			function adjust_textarea(h) {
+			h.style.height = "20px";
+			h.style.height = (h.scrollHeight)+"px";
+			}
+		</script>
   </body>
+  
 </html>
