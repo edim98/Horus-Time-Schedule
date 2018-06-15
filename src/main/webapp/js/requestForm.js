@@ -38,11 +38,8 @@ $('#reschedule-button').click(function(event) {
 
   });
 });
-<<<<<<< HEAD
 
 function adjust_textarea(h) {
     h.style.height = "20px";
     h.style.height = (h.scrollHeight)+"px";
 }
-=======
->>>>>>> 447598581a698d2f9eefb67b186ef18d9ec9a52d
