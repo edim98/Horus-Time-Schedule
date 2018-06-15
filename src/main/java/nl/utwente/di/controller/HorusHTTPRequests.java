@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Path("/requests")
+@Path("/horus/requests")
 public class HorusHTTPRequests {
 
     @GET
@@ -76,7 +76,7 @@ public class HorusHTTPRequests {
                 notes, courseType, faculty);
         DatabaseCommunication.addNewRequest(request);
     }
-    
+
     @POST
     @Path("/register")
     @Consumes("application/json")

@@ -1,12 +1,9 @@
 $(document).ready(function() {
   $.ajax({
-    url: '/requests',
+    url: '/horus/requests',
     type: 'GET',
     dataType: 'json',
-    headers: {
-      'Accept' : 'application/json',
-      'Content-Type' : 'application/json'
-    }
+
   })
   .done(function(result) {
     console.log("got results");
@@ -14,7 +11,7 @@ $(document).ready(function() {
   })
   .fail(function(result) {
     console.log("error did not get requests");
-    console.log(result);
+    console.log(result.status + " " + result.errorMessage);
   })
   .always(function() {
     console.log("complete");
