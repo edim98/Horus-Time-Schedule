@@ -216,14 +216,18 @@ public class DatabaseCommunication {
         return null;
     }
 
+    public static void change() {
+        String sql = "UPDATE request SET oldroom = 'SP 4' WHERE oldroom = 'SP4'";
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
-//        DatabaseCommunication.generateTables();
-//        System.out.println(DatabaseCommunication.getRequests());
-//        Lecturer l = new Lecturer("m2008491", "Eduard Modreanu", "29763754892984", "email", "hashedpass_bitch!");
-//        DatabaseCommunication.addNewUser(l);
-//        System.out.println(DatabaseCommunication.getId("request"));
-//        System.out.println(DatabaseCommunication.getUSer("m2008491", "hashedpass_bitch!"));
-//        System.out.println(DatabaseCommunication.getLecturer());
+        DatabaseCommunication.change();
     }
 
 }
