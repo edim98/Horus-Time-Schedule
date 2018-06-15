@@ -1,5 +1,6 @@
 package nl.utwente.di.controller;
 
+import nl.utwente.di.exceptions.InvalidInputException;
 import nl.utwente.di.model.Lecturer;
 import nl.utwente.di.model.Request;
 import nl.utwente.di.model.Room;
@@ -25,33 +26,55 @@ public class HorusHTTPRequests {
 
     @POST
     @Path("/login")
+    @Consumes("application/json")
     @Produces("application/json")
     public Response logIn(String loginString) {
         JSONObject loginJson = new JSONObject(loginString);
         String username = loginJson.getString("user");
         String password = loginJson.getString("password");
-        if (DatabaseCommunication.getUSer(username, password) == null) {
+        Lecturer lecturer = DatabaseCommunication.getUSer(username, password);
+        if (lecturer != null) {
+            JSONObject jsonObject = new JSONObject().put("teacherID", lecturer.getTeacherId())
+                                                    .put("name", lecturer.getName())
+                                                    .put("email", lecturer.getEmail())
+                                                    .put("isAdmin", lecturer.isTimetabler());
+            return Response.ok(jsonObject.toString(), "application/json").build();
+        }  else {
             return Response.status(Response.Status.BAD_REQUEST).build();
-        } else {
-            return Response.status(Response.Status.OK).build();
         }
+    }
+
+    public boolean checkValidRequestJSON(JSONObject jsonObject) {
+        return jsonObject.has("oldRoom") && jsonObject.has("oldDate") && jsonObject.has("newDate") &&
+                jsonObject.has("teacherID") && jsonObject.has("numberOfStudents") && jsonObject.has("type") &&
+                jsonObject.has("name") && jsonObject.has("notes") && jsonObject.has("courseType") && jsonObject.has("faculty");
     }
 
     //TODO check for valid room
     @POST
     @Consumes("application/json")
-    public void addRequest(String requestString) {
+    public void addRequest(String requestString) throws InvalidInputException {
         JSONObject jsonObject = new JSONObject(requestString);
+        if (!checkValidRequestJSON(jsonObject)) {
+            throw new InvalidInputException();
+        }
         Map<String, Room> rooms = DatabaseCommunication.getRooms();
         int id = DatabaseCommunication.getId("request") + 1;
         Room oldRoom = rooms.get(jsonObject.getString("oldRoom"));
-        Room newRoom = rooms.get(jsonObject.getString("newRoom"));
+        if (!DatabaseCommunication.checkValidRoom(oldRoom.getRoomNumber())) {
+            throw new InvalidInputException();
+        }
         String oldDate = jsonObject.getString("oldDate");
         String newDate = jsonObject.getString("newDate");
         String teacherID = jsonObject.getString("teacherID");
         int numberOfStudents = jsonObject.getInt("numberOfStudents");
         String requestType = jsonObject.getString("type");
-        Request request = new Request(id, oldRoom, newRoom, oldDate, newDate, teacherID, numberOfStudents, requestType);
+        String name = jsonObject.getString("name");
+        String notes = jsonObject.getString("notes");
+        String courseType = jsonObject.getString("courseType");
+        String faculty = jsonObject.getString("faculty");
+        Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name, numberOfStudents, requestType,
+                notes, courseType, faculty);
         DatabaseCommunication.addNewRequest(request);
     }
     
@@ -62,10 +85,10 @@ public class HorusHTTPRequests {
         JSONObject lecturerJson = new JSONObject(lecturerString);
         String teacherid = lecturerJson.getString("teacherid");
         String name = lecturerJson.getString("name");
-        String phone = lecturerJson.getString("phone");
         String password = lecturerJson.getString("password");
         String email = lecturerJson.getString("email");
-        Lecturer lecturer = new Lecturer(teacherid, name, phone, email, password);
+        Lecturer lecturer = new Lecturer(teacherid, name, email);
+        lecturer.setPassowrd(password);
         if (DatabaseCommunication.checkExistingUser(lecturer.getTeacherId())) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
