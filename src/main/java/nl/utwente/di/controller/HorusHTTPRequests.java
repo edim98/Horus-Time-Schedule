@@ -7,11 +7,7 @@ import nl.utwente.di.model.Room;
 import org.json.JSONObject;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -88,7 +84,7 @@ public class HorusHTTPRequests {
         String email = lecturerJson.getString("email");
         Lecturer lecturer = new Lecturer(teacherid, name, email);
         lecturer.setPassowrd(password);
-        if (DatabaseCommunication.checkExistingUser(lecturer.getTeacherId())) {
+        if (DatabaseCommunication.checkExistingUser(lecturer.getEmail())) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
         DatabaseCommunication.addNewUser(lecturer);
