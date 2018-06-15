@@ -95,8 +95,9 @@ public class HorusHTTPRequests {
     @GET
     @Path("/pending")
     @Produces("application/json")
-    public int getPendingRequests() {
-        return DatabaseCommunication.getPendingRequests();
+    public String getPendingRequests() {
+        JSONObject jsonObject = new JSONObject().put("requests", DatabaseCommunication.getPendingRequests());
+        return jsonObject.toString();
     }
 
     @PUT
