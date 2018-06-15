@@ -143,7 +143,7 @@ public class DatabaseCommunication {
     }
 
     public static Lecturer getUSer(String id, String password) {
-        String sql = "SELECT * FROM lecturer  WHERE email = ? AND password = ?;";
+        String sql = "SELECT * FROM users  WHERE email = ? AND password = ?;";
         Lecturer l;
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -151,9 +151,9 @@ public class DatabaseCommunication {
             pstmt.setString(2, password);
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
-                l = new Lecturer(resultSet.getString("teacherID"), resultSet.getString("name"), resultSet.getString("email"));
+                l = new Lecturer(resultSet.getString("user_id"), resultSet.getString("staff_name"), resultSet.getString("email"));
                 l.setPassowrd(resultSet.getString("password"));
-//                l.setTimetabler(resultSet.getBoolean("isTimetabler"));
+                l.setTimetabler(resultSet.getBoolean("is_timetabler"));
                 return l;
             }
             return null;

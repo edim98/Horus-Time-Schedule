@@ -19,7 +19,7 @@ import java.util.Map;
 public class HorusHTTPRequests {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces("application/json")
     public List<Request> getRequests() {
         return DatabaseCommunication.getRequests();
     }
@@ -44,13 +44,12 @@ public class HorusHTTPRequests {
         }
     }
 
-    public boolean checkValidRequestJSON(JSONObject jsonObject) {
+    private boolean checkValidRequestJSON(JSONObject jsonObject) {
         return jsonObject.has("oldRoom") && jsonObject.has("oldDate") && jsonObject.has("newDate") &&
                 jsonObject.has("teacherID") && jsonObject.has("numberOfStudents") && jsonObject.has("type") &&
                 jsonObject.has("name") && jsonObject.has("notes") && jsonObject.has("courseType") && jsonObject.has("faculty");
     }
 
-    //TODO check for valid room
     @POST
     @Consumes("application/json")
     public void addRequest(String requestString) throws InvalidInputException {
