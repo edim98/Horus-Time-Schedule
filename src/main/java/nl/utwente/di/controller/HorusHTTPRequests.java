@@ -77,7 +77,7 @@ public class HorusHTTPRequests {
                 notes, courseType, faculty);
         DatabaseCommunication.addNewRequest(request);
     }
-    
+
     @POST
     @Path("/register")
     @Consumes("application/json")

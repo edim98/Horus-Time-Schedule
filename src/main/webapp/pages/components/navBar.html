@@ -71,7 +71,7 @@
                                 <i class="fas fa-cogs"></i>Settings</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a data-toggle="modal" data-target="#contactPopup">
                                 <i class="fas fa-address-book"></i>Contact Us</a>
 
                         </li>
@@ -106,7 +106,7 @@
                               <i class="fas fa-cogs"></i>Settings</a>
                       </li>
                       <li>
-                          <a href="#">
+                          <a href="#" data-toggle="modal" data-target="#contactPopup">
                               <i class="fas fa-address-book"></i>Contact Us</a>
 
                       </li>
@@ -570,6 +570,38 @@
         </div>
         </div>
       </div>
+
+      <!-- CONTACT US POP-UP -->
+<div class="modal fade" id="contactPopup" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+  <!-- POP-UP CONTENT -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <table style="margin: 0 auto; margin-bottom: 25px; margin-top: 25px">
+          <tr>
+            <td valign="top" style="padding-right: 75px">
+              <h4>Contact the timetabling team:</h4>
+              Street address here <br>
+              Enschede 7511AA <br>
+              E-mail: email@email.com <br>
+              Phone number: 0682222222
+            </td>
+            <td valign="top">
+              <h4>Report a bug or suggestion:</h4> 
+              HORUS Project Team <br>
+              E-mail: email@email.com <br>
+              Phone number: 0682222222
+            </td>
+          </tr>
+      </table>
+      </div>
+    </div>
+  </div>
+</div>
 
 
         <!-- Jquery JS-->
