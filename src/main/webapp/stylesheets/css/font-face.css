@@ -232,3 +232,17 @@
        url('../fonts/poppins/poppins-v5-latin-900italic.ttf') format('truetype'), /* Safari, Android, iOS */
        url('../fonts/poppins/poppins-v5-latin-900italic.svg#Poppins') format('svg'); /* Legacy iOS */
 }
+
+.styled-select select {
+   background: #444;
+	color: white;
+   width: 250px;
+   padding: 5px;
+   font-size: 15px;
+   line-height: 1;
+   border: 0;
+   border-radius: 0;
+   height: 34px;
+   -webkit-appearance: none;
+   text-align:
+   }
