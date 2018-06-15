@@ -4,35 +4,35 @@ public class Request {
 
     private int id;
     private Room oldRoom;
-    private Room newRoom;
     private String oldDate;
     private String newDate;
     private String teacherID;
+    private String teacherName;
     private int numberOfStudents;
-    private requestType type;
-    private enum requestType {
-        reschedule, cancel
-    }
+    private RequestType type;
+    private String notes;
+    private CourseType courseType;
+    private String faculty;
+    private Status status;
 
-    //TODO add notes and status and type of course
-    public Request(int id, Room oldRoom, Room newRoom, String oldDate, String newDate,
-                   String teacherID, int studentsNumber, String type) {
+    public Request(int id, Room oldRoom, String oldDate, String newDate, String teacherID, String name,
+                   int studentsNumber, String type, String notes, String courseType, String faculty) {
         this.oldDate = oldDate;
         this.newDate = newDate;
         this.id = id;
-        this.newRoom = newRoom;
         this.oldRoom = oldRoom;
         this.teacherID = teacherID;
         this.numberOfStudents = studentsNumber;
-        this.type = requestType.valueOf(type);
+        this.notes = notes;
+        this.courseType = CourseType.valueOf(courseType);
+        this.type = RequestType.valueOf(type);
+        this.faculty = faculty;
+        this.teacherName = name;
+        this.status = Status.pending;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public void setNewRoom(Room newRoom) {
-        this.newRoom = newRoom;
     }
 
     public void setOldRoom(Room oldRoom) {
@@ -55,8 +55,28 @@ public class Request {
         this.numberOfStudents = numberOfStudents;
     }
 
-    public void setType(String type) {
-        this.type = requestType.valueOf(type);
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public void setType(RequestType type) {
+        this.type = type;
+    }
+
+    public void setCourseType(CourseType courseType) {
+        this.courseType = courseType;
+    }
+
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
+
+    public void setStatus(String status) {
+        this.status = Status.valueOf(status);
     }
 
     public int getId() {
@@ -65,10 +85,6 @@ public class Request {
 
     public Room getOldRoom() {
         return oldRoom;
-    }
-
-    public Room getNewRoom() {
-        return newRoom;
     }
 
     public String getOldDate() {
@@ -89,5 +105,25 @@ public class Request {
 
     public String getType() {
         return type.toString();
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public String getFaculty() {
+        return faculty;
+    }
+
+    public String getCourseType() {
+        return courseType.toString();
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }

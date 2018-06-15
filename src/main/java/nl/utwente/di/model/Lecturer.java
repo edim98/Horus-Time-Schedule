@@ -3,16 +3,15 @@ package nl.utwente.di.model;
 public class Lecturer {
     private String teacherId;
     private String name;
-    private String phone;
     private String email;
     private String password;
+    private boolean isTimetabler;
 
-    public Lecturer(String teacherId, String name, String phone, String email, String password) {
+    public Lecturer(String teacherId, String name, String email) {
         this.teacherId = teacherId;
         this.name = name;
-        this.phone = phone;
         this.email = email;
-        this.password = password;
+        this.isTimetabler = false;
     }
 
     public String getEmail() {
@@ -23,16 +22,16 @@ public class Lecturer {
         return name;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
     public String getTeacherId() {
         return teacherId;
     }
     
     public String getPassword() {
     	return password;
+    }
+
+    public boolean isTimetabler() {
+        return isTimetabler;
     }
 
     public void setEmail(String email) {
@@ -43,15 +42,15 @@ public class Lecturer {
         this.name = name;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public void setTeacherId(String teacherId) {
         this.teacherId = teacherId;
     }
     
     public void setPassowrd(String password) {
     	this.password = password;
+    }
+
+    public void setTimetabler(boolean timetabler) {
+        isTimetabler = timetabler;
     }
 }

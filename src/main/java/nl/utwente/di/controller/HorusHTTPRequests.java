@@ -25,15 +25,22 @@ public class HorusHTTPRequests {
 
     @POST
     @Path("/login")
+    @Consumes("application/json")
     @Produces("application/json")
     public Response logIn(String loginString) {
         JSONObject loginJson = new JSONObject(loginString);
         String username = loginJson.getString("user");
         String password = loginJson.getString("password");
-        if (DatabaseCommunication.getUSer(username, password) == null) {
+        Lecturer lecturer = DatabaseCommunication.getUSer(username, password);
+        if (lecturer != null) {
+            JSONObject jsonObject = new JSONObject().put("teacherID", lecturer.getTeacherId())
+                                                    .put("name", lecturer.getName())
+                                                    .put("email", lecturer.getEmail())
+                                                    .put("phone", lecturer.getPhone())
+                                                    .put("isAdmin", lecturer.isTimetabler());
+            return Response.ok(jsonObject.toString(), "application/json").build();
+        }  else {
             return Response.status(Response.Status.BAD_REQUEST).build();
-        } else {
-            return Response.status(Response.Status.OK).build();
         }
     }
 
@@ -45,13 +52,17 @@ public class HorusHTTPRequests {
         Map<String, Room> rooms = DatabaseCommunication.getRooms();
         int id = DatabaseCommunication.getId("request") + 1;
         Room oldRoom = rooms.get(jsonObject.getString("oldRoom"));
-        Room newRoom = rooms.get(jsonObject.getString("newRoom"));
         String oldDate = jsonObject.getString("oldDate");
         String newDate = jsonObject.getString("newDate");
         String teacherID = jsonObject.getString("teacherID");
         int numberOfStudents = jsonObject.getInt("numberOfStudents");
         String requestType = jsonObject.getString("type");
-        Request request = new Request(id, oldRoom, newRoom, oldDate, newDate, teacherID, numberOfStudents, requestType);
+        String name = jsonObject.getString("name");
+        String notes = jsonObject.getString("notes");
+        String courseType = jsonObject.getString("courseType");
+        String faculty = jsonObject.getString("faculty");
+        Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name, numberOfStudents, requestType,
+                notes, courseType, faculty);
         DatabaseCommunication.addNewRequest(request);
     }
     
@@ -65,7 +76,8 @@ public class HorusHTTPRequests {
         String phone = lecturerJson.getString("phone");
         String password = lecturerJson.getString("password");
         String email = lecturerJson.getString("email");
-        Lecturer lecturer = new Lecturer(teacherid, name, phone, email, password);
+        Lecturer lecturer = new Lecturer(teacherid, name, phone, email);
+        lecturer.setPassowrd(password);
         if (DatabaseCommunication.checkExistingUser(lecturer.getTeacherId())) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }

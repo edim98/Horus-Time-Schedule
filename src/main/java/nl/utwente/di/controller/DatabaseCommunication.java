@@ -1,11 +1,9 @@
 package nl.utwente.di.controller;
 
-import nl.utwente.di.model.Gps;
 import nl.utwente.di.model.Lecturer;
 import nl.utwente.di.model.Request;
 import nl.utwente.di.model.Room;
 
-import javax.ws.rs.Consumes;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,13 +85,17 @@ public class DatabaseCommunication {
             while (result.next()) {
                 int id = result.getInt(1);
                 Room oldRoom = rooms.get(result.getString(2));
-                Room newRoom = rooms.get(result.getString(3));
-                String oldDate = result.getString(4);
-                String newDate = result.getString(5);
-                String teacherID = result.getString(7);
-                int numberOfStrudents = result.getInt(6);
+                String oldDate = result.getString(3);
+                String newDate = result.getString(4);
+                String teacherID = result.getString(5);
+                String name = result.getString(6);
+                int numberOfStrudents = result.getInt(7);
                 String type = result.getString(8);
-                Request request = new Request(id, oldRoom, newRoom, oldDate, newDate, teacherID, numberOfStrudents, type);
+                String notes = result.getString(9);
+                String courseType = result.getString(10);
+                String faculty = result.getString(11);
+                Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name,
+                        numberOfStrudents, type, notes, courseType, faculty);
                 requests.add(request);
             }
             return requests;
@@ -104,17 +106,20 @@ public class DatabaseCommunication {
     }
 
     public static void addNewRequest(Request request) {
-        String sql = "INSERT INTO request VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO request(old_room, old_date, new_date, teacher_id, teacher_name, number_of_students, type, notes, course_type, faculty)" +
+                " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, request.getId());
-            pstmt.setString(2, request.getOldRoom().getRoomNumber());
-            pstmt.setString(3, request.getNewRoom().getRoomNumber());
-            pstmt.setString(4, request.getOldDate());
-            pstmt.setString(5, request.getNewDate());
-            pstmt.setInt(6, request.getNumberOfStudents());
-            pstmt.setString(7, request.getTeacherID());
-            pstmt.setString(8, request.getType());
+            pstmt.setString(1, request.getOldRoom().getRoomNumber());
+            pstmt.setString(2, request.getOldDate());
+            pstmt.setString(3, request.getNewDate());
+            pstmt.setInt(4, request.getNumberOfStudents());
+            pstmt.setString(5, request.getTeacherID());
+            pstmt.setString(6, request.getTeacherName());
+            pstmt.setString(7, request.getType());
+            pstmt.setString(8, request.getNotes());
+            pstmt.setString(9, request.getCourseType());
+            pstmt.setString(10, request.getFaculty());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -138,27 +143,25 @@ public class DatabaseCommunication {
     }
 
     public static Lecturer getUSer(String id, String password) {
-        String sql = "SELECT * FROM lecturer  WHERE (teacherID = ? OR email = ?) AND password = ?;";
-        Lecturer l = null;
+        String sql = "SELECT * FROM lecturer  WHERE email = ? AND password = ?;";
+        Lecturer l;
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
-            pstmt.setString(2, id);
-            pstmt.setString(3, password);
+            pstmt.setString(2, password);
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
-                String id1 = resultSet.getString("teacherid");;
-                String email = resultSet.getString("email");;
-                String password1 = resultSet.getString("password");;
-                String phone = resultSet.getString("phone");;
-                String name = resultSet.getString("name");
-                l = new Lecturer(id1, name, phone, email, password1);
+                l = new Lecturer(resultSet.getString("teacherID"), resultSet.getString("name"),
+                        resultSet.getString("phone"), resultSet.getString("email"));
+                l.setPassowrd(resultSet.getString("password"));
+//                l.setTimetabler(resultSet.getBoolean("isTimetabler"));
+                return l;
             }
-            return l;
+            return null;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return l;
+        return null;
     }
 
     public static boolean checkExistingUser(String lecturerid) {
