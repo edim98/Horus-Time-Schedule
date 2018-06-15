@@ -3,6 +3,7 @@ package nl.utwente.di.controller;
 import nl.utwente.di.model.Lecturer;
 import nl.utwente.di.model.Request;
 import nl.utwente.di.model.Room;
+import nl.utwente.di.model.Status;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -242,9 +243,21 @@ public class DatabaseCommunication {
         }
         return 0;
     }
+    public static void changeRequestStatus(Status status, int id) {
+        String sql = "UPDATE request SET status = ? WHERE id = ? AND status = 'pending'";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, status.toString());
+            pstmt.setInt(2, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         DatabaseCommunication.change();
+        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
     }
 
 }

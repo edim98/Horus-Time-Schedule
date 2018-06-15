@@ -4,6 +4,7 @@ import nl.utwente.di.exceptions.InvalidInputException;
 import nl.utwente.di.model.Lecturer;
 import nl.utwente.di.model.Request;
 import nl.utwente.di.model.Room;
+import nl.utwente.di.model.Status;
 import org.json.JSONObject;
 
 import javax.ws.rs.*;
@@ -94,7 +95,19 @@ public class HorusHTTPRequests {
     @GET
     @Path("/pending")
     @Produces("application/json")
-    public int getPendingRequests() {
-        return DatabaseCommunication.getPendingRequests();
+    public String getPendingRequests() {
+        JSONObject jsonObject = new JSONObject().put("requests", DatabaseCommunication.getPendingRequests());
+        return jsonObject.toString();
+    }
+
+    @PUT
+    @Path("/statuschange")
+    @Consumes("application/json")
+    public Response changeStatus(String jsonBody) {
+        JSONObject jsonObject = new JSONObject(jsonBody);
+        String status = jsonObject.getString("status");
+        int id = jsonObject.getInt("id");
+        DatabaseCommunication.changeRequestStatus(Status.valueOf(status), id);
+        return Response.status(Response.Status.OK).build();
     }
 }
