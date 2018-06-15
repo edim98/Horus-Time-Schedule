@@ -6,7 +6,6 @@ $(document).ready(function() {
       var formData = JSON.stringify({
         'teacherid' : $('#username').val(), // this can be the teacherID for now
         'name' : 'Harry Arts',
-        'phone' : '0742069101',
         'email' : $('#email').val(),
         'password' : $('#password').val()
       });
@@ -22,7 +21,7 @@ $(document).ready(function() {
           },
         complete: function(result){
           if(result.status == 200){
-            url = "./components/navBar.html";
+            url = "./components/admin.html";
             $(location).attr("href", url);
           } else{
             alert("Failed! " + result.status + result.errorMessage);///
