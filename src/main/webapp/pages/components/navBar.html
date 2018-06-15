@@ -12,7 +12,9 @@
 
     <!-- Bootstrap CSS-->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <!-- Vendor CSS-->
+    <!-- Form CSS -->
+	<link href="../../stylesheets/css/form.css" rel="stylesheet" media="all">
+	<!-- Vendor CSS-->
     <link href="../../vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
     <link href="../../vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet" media="all">
     <link href="../../vendor/wow/animate.css" rel="stylesheet" media="all">
@@ -30,9 +32,9 @@
 
     <!-- Main CSS-->
     <link href="../../stylesheets/components/navbar.css" rel="stylesheet" media="all">
-    <title></title>
+    <!-- <title></title> -->
   </head>
-  <body class="animsition">
+  <body class="animsition" onload="clearForm.reset();">
 
     <div class="page-wrapper">
         <!-- HEADER MOBILE-->
@@ -489,73 +491,17 @@
                 <div class="col-lg-12">
                     <h2 class="title-1 m-b-25">History</h2>
                     <div class="table-responsive table--no-card m-b-40">
-                        <table class="table table-borderless table-striped table-earning">
+                        <table id="request-table" class="table table-borderless table-striped table-earning">
                             <thead>
                                 <tr>
-                                    <th>Location</th>
-                                    <th>Course Name</th>
-                                    <th>Course Type</th>
-                                    <th class="text-right">Lectue Date</th>
-                                    <th class="text-right">Req. Status</th>
+                                    <th>Old Room</th>
+                                    <th>New Room</th>
+                                    <th>Old date</th>
+                                    <th class="text-right">New Date</th>
+                                    <th class="text-right">Req. Type</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Ravelijn 3336</td>
-                                    <td>Scrum Project</td>
-                                    <td>Workshop</td>
-                                    <td class="text-right">14-05-2018</td>
-                                    <td class="text-right"> <a style="color:#0fad00">Accepted</a></td>
-                                </tr>
-                                <tr>
-                                    <td>Vrijhof 212R</td>
-                                    <td>Programming</td>
-                                    <td>Lecture</td>
-                                    <td class="text-right">14-05-2018</td>
-                                    <td class="text-right"> <a style="color:#d41544">Declined</a></td>
-                                </tr>
-                                <tr>
-                                    <td>Vrijhof 212R</td>
-                                    <td>Programming</td>
-                                    <td>Lecture</td>
-                                    <td class="text-right">14-05-2018</td>
-                                    <td class="text-right"> <a style="color:#d41544">Declined</a></td>
-                                </tr>
-                                <tr>
-                                    <td>Vrijhof 212R</td>
-                                    <td>Programming</td>
-                                    <td>Lecture</td>
-                                    <td class="text-right">14-05-2018</td>
-                                    <td class="text-right"> <a style="color:#d41544">Declined</a></td>
-                                </tr>
-                                <tr>
-                                    <td>Vrijhof 212R</td>
-                                    <td>Programming</td>
-                                    <td>Lecture</td>
-                                    <td class="text-right">14-05-2018</td>
-                                    <td class="text-right"> <a style="color:#d41544">Declined</a></td>
-                                </tr>
-                                <tr>
-                                    <td>Vrijhof 212R</td>
-                                    <td>Programming</td>
-                                    <td>Lecture</td>
-                                    <td class="text-right">14-05-2018</td>
-                                    <td class="text-right"> <a style="color:#d41544">Declined</a></td>
-                                </tr>
-                                <tr>
-                                    <td>Vrijhof 212R</td>
-                                    <td>Programming</td>
-                                    <td>Lecture</td>
-                                    <td class="text-right">14-05-2018</td>
-                                    <td class="text-right"> <a style="color:#d41544">Declined</a></td>
-                                </tr>
-                                <tr>
-                                    <td>Vrijhof 212R</td>
-                                    <td>Programming</td>
-                                    <td>Lecture</td>
-                                    <td class="text-right">14-05-2018</td>
-                                    <td class="text-right"> <a style="color:#d41544">Declined</a></td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -571,98 +517,59 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-    <div class="modal-body">
-          <div>
-            <div class="form-group row">
-          <label for="example-text-input" class="col-2 col-form-label">First name</label>
-        <div class="col-10">
-          <input class="form-control" type="text" placeholder="First name" id="first-name-text-input">
-        </div>
-        </div>
-        <div class="form-group row">
-          <label for="example-text-input" class="col-2 col-form-label">Last name</label>
-        <div class="col-10">
-          <input class="form-control" type="text" placeholder="Last name" id="last-name-text-input">
-        </div>
-        </div>
-        <div class="form-group row">
-          <h1>Current class details</h1>
-      </div>
-      <div class="form-group row">
-        <label for="example-text-input" class="col-2 col-form-label"> Type of course</label>
-        <div class="col-10">
-          <form action="">
-        <input type="radio" name="type-of-course" value="lecture"> Lecture<br>
-        <input type="radio" name="type-of-course" value="colstruction"> Colstruction<br>
-        <input type="radio" name="type-of-course" value="exam"> Exam<br>
-        <input type="radio" name="type-of-course" value="seminar"> Seminar<br>
-        <input type="radio" name="type-of-course" value="practical"> Practical<br>
-        <input type="radio" name="type-of-course" value="project"> Project<br>
-        </form>
-      </div>
-    </div>
-        <div class="form-group row">
-          <label for="example-search-input" class="col-2 col-form-label">Current room</label>
-          <div class="col-10">
-            <input class="form-control" type="search" placeholder="Fill in the room code" id="example-search-input">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="datetime" class="col-2 col-form-label">Date and time</label>
-          <div class="col-10">
-            <input class="form-control" id="datetime-request">
-          </div>
-        </div>
-
-        <h1 for="type-of-request"> Type of request</h1>
-        <div class="col-10">
-
-
-            <form action="">
-          <input type="radio" name="type-of-request" value="RESCHEDULE" id="change-radio"> Reschedule<br>
-          <input type="radio" name="type-of-request" value="CANCEL" id="cancel-radio"> Cancel<br>
-          </form>
-
-      </div>
-
-      <form id="change-form">
-        <div class="form-group row" novalidate>
-          <label for="desired-room" class="col-2 col-form-label">Desired room</label>
-          <div class="col-10">
-            <input class="form-control au-input au-input--full" type="text" placeholder="Fill in the room code" id="desired-room" required>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="datetime-change" class="col-2 col-form-label">Date and time</label>
-          <div class="col-10">
-            <input class="form-control" placeholder="Click to set date and time" id="datetime-change" required>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="nr-of-students" class="col-2 col-form-label">Number of students</label>
-          <div class="col-10">
-            <input class="form-control" type="search" placeholder="nr. of students for the room" id="nr-of-students" required>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="example-search-input" class="col-2 col-form-label">Notes</label>
-          <div class="col-10">
-            <textarea class="form-control" type="search" placeholder="optional message" id="example-search-input"></textarea>
-          </div>
-        </div>
-      <button class="btn btn-default request-button" type="submit" id="reschedule-button">Request change</button>
-
-      </form>
-
-        </div>
+	<div class="modal-body" style="padding: 40px">
+		<form class="form-style-7" name="clearForm">
+		<ul>
+		<li>
+			<label for="faculty">Faculty</label>
+			<div class="ui-select">
+			<select name="faculty">
+			<option value="0">Faculty A</option>
+			<option value="1">Faculty B</option>
+			<option value="2">Faculty C</option>
+			</select>
+			</div>
+			<span>Please select your faculty</span>
+		</li>
+		<li>
+			<label for="current-room">Current room</label>
+			<input type="text" maxlength="20" id="current-room">
+			<span>Please specify for which room your current class is scheduled</span>
+		</li>
+		<li>
+			<label for="datetime-request">Date and time</label>
+			<input type="text" id="datetime-request">
+			<span>The date and time at which your class starts</span>
+		</li>
+		<input type="radio" name="type-of-request" value="RESCHEDULE" id="change-radio"> Make a schedule change<br>
+		<input type="radio" name="type-of-request" value="CANCEL" id="cancel-radio"> Cancel the class<br>
+		</ul>
+		</form>
+		<form id="change-form" class="form-style-7">
+		<ul>
+		<li>
+			<label for="datetime-change">Date and time</label>
+			<input type="text" id="datetime-change">
+			<span>The new date and time for your class</span>
+		</li>
+		<li>
+			<label for="nr-of-students">Number of students</label>
+			<input type="text" maxlength="4" id="nr-of-students">
+			<span>The number of students that will be attending this class</span>
+		</li>
+		<li>
+			<label for="notes-input">Notes</label>
+			<textarea id="notes-input" onkeyup="adjust_textarea(this)"></textarea>
+			<span>If you have any comments for the scheduler please specifiy them here</span>
+		</li>
+		</ul>
+		</form>
         <div class="modal-footer">
-          <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
-          <button class="btn btn-default request-button" data-dismiss="modal" type="submit" onclick="alert('Request sent!')" id="cancel-button">Cancel class</button>
-
-          <label allign="left" id="incomplete-fields">Complete fields lol</label>
-
+          <button class="btn btn-default btn-block request-button" type="submit" id="reschedule-button">Request change</button>
+          <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" onclick="alert('Request sent!')" id="cancel-button">Cancel class</button>
         </div>
-        </div>
+    </div>
+
 
         </div>
         </div>
@@ -670,12 +577,17 @@
 
 
         <!-- Jquery JS-->
+
         <script>
         $("#change-form").hide();
         $("#cancel-button").hide();
         $('#reschedule-button').hide();
         $('#incomplete-fields').hide();
         $(this).prop(':checked', false);
+        $('.selectpicker').selectpicker({
+        style: 'btn-info',
+    	   size: 6
+    });
         </script>
 
         <script>
@@ -711,19 +623,35 @@
           });
         </script>
 
+
+        <script>
+        $( document ).ready(function() {
+                var isChange = !$('#change-radio').prop('checked');
+                var isCancel = !$('#cancel-radio').prop('checked');
+
+                if(!isChange){
+                  $('#cancel-button').hide();
+                    $('#change-form').show();
+                    $('#reschedule-button').show();
+                }
+                 if(!isCancel){
+                  console.log( "CANCEL BUTTON ON!" );
+                  $('#change-form').hide();
+                  $('#reschedule-button').hide();
+                    $('#cancel-button').show();
+                }
+            });
+        </script>
         <script>
           $("#datetime-request").datetimepicker();
         </script>
         <script>
           $("#datetime-change").datetimepicker();
         </script>
-        <script>
-// Example starter JavaScript for disabling form submissions if there are invalid fields
+
+<!-- // Example starter JavaScript for disabling form submissions if there are invalid fields -->
         <script type="text/javascript" src="../../js/main.js"></script>
         <script type="text/javascript" src="../../js/popup-pages.js"></script>
-
-        <script type="text/javascript" src="../../js/moment.js"></script>
-        <script type="text/javascript" src="../../js/bootstrap.js"></script>
 
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -747,12 +675,22 @@
         <script src="../../vendor/chartjs/Chart.bundle.min.js"></script>
         <script src="../../vendor/select2/select2.min.js">
         </script>
-
+        <script src="../../js/requestForm.js"></script>
+        <!-- Get all requests script-->
+        <script src="../../js/getRequests.js"></script>
         <!--Date picker -->
           <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
         <!-- Popup JS-->
         <script src="../../js/popup-pages.js"></script>
         <!-- Main JS-->
         <script src="../../js/main.js"></script>
+		<!-- Form JS-->
+		<script type="text/javascript">
+			function adjust_textarea(h) {
+			h.style.height = "20px";
+			h.style.height = (h.scrollHeight)+"px";
+			}
+		</script>
   </body>
+
 </html>
