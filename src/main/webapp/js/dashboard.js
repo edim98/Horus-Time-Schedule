@@ -1,6 +1,6 @@
 $(document).ready(function() {
   $.ajax({
-    url: 'horus/requests/pending',
+    url: '/horus/requests/pending',
     type: 'GET',
     dataType: 'json',
     headers: {
@@ -13,7 +13,7 @@ $(document).ready(function() {
     document.getElementById("pendingRequests").innerHTML(result);
   })
   .fail(function(result) {
-    alert("error");
+    // alert("error");
     console.log("error did not get requests");
     console.log(result);
   })
