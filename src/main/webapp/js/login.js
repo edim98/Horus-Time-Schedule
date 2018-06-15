@@ -21,6 +21,7 @@ $(document).ready(function() {
         if(result.status == 200) {
           url='./components/navBar.html';
           $(location).attr('href', url);
+          console.log(result);
         } else {
           alert('Failed!' + result.status + result.errorMessage);
           location.reload();
