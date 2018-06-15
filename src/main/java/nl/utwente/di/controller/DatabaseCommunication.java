@@ -208,7 +208,7 @@ public class DatabaseCommunication {
     }
 
     public static void change() {
-        String sql = "UPDATE request SET oldroom = 'SP 4' WHERE oldroom = 'SP4'";
+        String sql = "UPDATE request SET status = 'pending'";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.executeUpdate();
@@ -226,6 +226,21 @@ public class DatabaseCommunication {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static int getPendingRequests() {
+        String sql = "SELECT count(*) FROM request WHERE status = 'pending';";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public static void main(String[] args) {
