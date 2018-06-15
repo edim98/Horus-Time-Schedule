@@ -90,4 +90,11 @@ public class HorusHTTPRequests {
         DatabaseCommunication.addNewUser(lecturer);
         return Response.status(Response.Status.OK).build();
     }
+
+    @GET
+    @Path("/pending")
+    @Produces("application/json")
+    public int getPendingRequests() {
+        return DatabaseCommunication.getPendingRequests();
+    }
 }
