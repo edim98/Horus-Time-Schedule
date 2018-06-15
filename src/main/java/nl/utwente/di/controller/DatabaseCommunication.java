@@ -151,8 +151,7 @@ public class DatabaseCommunication {
             pstmt.setString(2, password);
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
-                l = new Lecturer(resultSet.getString("teacherID"), resultSet.getString("name"),
-                        resultSet.getString("phone"), resultSet.getString("email"));
+                l = new Lecturer(resultSet.getString("teacherID"), resultSet.getString("name"), resultSet.getString("email"));
                 l.setPassowrd(resultSet.getString("password"));
 //                l.setTimetabler(resultSet.getBoolean("isTimetabler"));
                 return l;
@@ -178,18 +177,31 @@ public class DatabaseCommunication {
     }
     
     public static void addNewUser(Lecturer lecturer) {
-        String sql = "INSERT INTO lecturer VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users VALUES(?, ?, ?, ?, ?)";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, lecturer.getTeacherId());
             pstmt.setString(2, lecturer.getName());
-            pstmt.setString(3, lecturer.getPhone());
-            pstmt.setString(4, lecturer.getEmail());
-            pstmt.setString(5, lecturer.getPassword());
+            pstmt.setString(3, lecturer.getEmail());
+            pstmt.setString(4, lecturer.getPassword());
+            pstmt.setBoolean(5, lecturer.isTimetabler());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean checkValidRoom(String roomNr) {
+        String sql = "SELECT FROM room WHERE room_number = ?;";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, roomNr);
+            ResultSet resultSet = pstmt.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static ResultSet getLecturer() {
