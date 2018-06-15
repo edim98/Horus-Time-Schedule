@@ -30,18 +30,9 @@ public class DatabaseCommunication {
         return null;
     }
 
-    private static void executeSQL(String sql) {
-        try (Connection conn = connect();
-             Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     public static Map<String, Room> getRooms() {
         Map<String, Room> rooms = new HashMap<>();
-        String sql = "SELECT * FROM Room";
+        String sql = "SELECT * FROM room";
 
         try {
             Connection conn = connect();
@@ -164,7 +155,7 @@ public class DatabaseCommunication {
     }
 
     public static boolean checkExistingUser(String lecturerid) {
-        String sql = "SELECT * FROM lecturer WHERE teacherid = ?;";
+        String sql = "SELECT * FROM users WHERE email = ?;";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, lecturerid);
@@ -221,6 +212,17 @@ public class DatabaseCommunication {
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void makeUserAdmin(String name) {
+        String sql = "UPDATE users SET is_timetabler = true WHERE staff_name = ?;";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, name);
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
