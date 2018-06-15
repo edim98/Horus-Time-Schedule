@@ -327,7 +327,7 @@
             <div class="row">
               <div class="col-lg-12">
                     <!-- DATA TABLE -->
-                    <h3 class="title-5 m-b-35">Room Analaysis</h3>
+                    <h3 class="title-5 m-b-35">Request History</h3>
                     <div class="table-data__tool">
                         <div class="table-data__tool-left">
                             <div class="rs-select2--light rs-select2--md">
@@ -363,117 +363,39 @@
                         </div>
                     </div>
                     <div class="table-responsive table-responsive-data2">
-                        <table class="table table-data2">
+                        <table class="table table-data2" id ="request-table">
                             <thead>
                                 <tr>
-                                    <th>
-                                        <label class="au-checkbox">
-                                            <input type="checkbox">
-                                            <span class="au-checkmark"></span>
-                                        </label>
-                                    </th>
-                                    <th>Avg</th>
-                                    <th>Room</th>
-                                    <th>Size</th>
-                                    <th>Cpct.</th>
-                                    <th>Facilities</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Course Type</th>
+                                    <th>Old Date</th>
+                                    <th>New Date</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="tr-shadow">
-                                    <td>
-                                        <label class="au-checkbox">
-                                            <input type="checkbox">
-                                            <span class="au-checkmark"></span>
-                                        </label>
-                                    </td>
-                                    <td>Eduard Modreanu</td>
-                                    <td>
-                                        <span class="block-email">modreanu.eduard@gmail.com</span>
-                                    </td>
-                                    <td class="desc">200m^2</td>
-                                    <td>300</td>
-                                    <td>
-                                        <span class="status--process">Blackboard, video, TV</span>
-                                    </td>
-                                    <td>
-                                      <div class="table-data-feature">
-                                          <button class="item" data-toggle="tooltip" data-placement="top" title="Details">
-                                              <i class="fas fa-plus"></i>
-                                      </div>
-                                    </td>
+                                <tr class="tr-shadow request-entry">
+                                  <td>Harry Arts</td>
+                                  <td>Reschedule</td>
+                                  <td>Exam</td>
+                                  <td>01-01-2018</td>
+                                  <td>20-12-2020</td>
+                                  <td>
+                                    <button type="button" class="btn btn-secondary show-info">+</button>
+                                  </td>
                                 </tr>
-                                <tr class="spacer"></tr>
-                                <tr class="tr-shadow">
-                                    <td>
-                                        <label class="au-checkbox">
-                                            <input type="checkbox">
-                                            <span class="au-checkmark"></span>
-                                        </label>
-                                    </td>
-                                    <td>Eduard Modreanu</td>
-                                    <td>
-                                        <span class="block-email">modreanu.eduard@gmail.com</span>
-                                    </td>
-                                    <td class="desc">200m^2</td>
-                                    <td>300</td>
-                                    <td>
-                                        <span class="status--process">Blackboard, video, TV</span>
-                                    </td>
-                                    <td>
-                                      <div class="table-data-feature">
-                                          <button class="item" data-toggle="tooltip" data-placement="top" title="Details">
-                                              <i class="fas fa-plus"></i>
-                                      </div>
-                                    </td>
-                                </tr>
-                                <tr class="spacer"></tr>
-                                <tr class="tr-shadow">
-                                    <td>
-                                        <label class="au-checkbox">
-                                            <input type="checkbox">
-                                            <span class="au-checkmark"></span>
-                                        </label>
-                                    </td>
-                                    <td>Eduard Modreanu</td>
-                                    <td>
-                                        <span class="block-email">modreanu.eduard@gmail.com</span>
-                                    </td>
-                                    <td class="desc">200m^2</td>
-                                    <td>300</td>
-                                    <td>
-                                        <span class="status--process">Blackboard, video, TV</span>
-                                    </td>
-                                    <td>
-                                      <div class="table-data-feature">
-                                          <button class="item" data-toggle="tooltip" data-placement="top" title="Details">
-                                              <i class="fas fa-plus"></i>
-                                      </div>
-                                    </td>
-                                </tr>
-                                <tr class="spacer"></tr>
-                                <tr class="tr-shadow">
-                                    <td>
-                                        <label class="au-checkbox">
-                                            <input type="checkbox">
-                                            <span class="au-checkmark"></span>
-                                        </label>
-                                    </td>
-                                    <td>Eduard Modreanu</td>
-                                    <td>
-                                        <span class="block-email">modreanu.eduard@gmail.com</span>
-                                    </td>
-                                    <td class="desc">200m^2</td>
-                                    <td>300</td>
-                                    <td>
-                                        <span class="status--process">Blackboard, video, TV</span>
-                                    </td>
-                                    <td>
-                                        <div class="table-data-feature">
-                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Details">
-                                                <i class="fas fa-plus"></i>
-                                        </div>
-                                    </td>
+                                <tr class="tr-shadow hidden-info" style= 'display: none'>
+                                  <td colspan="6">
+                                    <div>
+                                      <ul>
+                                        <li>ID: </li>
+                                        <li>Teacher ID: </li>
+                                        <li>Old Room: </li>
+                                        <li>Number of Students: </li>
+                                        <li>Other Notes: </li>
+                                      </ul>
+                                    </div>
+                                  </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -712,6 +634,9 @@
         <script src="../../js/popup-pages.js"></script>
         <!-- Main JS-->
         <script src="../../js/main.js"></script>
+        <!-- Request-History-->
+
+        <script src="../../js/request-history.js"></script>
 		<!-- Form JS-->
 		<script type="text/javascript">
 			function adjust_textarea(h) {
