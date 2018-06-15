@@ -40,6 +40,15 @@ Notes:	decreasing heading by 0.4em with every subsequent heading level
 /*                   GENERIC                           */
 /*-----------------------------------------------------*/
 /* ----- Normalize ----- */
+#logo {
+  display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-align-content: center;
+    align-content: center;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -73,8 +82,9 @@ button {
 }
 
 img {
-    max-width: 100%;
-    height: auto;
+    padding-right: 1em;
+    height: 2.5em;
+    width: 10em;
 }
 
 p {
@@ -224,8 +234,7 @@ a:active {
     outline: none;
 }
 
-a:hover,
-a {
+a:hover {
     -webkit-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
@@ -236,6 +245,22 @@ a {
 /*                   OBJECTS                           */
 /*-----------------------------------------------------*/
 /* ----- Section----- */
+#top-bar {
+  float: right;
+}
+
+#user-popup-btn {
+    color: black;
+    border-radius: 3px;
+    padding: 5px;
+    margin-left: 1em;
+}
+#user-popup-btn:hover {
+    background-color: #555555;
+      color: white;
+}
+
+
 
 #background-gif1 {
   position: absolute;
@@ -306,7 +331,7 @@ section {
     background: #e5e5e5;
     padding-left: 250px;
     padding-right: 25px;
-    height:100%;
+    height: 63em;
 }
 
 @media (max-width: 991px) {
