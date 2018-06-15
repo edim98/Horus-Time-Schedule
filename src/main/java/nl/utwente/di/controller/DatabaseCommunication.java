@@ -143,7 +143,7 @@ public class DatabaseCommunication {
     }
 
     public static Lecturer getUSer(String id, String password) {
-        String sql = "SELECT * FROM lecturer  WHERE email = ? AND password = ?;";
+        String sql = "SELECT * FROM users  WHERE email = ? AND password = ?;";
         Lecturer l;
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -151,9 +151,9 @@ public class DatabaseCommunication {
             pstmt.setString(2, password);
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
-                l = new Lecturer(resultSet.getString("teacherID"), resultSet.getString("name"), resultSet.getString("email"));
+                l = new Lecturer(resultSet.getString("user_id"), resultSet.getString("staff_name"), resultSet.getString("email"));
                 l.setPassowrd(resultSet.getString("password"));
-//                l.setTimetabler(resultSet.getBoolean("isTimetabler"));
+                l.setTimetabler(resultSet.getBoolean("is_timetabler"));
                 return l;
             }
             return null;
@@ -216,14 +216,18 @@ public class DatabaseCommunication {
         return null;
     }
 
+    public static void change() {
+        String sql = "UPDATE request SET oldroom = 'SP 4' WHERE oldroom = 'SP4'";
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
-//        DatabaseCommunication.generateTables();
-//        System.out.println(DatabaseCommunication.getRequests());
-//        Lecturer l = new Lecturer("m2008491", "Eduard Modreanu", "29763754892984", "email", "hashedpass_bitch!");
-//        DatabaseCommunication.addNewUser(l);
-//        System.out.println(DatabaseCommunication.getId("request"));
-//        System.out.println(DatabaseCommunication.getUSer("m2008491", "hashedpass_bitch!"));
-//        System.out.println(DatabaseCommunication.getLecturer());
+        DatabaseCommunication.change();
     }
 
 }
