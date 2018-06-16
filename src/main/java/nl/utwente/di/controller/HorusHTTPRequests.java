@@ -42,6 +42,7 @@ public class HorusHTTPRequests {
     }
 
     private boolean checkValidRequestJSON(JSONObject jsonObject) {
+        System.out.println(jsonObject);
         return jsonObject.has("oldRoom") && jsonObject.has("oldDate") && jsonObject.has("newDate") &&
                 jsonObject.has("teacherID") && jsonObject.has("numberOfStudents") && jsonObject.has("type") &&
                 jsonObject.has("name") && jsonObject.has("notes") && jsonObject.has("courseType") && jsonObject.has("faculty");
@@ -68,6 +69,7 @@ public class HorusHTTPRequests {
         String name = jsonObject.getString("name");
         String notes = jsonObject.getString("notes");
         String courseType = jsonObject.getString("courseType");
+        //TODO: courseType must be derived from old date, old room and faculty
         String faculty = jsonObject.getString("faculty");
         Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name, numberOfStudents, requestType,
                 notes, courseType, faculty);

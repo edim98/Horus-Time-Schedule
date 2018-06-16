@@ -288,7 +288,7 @@
 		<li>
 			<label for="faculty">Faculty</label>
 			<div class="ui-select">
-			<select name="faculty">
+			<select id="faculty" name="faculty">
 			<option value="0">Faculty A</option>
 			<option value="1">Faculty B</option>
 			<option value="2">Faculty C</option>
@@ -331,7 +331,7 @@
 		</form>
         <div class="modal-footer">
           <button class="btn btn-default btn-block request-button" type="submit" id="reschedule-button">Request change</button>
-          <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" onclick="alert('Request sent!')" id="cancel-button">Cancel class</button>
+          <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" id="cancel-button">Cancel class</button>
         </div>
     </div>
         </div>
@@ -350,7 +350,7 @@
     		<form class="form-style-7" name="clearForm">
     		<ul>
     		<li>
-    			<label for="faculty">Faculty</label>
+    			<label for="faculty">Settngs</label>
     			<div class="ui-select">
     			<select name="faculty">
     			<option value="0">Faculty A</option>
@@ -394,8 +394,8 @@
     		</ul>
     		</form>
             <div class="modal-footer">
-              <button class="btn btn-default btn-block request-button" type="submit" id="reschedule-button">Request change</button>
-              <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" onclick="alert('Request sent!')" id="cancel-button">Cancel class</button>
+              <button class="btn btn-default btn-block request-button" type="submit">Request change</button>
+              <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit">Cancel class</button>
             </div>
         </div>
             </div>
@@ -417,7 +417,7 @@
     });
         </script>
 
-        <script>
+        <!-- <script>
         $('#reschedule-button').click(function(){
           if ($('#desired-room').val().length === 0 || $('#datetime-change').val().length === 0 || $('#nr-of-students').val().length === 0){
             $('#incomplete-fields').show();
@@ -425,7 +425,7 @@
             $('#incomplete-fields').hide();
           }
         });
-        </script>
+        </script> -->
         <script>
           $('#change-radio').on('click', function(){
             $('#cancel-button').hide();

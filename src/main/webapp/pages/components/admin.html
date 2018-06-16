@@ -374,32 +374,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-<<<<<<< HEAD:src/main/webapp/pages/components/admin.html
-=======
-                                <tr class="tr-shadow request-entry">
-                                  <td>Harry Arts</td>
-                                  <td>Reschedule</td>
-                                  <td>Exam</td>
-                                  <td>01-01-2018</td>
-                                  <td>20-12-2020</td>
-                                  <td>
-                                    <button type="button" class="btn btn-secondary show-info">+</button>
-                                  </td>
-                                </tr>
-                                <tr class="tr-shadow hidden-info" style= 'display: none'>
-                                  <td colspan="6">
-                                    <div>
-                                      <ul>
-                                        <li>ID: </li>
-                                        <li>Teacher ID: </li>
-                                        <li>Old Room: </li>
-                                        <li>Number of Students: </li>
-                                        <li>Other Notes: </li>
-                                      </ul>
-                                    </div>
-                                  </td>
-                                </tr>
->>>>>>> ad10b7a7927a5dad327060cf8bfc0a01bb1f2cf3:src/main/webapp/pages/components/admin.html
                             </tbody>
                         </table>
                     </div>
@@ -428,74 +402,6 @@
                     </div>
                 </div>
             </div>
-
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog modal-lg">
-
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-	<div class="modal-body" style="padding: 40px">
-		<form class="form-style-7" name="clearForm">
-		<ul>
-		<li>
-			<label for="faculty">Faculty</label>
-			<div class="ui-select">
-			<select name="faculty">
-			<option value="0">Faculty A</option>
-			<option value="1">Faculty B</option>
-			<option value="2">Faculty C</option>
-			</select>
-			</div>
-			<span>Please select your faculty</span>
-		</li>
-		<li>
-			<label for="current-room">Current room</label>
-			<input type="text" maxlength="20" id="current-room">
-			<span>Please specify for which room your current class is scheduled</span>
-		</li>
-		<li>
-			<label for="datetime-request">Date and time</label>
-			<input type="text" id="datetime-request">
-			<span>The date and time at which your class starts</span>
-		</li>
-		<input type="radio" name="type-of-request" value="RESCHEDULE" id="change-radio"> Make a schedule change<br>
-		<input type="radio" name="type-of-request" value="CANCEL" id="cancel-radio"> Cancel the class<br>
-		</ul>
-		</form>
-		<form id="change-form" class="form-style-7">
-		<ul>
-		<li>
-			<label for="datetime-change">Date and time</label>
-			<input type="text" id="datetime-change">
-			<span>The new date and time for your class</span>
-		</li>
-		<li>
-			<label for="nr-of-students">Number of students</label>
-			<input type="text" maxlength="4" id="nr-of-students">
-			<span>The number of students that will be attending this class</span>
-		</li>
-		<li>
-			<label for="notes-input">Notes</label>
-			<textarea id="notes-input" onkeyup="adjust_textarea(this)"></textarea>
-			<span>If you have any comments for the scheduler please specifiy them here</span>
-		</li>
-		</ul>
-		</form>
-        <div class="modal-footer">
-          <button class="btn btn-default btn-block request-button" type="submit" id="reschedule-button">Request change</button>
-          <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" onclick="alert('Request sent!')" id="cancel-button">Cancel class</button>
-        </div>
-    </div>
-
-
-        </div>
-        </div>
-      </div>
-
       <!-- CONTACT US POP-UP -->
 <div class="modal fade" id="contactPopup" role="dialog">
   <div class="modal-dialog modal-lg">
@@ -640,17 +546,6 @@
         <!-- Request-History-->
 
         <script src="../../js/request-history.js"></script>
-<<<<<<< HEAD:src/main/webapp/pages/components/admin.html
-=======
-        <script src="../../js/dashboard.js"></script>
-		<!-- Form JS-->
-		<script type="text/javascript">
-			function adjust_textarea(h) {
-			h.style.height = "20px";
-			h.style.height = (h.scrollHeight)+"px";
-			}
-		</script>
->>>>>>> ad10b7a7927a5dad327060cf8bfc0a01bb1f2cf3:src/main/webapp/pages/components/admin.html
   </body>
 
 </html>
