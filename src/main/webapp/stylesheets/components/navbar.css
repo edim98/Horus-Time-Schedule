@@ -81,12 +81,6 @@ button {
     background: none;
 }
 
-img {
-    padding-right: 1em;
-    height: 2.5em;
-    width: 10em;
-}
-
 p {
     margin: 0;
 }
@@ -245,22 +239,15 @@ a:hover {
 /*                   OBJECTS                           */
 /*-----------------------------------------------------*/
 /* ----- Section----- */
+#logo-image {
+  padding-right: 1em;
+  height: 2.5em;
+  width: 10em;
+}
+
 #top-bar {
-  float: right;
+  float: left;
 }
-
-#user-popup-btn {
-    color: black;
-    border-radius: 3px;
-    padding: 5px;
-    margin-left: 1em;
-}
-#user-popup-btn:hover {
-    background-color: #555555;
-      color: white;
-}
-
-
 
 #background-gif1 {
   position: absolute;
@@ -1272,6 +1259,7 @@ section {
         left: 0;
         right:0;
         height: 170px;
+        width: 100em;
     }
 }
 
@@ -1337,7 +1325,7 @@ section {
     }
 
     .header-wrap .notifi-dropdown {
-        left: -83px;
+        left: 0px;
     }
 
     .header-wrap .notifi-dropdown::before {
@@ -2092,7 +2080,7 @@ section {
 }
 
 .notifi-dropdown {
-    left: -117px;
+    left: -1em;
     top: 49px;
 }
 
@@ -2470,7 +2458,7 @@ section {
 @media (max-width: 991px) {
     .header-button2 .header-button-item .notifi-dropdown {
         top: 63px;
-        right: -48px;
+        right: 666em;
         -webkit-transform-origin: 80% top;
         -moz-transform-origin: 80% top;
         -ms-transform-origin: 80% top;

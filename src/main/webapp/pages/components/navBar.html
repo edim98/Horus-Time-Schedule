@@ -73,7 +73,10 @@
                         <li>
                             <a href="#">
                                 <i class="fas fa-address-book"></i>Contact Us</a>
-
+                        </li>
+                        <li>
+                          <a href="login.html">
+                              <i class="fas fa-sign-out-alt"></i>Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -102,13 +105,16 @@
                               <i class="fas fa-file"></i>Requests</a>
                       </li>
                       <li>
-                          <a href="map.html">
+                          <a href="#" data-toggle="modal" data-target="#settingsModal">
                               <i class="fas fa-cogs"></i>Settings</a>
                       </li>
                       <li>
                           <a href="#">
                               <i class="fas fa-address-book"></i>Contact Us</a>
-
+                      </li>
+                      <li>
+                        <a href="../login.html">
+                            <i class="fas fa-sign-out-alt"></i>Logout</a>
                       </li>
                 </nav>
             </div>
@@ -164,34 +170,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="account-wrap">
-                                    <div class="clearfix js-item-menu">
 
-                                        <div class="content">
-                                            <button clas="btn btn-default btn-block" id="user-popup-btn">Your name lol</button>
-                                        </div>
-                                        <div class="account-dropdown js-dropdown">
-                                                <div class="content">
-                                                    <h2>het goed CSS alsjeblieft</h2>
-                                                </div>
-                                            <!-- <div class="account-dropdown__body">
-                                                <div class="account-dropdown__item">
-                                                    <a href="#">
-                                                        <i class="fas fa-user-circle"></i>Account</a>
-                                                </div>
-                                                <div class="account-dropdown__item">
-                                                    <a href="#">
-                                                        <i class="fas fa-cogs"></i>Settings</a>
-                                                </div>
-
-                                            </div> -->
-                                            <div class="account-dropdown__footer">
-                                                <a href="#">
-                                                    <i class="fas fa-sign-out-alt"></i>Logout</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -359,11 +338,73 @@
           <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" onclick="alert('Request sent!')" id="cancel-button">Cancel class</button>
         </div>
     </div>
-
-
         </div>
         </div>
       </div>
+
+      <div class="modal fade" id="settingsModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+    	<div class="modal-body" style="padding: 40px">
+    		<form class="form-style-7" name="clearForm">
+    		<ul>
+    		<li>
+    			<label for="faculty">Faculty</label>
+    			<div class="ui-select">
+    			<select name="faculty">
+    			<option value="0">Faculty A</option>
+    			<option value="1">Faculty B</option>
+    			<option value="2">Faculty C</option>
+    			</select>
+    			</div>
+    			<span>Please select your faculty</span>
+    		</li>
+    		<li>
+    			<label for="current-room">Current room</label>
+    			<input type="text" maxlength="20" id="current-room">
+    			<span>Please specify for which room your current class is scheduled</span>
+    		</li>
+    		<li>
+    			<label for="datetime-request">Date and time</label>
+    			<input type="text" id="datetime-request">
+    			<span>The date and time at which your class starts</span>
+    		</li>
+    		<input type="radio" name="type-of-request" value="RESCHEDULE" id="change-radio"> Make a schedule change<br>
+    		<input type="radio" name="type-of-request" value="CANCEL" id="cancel-radio"> Cancel the class<br>
+    		</ul>
+    		</form>
+    		<form id="change-form" class="form-style-7">
+    		<ul>
+    		<li>
+    			<label for="datetime-change">Date and time</label>
+    			<input type="text" id="datetime-change">
+    			<span>The new date and time for your class</span>
+    		</li>
+    		<li>
+    			<label for="nr-of-students">Number of students</label>
+    			<input type="text" maxlength="4" id="nr-of-students">
+    			<span>The number of students that will be attending this class</span>
+    		</li>
+    		<li>
+    			<label for="notes-input">Notes</label>
+    			<textarea id="notes-input" onkeyup="adjust_textarea(this)"></textarea>
+    			<span>If you have any comments for the scheduler please specifiy them here</span>
+    		</li>
+    		</ul>
+    		</form>
+            <div class="modal-footer">
+              <button class="btn btn-default btn-block request-button" type="submit" id="reschedule-button">Request change</button>
+              <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" onclick="alert('Request sent!')" id="cancel-button">Cancel class</button>
+            </div>
+        </div>
+            </div>
+            </div>
+          </div>
 
 
         <!-- Jquery JS-->
