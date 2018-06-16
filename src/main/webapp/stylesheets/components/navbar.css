@@ -40,6 +40,15 @@ Notes:	decreasing heading by 0.4em with every subsequent heading level
 /*                   GENERIC                           */
 /*-----------------------------------------------------*/
 /* ----- Normalize ----- */
+#logo {
+  display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-align-content: center;
+    align-content: center;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -70,11 +79,6 @@ input, textarea {
 button {
     border: none;
     background: none;
-}
-
-img {
-    max-width: 100%;
-    height: auto;
 }
 
 p {
@@ -224,8 +228,7 @@ a:active {
     outline: none;
 }
 
-a:hover,
-a {
+a:hover {
     -webkit-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
@@ -236,6 +239,15 @@ a {
 /*                   OBJECTS                           */
 /*-----------------------------------------------------*/
 /* ----- Section----- */
+#logo-image {
+  padding-right: 1em;
+  height: 2.5em;
+  width: 10em;
+}
+
+#top-bar {
+  float: left;
+}
 
 #background-gif1 {
   position: absolute;
@@ -306,7 +318,7 @@ section {
     background: #e5e5e5;
     padding-left: 250px;
     padding-right: 25px;
-    height:100%;
+    height: 63em;
 }
 
 @media (max-width: 991px) {
@@ -1247,6 +1259,7 @@ section {
         left: 0;
         right:0;
         height: 170px;
+        width: 100em;
     }
 }
 
@@ -1312,7 +1325,7 @@ section {
     }
 
     .header-wrap .notifi-dropdown {
-        left: -83px;
+        left: 0px;
     }
 
     .header-wrap .notifi-dropdown::before {
@@ -2067,7 +2080,7 @@ section {
 }
 
 .notifi-dropdown {
-    left: -117px;
+    left: -1em;
     top: 49px;
 }
 
@@ -2445,7 +2458,7 @@ section {
 @media (max-width: 991px) {
     .header-button2 .header-button-item .notifi-dropdown {
         top: 63px;
-        right: -48px;
+        right: 666em;
         -webkit-transform-origin: 80% top;
         -moz-transform-origin: 80% top;
         -ms-transform-origin: 80% top;
