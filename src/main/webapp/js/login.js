@@ -19,8 +19,21 @@ $(document).ready(function() {
 
       complete: function(result) {
         if(result.status == 200) {
-          url='./components/admin.html';
-          $(location).attr('href', url);
+
+          var responseJSON = result.responseJSON;
+          var name = responseJSON.name;
+          var teacherID = responseJSON.teacherID;
+          var isAdmin = responseJSON.isAdmin;
+          //console.log(name + " " + teacherID + " " + isAdmin);
+          if(isAdmin){
+            url='./components/admin.html';
+            $(location).attr('href', url);
+          } else {
+            alert('you are not an admin!');
+            location.reload();
+          }
+        //  $(location).attr('href', url);
+
         } else {
           alert('Failed!' + result.status + result.errorMessage);
           location.reload();

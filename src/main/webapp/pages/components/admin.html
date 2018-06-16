@@ -34,7 +34,7 @@
     <link href="../../stylesheets/components/navbar.css" rel="stylesheet" media="all">
     <!-- <title></title> -->
   </head>
-  <body class="animsition" onload="clearForm.reset();">
+  <body class="animsition">
 
     <div class="page-wrapper">
         <!-- HEADER MOBILE-->
@@ -64,14 +64,14 @@
 
                         <li>
                             <a data-toggle="modal" data-target="#myModal">
-                                <i class="fas fa-file"></i>Requests</a>
+                                <i class="fas fa-file"></i>New request</a>
                         </li>
                         <li>
                             <a href="map.html">
                                 <i class="fas fa-cogs"></i>Settings</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a data-toggle="modal" data-target="#contactPopup">
                                 <i class="fas fa-address-book"></i>Contact Us</a>
 
                         </li>
@@ -99,14 +99,14 @@
 
                       <li>
                           <a  href="#" data-toggle="modal" data-target="#myModal">
-                              <i class="fas fa-file"></i>Requests</a>
+                              <i class="fas fa-file"></i>New request</a>
                       </li>
                       <li>
                           <a href="map.html">
                               <i class="fas fa-cogs"></i>Settings</a>
                       </li>
                       <li>
-                          <a href="#">
+                          <a href="#" data-toggle="modal" data-target="#contactPopup">
                               <i class="fas fa-address-book"></i>Contact Us</a>
 
                       </li>
@@ -206,17 +206,13 @@
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">
-                                            <img src="images/icon/avatar-01.jpg" alt="John Doe" />
-                                        </div>
-                                        <div class="content">
-                                            <a class="js-acc-btn" href="#">
-                                            <i class="fas fa-user"></i></a>
+                                            <img src="images/icon/user.png" alt="John Doe" />
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
                                                 <div class="image">
                                                     <a href="#">
-                                                        <img src="images/icon/avatar-01.jpg" alt="John Doe" />
+                                                        <img src="images/icon/user.png" alt="John Doe" />
                                                     </a>
                                                 </div>
                                                 <div class="content">
@@ -260,8 +256,8 @@
                                     <i class="fas fa-door-open"></i>
                                 </div>
                                 <div class="text">
-                                    <h2>10</h2>
-                                    <span>Not resolved requests</span>
+                                    <h2 id="pendingRequests">unknown</h2>
+                                    <span>Requests pending</span>
                                 </div>
                             </div>
                             <div class="overview-chart">
@@ -378,6 +374,32 @@
                                 </tr>
                             </thead>
                             <tbody>
+<<<<<<< HEAD:src/main/webapp/pages/components/admin.html
+=======
+                                <tr class="tr-shadow request-entry">
+                                  <td>Harry Arts</td>
+                                  <td>Reschedule</td>
+                                  <td>Exam</td>
+                                  <td>01-01-2018</td>
+                                  <td>20-12-2020</td>
+                                  <td>
+                                    <button type="button" class="btn btn-secondary show-info">+</button>
+                                  </td>
+                                </tr>
+                                <tr class="tr-shadow hidden-info" style= 'display: none'>
+                                  <td colspan="6">
+                                    <div>
+                                      <ul>
+                                        <li>ID: </li>
+                                        <li>Teacher ID: </li>
+                                        <li>Old Room: </li>
+                                        <li>Number of Students: </li>
+                                        <li>Other Notes: </li>
+                                      </ul>
+                                    </div>
+                                  </td>
+                                </tr>
+>>>>>>> ad10b7a7927a5dad327060cf8bfc0a01bb1f2cf3:src/main/webapp/pages/components/admin.html
                             </tbody>
                         </table>
                     </div>
@@ -473,6 +495,38 @@
         </div>
         </div>
       </div>
+
+      <!-- CONTACT US POP-UP -->
+<div class="modal fade" id="contactPopup" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+  <!-- POP-UP CONTENT -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <table style="margin: 0 auto; margin-bottom: 25px; margin-top: 25px">
+          <tr>
+            <td valign="top" style="padding-right: 75px">
+              <h4>Contact the timetabling team:</h4>
+              Street address here <br>
+              Enschede 7511AA <br>
+              E-mail: email@email.com <br>
+              Phone number: 0682222222
+            </td>
+            <td valign="top">
+              <h4>Report a bug or suggestion:</h4>
+              HORUS Project Team <br>
+              E-mail: email@email.com <br>
+              Phone number: 0682222222
+            </td>
+          </tr>
+      </table>
+      </div>
+    </div>
+  </div>
+</div>
 
 
         <!-- Jquery JS-->
@@ -586,6 +640,17 @@
         <!-- Request-History-->
 
         <script src="../../js/request-history.js"></script>
+<<<<<<< HEAD:src/main/webapp/pages/components/admin.html
+=======
+        <script src="../../js/dashboard.js"></script>
+		<!-- Form JS-->
+		<script type="text/javascript">
+			function adjust_textarea(h) {
+			h.style.height = "20px";
+			h.style.height = (h.scrollHeight)+"px";
+			}
+		</script>
+>>>>>>> ad10b7a7927a5dad327060cf8bfc0a01bb1f2cf3:src/main/webapp/pages/components/admin.html
   </body>
 
 </html>

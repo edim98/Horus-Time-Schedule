@@ -38,3 +38,11 @@ $('#reschedule-button').click(function(event) {
 
   });
 });
+<<<<<<< HEAD
+=======
+
+function adjust_textarea(h) {
+    h.style.height = "20px";
+    h.style.height = (h.scrollHeight)+"px";
+}
+>>>>>>> ad10b7a7927a5dad327060cf8bfc0a01bb1f2cf3

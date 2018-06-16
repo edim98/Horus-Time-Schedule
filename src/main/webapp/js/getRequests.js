@@ -1,6 +1,6 @@
 $(document).ready(function() {
   $.ajax({
-    url: '/horus/requests',
+    url: '/requests',
     type: 'GET',
     dataType: 'json',
   })
@@ -48,10 +48,11 @@ $(document).ready(function() {
     //for(i = totalData; i >= totalData - 5; i--);
     //console.log('This is the value: ' + $("#old-room").val());
   })
-  .fail(function() {
-    console.log("error");
+  .fail(function(result) {
+    console.log("error did not get requests");
+    console.log(result);
   })
-  .always(function(data) {
+  .always(function() {
     console.log("complete");
   });
 
