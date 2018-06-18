@@ -100,7 +100,7 @@ public class DatabaseCommunication {
     }
 
     public static void addNewRequest(Request request) {
-        String sql = "INSERT INTO request" +
+        String sql = "INSERT INTO request(oldroom, olddate, newdate, teacherid, teachername, numberofstudents, requesttype, notes, coursetype, faculty, status)" +
                 " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -260,7 +260,7 @@ public class DatabaseCommunication {
 
     public static void main(String[] args) {
         DatabaseCommunication.change();
-        DatabaseCommunication.changeRequestStatus(Status.accepted, 3);
+        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
     }
 
 }
