@@ -406,7 +406,6 @@
         $('#psw-change-form').hide();
         $('#faculty-preference').hide();
         $('#new-name-input').hide();
-        $('#settings-button').hide();
         $(this).prop(':checked', false);
         $('.selectpicker').selectpicker({
         style: 'btn-info',
@@ -421,17 +420,14 @@
             $('#psw-change-form').show();
             $('#faculty-preference').hide();
             $('#new-name-input').hide();
-            $('#settings-button').show();
           } else if ($('#settingsOptions').val() == "2"){
             $('#psw-change-form').hide();
             $('#faculty-preference').show();
             $('#new-name-input').hide();
-            $('#settings-button').show();
           } else if ($('#settingsOptions').val() == "4"){
             $('#psw-change-form').hide();
             $('#faculty-preference').hide();
             $('#new-name-input').show();
-            $('#settings-button').show();
           }
         })
         </script>
@@ -444,7 +440,7 @@
             $('#incomplete-fields').hide();
           }
         });
-        </script>
+        </script> -->
         <script>
           $('#change-radio').on('click', function(){
             $('#cancel-button').hide();
