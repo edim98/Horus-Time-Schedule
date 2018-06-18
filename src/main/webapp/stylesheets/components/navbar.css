@@ -318,7 +318,7 @@ section {
     background: #e5e5e5;
     padding-left: 250px;
     padding-right: 25px;
-    height: 63em;
+    height: auto;
 }
 
 @media (max-width: 991px) {

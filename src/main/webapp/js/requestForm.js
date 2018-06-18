@@ -6,14 +6,14 @@ $('#cancel-button').click(function(event){
   var request = JSON.stringify({
     'oldRoom' : $('#current-room').val(),
     'oldDate' : $('#datetime-request').val(),
-    'newDate' : 'NULL',
+    'newDate' : 'Not specified',
     'teacherID' : 't12345',
     'numberOfStudents' : '0',
-    'type' : 'cancel',
+    'type' : 'Cancel',
     'name' : 'Rom Langerak',
     'courseType' : 'lecture',
     'faculty' : $('#faculty option:selected').val(),
-    'notes' : 'NULL'
+    'notes' : 'Not specified'
   });
 
   console.log(request);
