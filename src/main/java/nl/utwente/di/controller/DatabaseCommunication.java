@@ -86,8 +86,10 @@ public class DatabaseCommunication {
                 String notes = result.getString(9);
                 String courseType = result.getString(10);
                 String faculty = result.getString(11);
+                String status = result.getString(12);
                 Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name,
                         numberOfStrudents, type, notes, courseType, faculty);
+                request.setStatus(status);
                 requests.add(request);
             }
             return requests;
@@ -98,7 +100,7 @@ public class DatabaseCommunication {
     }
 
     public static void addNewRequest(Request request) {
-        String sql = "INSERT INTO request(old_room, old_date, new_date, teacher_id, teacher_name, number_of_students, type, notes, course_type, faculty)" +
+        String sql = "INSERT INTO request(oldroom, olddate, newdate, teacherid, teachername, numberofstudents, requesttype, notes, coursetype, faculty)" +
                 " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
