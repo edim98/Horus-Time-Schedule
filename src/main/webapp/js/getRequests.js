@@ -1,6 +1,6 @@
 $(document).ready(function() {
   $.ajax({
-    url: 'horus/requests',
+    url: '/horus/requests',
     type: 'GET',
     dataType: 'json',
   })
