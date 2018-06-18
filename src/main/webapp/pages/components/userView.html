@@ -21,9 +21,11 @@
     <link href="../../vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" media="all">
     <link href="../../vendor/slick/slick.css" rel="stylesheet" media="all">
     <link href="../../vendor/select2/select2.min.css" rel="stylesheet" media="all">
-    <link href="../../vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
+    <link href="../../vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all"></link>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" /></link>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+
+
 
     <link rel="stylesheet" href="../../js/jquery.datetimepicker.min.css" />
     <script src="../../js/jquery.js"></script>
@@ -344,58 +346,49 @@
           <!-- Modal content-->
           <div class="modal-content">
             <div class="modal-header">
+                <h1>Settings</h1>
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
     	<div class="modal-body" style="padding: 40px">
-    		<form class="form-style-7" name="clearForm">
-    		<ul>
-    		<li>
-    			<label for="faculty">Settngs</label>
-    			<div class="ui-select">
-    			<select name="faculty">
-    			<option value="0">Faculty A</option>
-    			<option value="1">Faculty B</option>
-    			<option value="2">Faculty C</option>
-    			</select>
-    			</div>
-    			<span>Please select your faculty</span>
-    		</li>
-    		<li>
-    			<label for="current-room">Current room</label>
-    			<input type="text" maxlength="20" id="current-room">
-    			<span>Please specify for which room your current class is scheduled</span>
-    		</li>
-    		<li>
-    			<label for="datetime-request">Date and time</label>
-    			<input type="text" id="datetime-request">
-    			<span>The date and time at which your class starts</span>
-    		</li>
-    		<input type="radio" name="type-of-request" value="RESCHEDULE" id="change-radio"> Make a schedule change<br>
-    		<input type="radio" name="type-of-request" value="CANCEL" id="cancel-radio"> Cancel the class<br>
-    		</ul>
-    		</form>
-    		<form id="change-form" class="form-style-7">
-    		<ul>
-    		<li>
-    			<label for="datetime-change">Date and time</label>
-    			<input type="text" id="datetime-change">
-    			<span>The new date and time for your class</span>
-    		</li>
-    		<li>
-    			<label for="nr-of-students">Number of students</label>
-    			<input type="text" maxlength="4" id="nr-of-students">
-    			<span>The number of students that will be attending this class</span>
-    		</li>
-    		<li>
-    			<label for="notes-input">Notes</label>
-    			<textarea id="notes-input" onkeyup="adjust_textarea(this)"></textarea>
-    			<span>If you have any comments for the scheduler please specifiy them here</span>
-    		</li>
-    		</ul>
-    		</form>
+        <form>
+  <select class="custom-select my-1 mr-sm-2" id="settingsOptions">
+    <option value="0" selected hidden>Choose what you want to change</option>
+    <option value="1">Password</option>
+    <option value="2">Default faculty</option>
+    <!-- <option value="3">Security question</option> -->
+    <option value="4">Name</option>
+  </select>
+
+  <form >
+  <div class="form-row" id="psw-change-form">
+    <div class="col">
+      <input type="password" class="form-control" placeholder="Old password" id="old-psw-input">
+    </div>
+    <div class="col">
+      <input type="password" class="form-control" placeholder="New password" id="new-psw-input">
+    </div>
+  </div>
+</form>
+
+<select class="custom-select my-1 mr-sm-2" id="faculty-preference">
+  <option value="" selected hidden>Choose a default faculty</option>
+  <option value="1">BMS</option>
+  <option value="2">ET</option>
+  <option value="3">EEMCS/EWI</option>
+  <option value="4">TNW</option>
+  <option value="5">ITC</option>
+</select>
+
+
+<form>
+  <input type="text" class="form-control" placeholder="New name" id="new-name-input">
+</form>
+
+
+
+</form>
             <div class="modal-footer">
-              <button class="btn btn-default btn-block request-button" type="submit">Request change</button>
-              <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit">Cancel class</button>
+                  <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" onclick="alert('Settings updated!')" id="settings-button">Confirm changes</button>
             </div>
         </div>
             </div>
@@ -410,6 +403,9 @@
         $("#cancel-button").hide();
         $('#reschedule-button').hide();
         $('#incomplete-fields').hide();
+        $('#psw-change-form').hide();
+        $('#faculty-preference').hide();
+        $('#new-name-input').hide();
         $(this).prop(':checked', false);
         $('.selectpicker').selectpicker({
         style: 'btn-info',
@@ -417,7 +413,26 @@
     });
         </script>
 
-        <!-- <script>
+        <script>
+        $('#settingsOptions').change(function() {
+          var selectedOption = $('#settingsOptions').val();
+          if ($('#settingsOptions').val() == "1"){
+            $('#psw-change-form').show();
+            $('#faculty-preference').hide();
+            $('#new-name-input').hide();
+          } else if ($('#settingsOptions').val() == "2"){
+            $('#psw-change-form').hide();
+            $('#faculty-preference').show();
+            $('#new-name-input').hide();
+          } else if ($('#settingsOptions').val() == "4"){
+            $('#psw-change-form').hide();
+            $('#faculty-preference').hide();
+            $('#new-name-input').show();
+          }
+        })
+        </script>
+
+        <script>
         $('#reschedule-button').click(function(){
           if ($('#desired-room').val().length === 0 || $('#datetime-change').val().length === 0 || $('#nr-of-students').val().length === 0){
             $('#incomplete-fields').show();
@@ -453,6 +468,8 @@
 
         <script>
         $( document ).ready(function() {
+          // events that happen at page refresh
+          $("#settingsOptions").val("0").change();
                 var isChange = !$('#change-radio').prop('checked');
                 var isCancel = !$('#cancel-radio').prop('checked');
 
@@ -462,7 +479,6 @@
                     $('#reschedule-button').show();
                 }
                  if(!isCancel){
-                  console.log( "CANCEL BUTTON ON!" );
                   $('#change-form').hide();
                   $('#reschedule-button').hide();
                     $('#cancel-button').show();
