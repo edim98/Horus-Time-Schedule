@@ -107,9 +107,9 @@ public class DatabaseCommunication {
             pstmt.setString(1, request.getOldRoom().getRoomNumber());
             pstmt.setString(2, request.getOldDate());
             pstmt.setString(3, request.getNewDate());
-            pstmt.setInt(4, request.getNumberOfStudents());
-            pstmt.setString(5, request.getTeacherID());
-            pstmt.setString(6, request.getTeacherName());
+            pstmt.setString(4, request.getTeacherID());
+            pstmt.setString(5, request.getTeacherName());
+            pstmt.setInt(6, request.getNumberOfStudents());
             pstmt.setString(7, request.getType());
             pstmt.setString(8, request.getNotes());
             pstmt.setString(9, request.getCourseType());

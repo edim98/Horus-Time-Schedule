@@ -50,7 +50,7 @@ $(document).ready(function() {
   })
   .fail(function(result) {
     console.log("error did not get requests");
-    console.log(result);
+    console.log(result.status + " " + result.errorMessage);
   })
   .always(function() {
     console.log("complete");
