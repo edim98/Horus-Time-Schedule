@@ -225,6 +225,39 @@ public class DatabaseCommunication {
         }
     }
 
+    public static List<Request> getRequests(String user) {
+        String sql = "SELECT * FROM request WHERE teachername = ?;";
+        List<Request> requests = new ArrayList<>();
+        Map<String, Room> rooms = getRooms();
+        try (Connection connection = connect();
+            PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, user);
+            ResultSet result = pstmt.executeQuery();
+            while (result.next()) {
+                int id = result.getInt(1);
+                Room oldRoom = rooms.get(result.getString(2));
+                String oldDate = result.getString(3);
+                String newDate = result.getString(4);
+                String teacherID = result.getString(5);
+                String name = result.getString(6);
+                int numberOfStrudents = result.getInt(7);
+                String type = result.getString(8);
+                String notes = result.getString(9);
+                String courseType = result.getString(10);
+                String faculty = result.getString(11);
+                String status = result.getString(12);
+                Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name,
+                        numberOfStrudents, type, notes, courseType, faculty);
+                request.setStatus(status);
+                requests.add(request);
+            }
+            return requests;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return requests;
+    }
+
     public static void main(String[] args) {
         DatabaseCommunication.change();
         DatabaseCommunication.changeRequestStatus(Status.accepted, 1);

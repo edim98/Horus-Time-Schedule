@@ -21,6 +21,13 @@ public class HorusHTTPRequests {
         return DatabaseCommunication.getRequests();
     }
 
+    @GET
+    @Path("/user")
+    @Produces("application/json")
+    public List<Request> getRequest(@HeaderParam("user") String user) {
+        return DatabaseCommunication.getRequests(user);
+    }
+
     @POST
     @Path("/login")
     @Consumes("application/json")
