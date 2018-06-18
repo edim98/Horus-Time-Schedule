@@ -100,8 +100,8 @@ public class DatabaseCommunication {
     }
 
     public static void addNewRequest(Request request) {
-        String sql = "INSERT INTO request(oldroom, olddate, newdate, teacherid, teachername, numberofstudents, requesttype, notes, coursetype, faculty)" +
-                " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO request" +
+                " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, request.getOldRoom().getRoomNumber());
@@ -114,6 +114,7 @@ public class DatabaseCommunication {
             pstmt.setString(8, request.getNotes());
             pstmt.setString(9, request.getCourseType());
             pstmt.setString(10, request.getFaculty());
+            pstmt.setString(11, request.getStatus().toString());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -259,7 +260,7 @@ public class DatabaseCommunication {
 
     public static void main(String[] args) {
         DatabaseCommunication.change();
-        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
+        DatabaseCommunication.changeRequestStatus(Status.accepted, 3);
     }
 
 }
