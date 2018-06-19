@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+  $('#faculty').val("99");
+
 $('#cancel-button').click(function(event){
   event.preventDefault();
 

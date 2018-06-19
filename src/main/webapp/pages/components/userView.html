@@ -57,14 +57,8 @@
                 <div class="container-fluid">
                     <ul class="navbar-mobile__list list-unstyled">
                         <li>
-                            <a href="#">
-                                <i class="fas fa-tachometer-alt"></i>Dashboard</a>
-
-                        </li>
-
-                        <li>
                             <a data-toggle="modal" data-target="#myModal">
-                                <i class="fas fa-file"></i>Requests</a>
+                                <i class="fas fa-file"></i>New Request</a>
                         </li>
                         <li>
                             <a href="map.html">
@@ -75,7 +69,7 @@
                                 <i class="fas fa-address-book"></i>Contact Us</a>
                         </li>
                         <li>
-                          <a href="login.html">
+                          <a href="../login.html">
                               <i class="fas fa-sign-out-alt"></i>Logout</a>
                         </li>
                     </ul>
@@ -92,12 +86,6 @@
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
-                      <li>
-                          <a href="#">
-                              <i class="fas fa-tachometer-alt"></i>Dashboard</a>
-
-                      </li>
-
                       <li>
                           <a  href="#" data-toggle="modal" data-target="#myModal">
                               <i class="fas fa-file"></i>Requests</a>
@@ -177,7 +165,7 @@
             <!-- HEADER DESKTOP-->
 
             <div class="row m-t-25">
-                <div class="col-sm-6 col-lg-3">
+                <div class="col-xl-4 col-lg-3">
                     <div class="overview-item overview-item--c1">
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
@@ -185,8 +173,8 @@
                                     <i class="fas fa-door-open"></i>
                                 </div>
                                 <div class="text">
-                                    <h2>10</h2>
-                                    <span>Not resolved requests</span>
+                                    <h2>2</h2>
+                                    <span>Pending requests</span>
                                 </div>
                             </div>
                             <div class="overview-chart">
@@ -196,8 +184,8 @@
                     </div>
                 </div>
 
-                <div class="col-sm-6 col-lg-3">
-                    <div class="overview-item overview-item--c3">
+                <div class="col-xl-4 col-lg-3">
+                    <div class="overview-item overview-item--c2">
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
@@ -214,8 +202,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-lg-3">
-                    <div class="overview-item overview-item--c2">
+                 <div class="col-xl-4 col-lg-3">
+                     <div class="overview-item overview-item--c3">
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
@@ -231,9 +219,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-6 col-lg-3">
-                    <div class="overview-item overview-item--c4">
+                 </div>
+                <!-- <div class="col-sm-6 col-lg-3"> -->
+                    <!-- <div class="overview-item overview-item--c4">
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
@@ -248,8 +236,8 @@
                                 <canvas id="widgetChart4"></canvas>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div> -->
             </div>
 
 
@@ -291,9 +279,12 @@
 			<label for="faculty">Faculty</label>
 			<div class="ui-select">
 			<select id="faculty" name="faculty">
-			<option value="0">Faculty A</option>
-			<option value="1">Faculty B</option>
-			<option value="2">Faculty C</option>
+      <option value="99" selected disabled hidden></option>
+      <option value="0">BMS</option>
+			<option value="1">ET</option>
+			<option value="2">EEMCS/EWI</option>
+			<option value="3">TNW</option>
+      <option value="4">ITC</option>
 			</select>
 			</div>
 			<span>Please select your faculty</span>
