@@ -1,18 +1,30 @@
+$('#settings-button').hide();
+
+$('#settingsOptions').on('hidden', function(){
+        alert("ia pula");
+        $('settingsOptions').val("99");
+     });
+
 $(document).ready(function() {
   $('#settingsOptions').change(function() {
     var selectedOption = $('#settingsOptions').val();
-    if ($('#settingsOptions').val() == "1"){
+    if (selectedOption == "1"){
+      $('#settings-button').show();
       $('#psw-change-form').show();
-      $('#faculty-preference').hide();
+      $('#email-input').hide();
       $('#new-name-input').hide();
-    } else if ($('#settingsOptions').val() == "2"){
+    } else if (selectedOption == "2"){
+      $('#settings-button').show();
       $('#psw-change-form').hide();
-      $('#faculty-preference').show();
+      $('#email-input').show();
       $('#new-name-input').hide();
-    } else if ($('#settingsOptions').val() == "4"){
+    } else if (selectedOption == "4"){
+      $('#settings-button').show();
       $('#psw-change-form').hide();
-      $('#faculty-preference').hide();
+      $('#email-input').hide();
       $('#new-name-input').show();
+    } else {
+      $('#settings-button').hide();
     }
   });
 });
