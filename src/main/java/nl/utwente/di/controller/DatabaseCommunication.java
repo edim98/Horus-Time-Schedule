@@ -121,10 +121,8 @@ public class DatabaseCommunication {
         }
     }
 
-    public static int getId(String table) {
-        String sql = "SELECT id FROM " + table + " t WHERE NOT EXISTS" +
-                "(SELECT id FROM " + table + " WHERE id = t.id + 1) LIMIT 1;";
-        try(Connection conn = connect();
+    private static int getInt(String sql) {
+        try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
@@ -135,6 +133,12 @@ public class DatabaseCommunication {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    public static int getId(String table) {
+        String sql = "SELECT id FROM " + table + " t WHERE NOT EXISTS" +
+                "(SELECT id FROM " + table + " WHERE id = t.id + 1) LIMIT 1;";
+        return getInt(sql);
     }
 
     public static Lecturer getUSer(String id, String password) {
@@ -158,17 +162,21 @@ public class DatabaseCommunication {
         return null;
     }
 
-    public static boolean checkExistingUser(String lecturerid) {
-        String sql = "SELECT * FROM users WHERE email = ?;";
-        try(Connection conn = connect();
+    public static boolean check(String sql, String check) {
+        try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, lecturerid);
+            pstmt.setString(1, check);
             ResultSet resultSet = pstmt.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static boolean checkExistingUser(String lecturerid) {
+        String sql = "SELECT * FROM users WHERE email = ?;";
+        return check(sql, lecturerid);
     }
     
     public static void addNewUser(Lecturer lecturer) {
@@ -188,27 +196,7 @@ public class DatabaseCommunication {
 
     public static boolean checkValidRoom(String roomNr) {
         String sql = "SELECT FROM room WHERE room_number = ?;";
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, roomNr);
-            ResultSet resultSet = pstmt.executeQuery();
-            return resultSet.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public static ResultSet getLecturer() {
-        String sql = "SELECT email FROM lecturer;";
-        try(Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            ResultSet resultSet = pstmt.executeQuery();
-            return resultSet;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return check(sql, roomNr);
     }
 
     public static void change() {
@@ -221,30 +209,9 @@ public class DatabaseCommunication {
         }
     }
 
-    public static void makeUserAdmin(String name) {
-        String sql = "UPDATE users SET is_timetabler = true WHERE staff_name = ?;";
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, name);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static int getPendingRequests() {
         String sql = "SELECT count(*) FROM request WHERE status = 'pending';";
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            ResultSet resultSet = pstmt.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-            return 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
+        return getInt(sql);
     }
     public static void changeRequestStatus(Status status, int id) {
         String sql = "UPDATE request SET status = ? WHERE id = ? AND status = 'pending'";
@@ -256,6 +223,39 @@ public class DatabaseCommunication {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<Request> getRequests(String user) {
+        String sql = "SELECT * FROM request WHERE teachername = ?;";
+        List<Request> requests = new ArrayList<>();
+        Map<String, Room> rooms = getRooms();
+        try (Connection connection = connect();
+            PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, user);
+            ResultSet result = pstmt.executeQuery();
+            while (result.next()) {
+                int id = result.getInt(1);
+                Room oldRoom = rooms.get(result.getString(2));
+                String oldDate = result.getString(3);
+                String newDate = result.getString(4);
+                String teacherID = result.getString(5);
+                String name = result.getString(6);
+                int numberOfStrudents = result.getInt(7);
+                String type = result.getString(8);
+                String notes = result.getString(9);
+                String courseType = result.getString(10);
+                String faculty = result.getString(11);
+                String status = result.getString(12);
+                Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name,
+                        numberOfStrudents, type, notes, courseType, faculty);
+                request.setStatus(status);
+                requests.add(request);
+            }
+            return requests;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return requests;
     }
 
     public static void main(String[] args) {
