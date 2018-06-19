@@ -110,13 +110,40 @@ public class HorusHTTPRequests {
     }
 
     @PUT
-    @Path("/statuschange")
+    @Path("/statusChange")
     @Consumes("application/json")
     public Response changeStatus(String jsonBody) {
         JSONObject jsonObject = new JSONObject(jsonBody);
         String status = jsonObject.getString("status");
         int id = jsonObject.getInt("id");
         DatabaseCommunication.changeRequestStatus(Status.valueOf(status), id);
+        return Response.status(Response.Status.OK).build();
+    }
+
+    @PUT
+    @Path("/changeEmail")
+    @Consumes("application/json")
+    public Response changeEmail(@HeaderParam("newEmail") String newEmail,
+                                @HeaderParam("user") int userID) {
+        DatabaseCommunication.changeEmail(newEmail, userID);
+        return Response.status(Response.Status.OK).build();
+    }
+
+    @PUT
+    @Path("/changePassword")
+    @Consumes("application/json")
+    public Response changePassword(@HeaderParam("newPass") String newPass,
+                                @HeaderParam("user") int userID) {
+        DatabaseCommunication.changePassword(newPass, userID);
+        return Response.status(Response.Status.OK).build();
+    }
+
+    @PUT
+    @Path("/changeName")
+    @Consumes("application/json")
+    public Response changeName(@HeaderParam("newName") String newName,
+                                @HeaderParam("user") int userID) {
+        DatabaseCommunication.changeName(newName, userID);
         return Response.status(Response.Status.OK).build();
     }
 }
