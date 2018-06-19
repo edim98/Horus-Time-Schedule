@@ -33,8 +33,10 @@ $(document).ready(function() {
       '<li>Teacher ID: '+teacherID+'</li>'+
       '<li>Old Room: '+oldRoom+'</li>'+
       '<li>Number of students: '+numberOfStudents+'</li>'+
-      '<li>Other notes: '+notes+'</li>'+
-      '</ul></div></td></tr>'
+      '<li>Other notes: '+notes+'</li></ul><br>'+
+      '<button type="button" class="btn btn-success show-info accept-button">Accept</button>'+
+      '<button type="button" class="btn btn-danger show-info pull-right decline-button">Decline</button>'+
+      '</div></td></tr>'
 
       requestTableBody.append(html);
 
@@ -44,6 +46,8 @@ $(document).ready(function() {
         var hidden_tr = $(closest_tr).next('.hidden-info');
         hidden_tr.slideToggle('fast');
       });
+
+      $('.accept-button')
     }
     //for(i = totalData; i >= totalData - 5; i--);
     //console.log('This is the value: ' + $("#old-room").val());
