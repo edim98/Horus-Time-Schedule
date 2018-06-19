@@ -14,7 +14,7 @@ $(document).ready(function() {
   })
   .done(function(data) {
     console.log("success");
-    for(int i = 0; i < data.length; i++){
+    for(i = 0; i < data.length; i++){
       var courseType = data[i].courseType;
       var faculty = data[i].faculty;
       var id = data[i].id;
@@ -31,18 +31,28 @@ $(document).ready(function() {
       var requestTableBody = $('#request-table').find('tbody');
       var html = '<tr class="tr-shadow" request-entry>' +
       '<td>'+oldRoom+'</td>'+
-      '<td>'+newRoom+'</td>'+
       '<td>'+oldDate+'</td>'+
       '<td>'+newDate+'</td>'+
       '<td>'+type+'</td>'+
       '<td>'+status+'</td>'+
       '<td><button type="button" class="btn btn-secondary show-info">+</button></td></tr>'+
       '<tr class="tr-shadow hidden-info" style="display: none">'+
-      '<td colspan="7">'+
+      '<td colspan="6">'+
       '<div><ul>'+
       '<li>Requset ID: '+id+'</li>'+
+      '<li>Course Type: '+courseType+'<li>'+
       '<li>Number of students: '+numberOfStudents+'</li>'+
-      '<li>Old Room'
+      '<li>Other notes: '+notes+'</li>'+
+      '</ul></div></td></tr>'
+
+      requestTableBody.append(html);
+
+      $('.show-info').off().on('click', function(event){
+        event.stopPropagation();
+        var closest_tr = $(this).closest('tr');
+        var hiddent_tr = $(closest_tr).next('.hidden-info');
+        hiddent_tr.slideToggle('fast');
+      });
     }
     var receivedJson = data;
     console.log(data);
