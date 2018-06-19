@@ -4,14 +4,11 @@ import nl.utwente.di.exceptions.InvalidInputException;
 import nl.utwente.di.model.Lecturer;
 import nl.utwente.di.model.Request;
 import nl.utwente.di.model.Room;
+import nl.utwente.di.model.Status;
 import org.json.JSONObject;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +19,13 @@ public class HorusHTTPRequests {
     @Produces("application/json")
     public List<Request> getRequests() {
         return DatabaseCommunication.getRequests();
+    }
+
+    @GET
+    @Path("/user")
+    @Produces("application/json")
+    public List<Request> getRequest(@HeaderParam("user") String user) {
+        return DatabaseCommunication.getRequests(user);
     }
 
     @POST
@@ -45,6 +49,7 @@ public class HorusHTTPRequests {
     }
 
     private boolean checkValidRequestJSON(JSONObject jsonObject) {
+        System.out.println(jsonObject);
         return jsonObject.has("oldRoom") && jsonObject.has("oldDate") && jsonObject.has("newDate") &&
                 jsonObject.has("teacherID") && jsonObject.has("numberOfStudents") && jsonObject.has("type") &&
                 jsonObject.has("name") && jsonObject.has("notes") && jsonObject.has("courseType") && jsonObject.has("faculty");
@@ -71,6 +76,7 @@ public class HorusHTTPRequests {
         String name = jsonObject.getString("name");
         String notes = jsonObject.getString("notes");
         String courseType = jsonObject.getString("courseType");
+        //TODO: courseType must be derived from old date, old room and faculty
         String faculty = jsonObject.getString("faculty");
         Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name, numberOfStudents, requestType,
                 notes, courseType, faculty);
@@ -88,10 +94,29 @@ public class HorusHTTPRequests {
         String email = lecturerJson.getString("email");
         Lecturer lecturer = new Lecturer(teacherid, name, email);
         lecturer.setPassowrd(password);
-        if (DatabaseCommunication.checkExistingUser(lecturer.getTeacherId())) {
+        if (DatabaseCommunication.checkExistingUser(lecturer.getEmail())) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
         DatabaseCommunication.addNewUser(lecturer);
+        return Response.status(Response.Status.OK).build();
+    }
+
+    @GET
+    @Path("/pending")
+    @Produces("application/json")
+    public String getPendingRequests() {
+        JSONObject jsonObject = new JSONObject().put("requests", DatabaseCommunication.getPendingRequests());
+        return jsonObject.toString();
+    }
+
+    @PUT
+    @Path("/statuschange")
+    @Consumes("application/json")
+    public Response changeStatus(String jsonBody) {
+        JSONObject jsonObject = new JSONObject(jsonBody);
+        String status = jsonObject.getString("status");
+        int id = jsonObject.getInt("id");
+        DatabaseCommunication.changeRequestStatus(Status.valueOf(status), id);
         return Response.status(Response.Status.OK).build();
     }
 }

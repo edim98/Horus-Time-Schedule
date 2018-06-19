@@ -3,6 +3,7 @@ package nl.utwente.di.controller;
 import nl.utwente.di.model.Lecturer;
 import nl.utwente.di.model.Request;
 import nl.utwente.di.model.Room;
+import nl.utwente.di.model.Status;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -30,18 +31,9 @@ public class DatabaseCommunication {
         return null;
     }
 
-    private static void executeSQL(String sql) {
-        try (Connection conn = connect();
-             Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     public static Map<String, Room> getRooms() {
         Map<String, Room> rooms = new HashMap<>();
-        String sql = "SELECT * FROM Room";
+        String sql = "SELECT * FROM room";
 
         try {
             Connection conn = connect();
@@ -94,8 +86,10 @@ public class DatabaseCommunication {
                 String notes = result.getString(9);
                 String courseType = result.getString(10);
                 String faculty = result.getString(11);
+                String status = result.getString(12);
                 Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name,
                         numberOfStrudents, type, notes, courseType, faculty);
+                request.setStatus(status);
                 requests.add(request);
             }
             return requests;
@@ -106,30 +100,29 @@ public class DatabaseCommunication {
     }
 
     public static void addNewRequest(Request request) {
-        String sql = "INSERT INTO request(old_room, old_date, new_date, teacher_id, teacher_name, number_of_students, type, notes, course_type, faculty)" +
-                " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO request(oldroom, olddate, newdate, teacherid, teachername, numberofstudents, requesttype, notes, coursetype, faculty, status)" +
+                " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, request.getOldRoom().getRoomNumber());
             pstmt.setString(2, request.getOldDate());
             pstmt.setString(3, request.getNewDate());
-            pstmt.setInt(4, request.getNumberOfStudents());
-            pstmt.setString(5, request.getTeacherID());
-            pstmt.setString(6, request.getTeacherName());
+            pstmt.setString(4, request.getTeacherID());
+            pstmt.setString(5, request.getTeacherName());
+            pstmt.setInt(6, request.getNumberOfStudents());
             pstmt.setString(7, request.getType());
             pstmt.setString(8, request.getNotes());
             pstmt.setString(9, request.getCourseType());
             pstmt.setString(10, request.getFaculty());
+            pstmt.setString(11, request.getStatus().toString());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static int getId(String table) {
-        String sql = "SELECT id FROM " + table + " t WHERE NOT EXISTS" +
-                "(SELECT id FROM " + table + " WHERE id = t.id + 1) LIMIT 1;";
-        try(Connection conn = connect();
+    private static int getInt(String sql) {
+        try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
@@ -140,6 +133,12 @@ public class DatabaseCommunication {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    public static int getId(String table) {
+        String sql = "SELECT id FROM " + table + " t WHERE NOT EXISTS" +
+                "(SELECT id FROM " + table + " WHERE id = t.id + 1) LIMIT 1;";
+        return getInt(sql);
     }
 
     public static Lecturer getUSer(String id, String password) {
@@ -163,17 +162,21 @@ public class DatabaseCommunication {
         return null;
     }
 
-    public static boolean checkExistingUser(String lecturerid) {
-        String sql = "SELECT * FROM lecturer WHERE teacherid = ?;";
-        try(Connection conn = connect();
+    public static boolean check(String sql, String check) {
+        try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, lecturerid);
+            pstmt.setString(1, check);
             ResultSet resultSet = pstmt.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static boolean checkExistingUser(String lecturerid) {
+        String sql = "SELECT * FROM users WHERE email = ?;";
+        return check(sql, lecturerid);
     }
     
     public static void addNewUser(Lecturer lecturer) {
@@ -193,31 +196,11 @@ public class DatabaseCommunication {
 
     public static boolean checkValidRoom(String roomNr) {
         String sql = "SELECT FROM room WHERE room_number = ?;";
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, roomNr);
-            ResultSet resultSet = pstmt.executeQuery();
-            return resultSet.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public static ResultSet getLecturer() {
-        String sql = "SELECT email FROM lecturer;";
-        try(Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            ResultSet resultSet = pstmt.executeQuery();
-            return resultSet;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return check(sql, roomNr);
     }
 
     public static void change() {
-        String sql = "UPDATE request SET oldroom = 'SP 4' WHERE oldroom = 'SP4'";
+        String sql = "UPDATE request SET status = 'pending'";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.executeUpdate();
@@ -226,8 +209,58 @@ public class DatabaseCommunication {
         }
     }
 
+    public static int getPendingRequests() {
+        String sql = "SELECT count(*) FROM request WHERE status = 'pending';";
+        return getInt(sql);
+    }
+    public static void changeRequestStatus(Status status, int id) {
+        String sql = "UPDATE request SET status = ? WHERE id = ? AND status = 'pending'";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, status.toString());
+            pstmt.setInt(2, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Request> getRequests(String user) {
+        String sql = "SELECT * FROM request WHERE teachername = ?;";
+        List<Request> requests = new ArrayList<>();
+        Map<String, Room> rooms = getRooms();
+        try (Connection connection = connect();
+            PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, user);
+            ResultSet result = pstmt.executeQuery();
+            while (result.next()) {
+                int id = result.getInt(1);
+                Room oldRoom = rooms.get(result.getString(2));
+                String oldDate = result.getString(3);
+                String newDate = result.getString(4);
+                String teacherID = result.getString(5);
+                String name = result.getString(6);
+                int numberOfStrudents = result.getInt(7);
+                String type = result.getString(8);
+                String notes = result.getString(9);
+                String courseType = result.getString(10);
+                String faculty = result.getString(11);
+                String status = result.getString(12);
+                Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name,
+                        numberOfStrudents, type, notes, courseType, faculty);
+                request.setStatus(status);
+                requests.add(request);
+            }
+            return requests;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return requests;
+    }
+
     public static void main(String[] args) {
         DatabaseCommunication.change();
+        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
     }
 
 }
