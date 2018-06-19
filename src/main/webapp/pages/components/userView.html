@@ -88,7 +88,7 @@
                     <ul class="list-unstyled navbar__list">
                       <li>
                           <a  href="#" data-toggle="modal" data-target="#myModal">
-                              <i class="fas fa-file"></i>Requests</a>
+                              <i class="fas fa-file"></i>New Request</a>
                       </li>
                       <li>
                           <a href="#" data-toggle="modal" data-target="#settingsModal">
@@ -193,7 +193,7 @@
                                 </div>
                                 <div class="text">
                                     <h2>30</h2>
-                                    <span>Requests solved this week</span>
+                                    <span>Requests made this week</span>
                                 </div>
                             </div>
                             <div class="overview-chart">
@@ -250,10 +250,10 @@
                         <table id="request-table" class="table table-borderless table-striped table-earning">
                             <thead>
                                 <tr>
-                                    <th>Room</th>
+                                    <th>Old Room</th>
                                     <th>Old date</th>
-                                    <th class="text-right">New Date</th>
-                                    <th class="text-right">Request Type</th>
+                                    <th>Request Type</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -270,6 +270,7 @@
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
+          <h1>New Request</h1>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 	<div class="modal-body" style="padding: 40px">
@@ -345,8 +346,7 @@
   <select class="custom-select my-1 mr-sm-2" id="settingsOptions">
     <option value="0" selected hidden>Choose what you want to change</option>
     <option value="1">Password</option>
-    <option value="2">Default faculty</option>
-    <!-- <option value="3">Security question</option> -->
+    <option value="2">E-mail</option>
     <option value="4">Name</option>
   </select>
 
@@ -361,14 +361,7 @@
   </div>
 </form>
 
-<select class="custom-select my-1 mr-sm-2" id="faculty-preference">
-  <option value="" selected hidden>Choose a default faculty</option>
-  <option value="1">BMS</option>
-  <option value="2">ET</option>
-  <option value="3">EEMCS/EWI</option>
-  <option value="4">TNW</option>
-  <option value="5">ITC</option>
-</select>
+<input type="email" class="form-control" id="email-input" placeholder="Enter new e-mail">
 
 
 <form>
@@ -387,106 +380,14 @@
           </div>
 
 
-        <!-- Jquery JS-->
-
-        <script>
-        $("#change-form").hide();
-        $("#cancel-button").hide();
-        $('#reschedule-button').hide();
-        $('#incomplete-fields').hide();
-        $('#psw-change-form').hide();
-        $('#faculty-preference').hide();
-        $('#new-name-input').hide();
-        $(this).prop(':checked', false);
-        $('.selectpicker').selectpicker({
-        style: 'btn-info',
-    	   size: 6
-    });
-        </script>
-
-        <script>
-        $('#settingsOptions').change(function() {
-          var selectedOption = $('#settingsOptions').val();
-          if ($('#settingsOptions').val() == "1"){
-            $('#psw-change-form').show();
-            $('#faculty-preference').hide();
-            $('#new-name-input').hide();
-          } else if ($('#settingsOptions').val() == "2"){
-            $('#psw-change-form').hide();
-            $('#faculty-preference').show();
-            $('#new-name-input').hide();
-          } else if ($('#settingsOptions').val() == "4"){
-            $('#psw-change-form').hide();
-            $('#faculty-preference').hide();
-            $('#new-name-input').show();
-          }
-        })
-        </script>
-
-        <script>
-        $('#reschedule-button').click(function(){
-          if ($('#desired-room').val().length === 0 || $('#datetime-change').val().length === 0 || $('#nr-of-students').val().length === 0){
-            $('#incomplete-fields').show();
-          } else {
-            $('#incomplete-fields').hide();
-          }
-        });
-        </script>
-        <script>
-          $('#change-radio').on('click', function(){
-            $('#cancel-button').hide();
-            if($(this).prop(':checked')){
-                $('#change-form').hide();
-                $('#reschedule-button').hide();
-            } else {
-                $('#change-form').show();
-                $('#reschedule-button').show();
-            }
-          });
-        </script>
-        <script>
-          $('#cancel-radio').on('click', function(){
-            $('#change-form').hide();
-            $('#reschedule-button').hide();
-            if($(this).prop(':checked')){
-                $('#cancel-button').hide();
-            } else {
-                $('#cancel-button').show();
-            }
-          });
-        </script>
-
-
-        <script>
-        $( document ).ready(function() {
-          // events that happen at page refresh
-          $("#settingsOptions").val("0").change();
-                var isChange = !$('#change-radio').prop('checked');
-                var isCancel = !$('#cancel-radio').prop('checked');
-
-                if(!isChange){
-                  $('#cancel-button').hide();
-                    $('#change-form').show();
-                    $('#reschedule-button').show();
-                }
-                 if(!isCancel){
-                  $('#change-form').hide();
-                  $('#reschedule-button').hide();
-                    $('#cancel-button').show();
-                }
-            });
-        </script>
-        <script>
-          $("#datetime-request").datetimepicker();
-        </script>
-        <script>
-          $("#datetime-change").datetimepicker();
-        </script>
 
 <!-- // Example starter JavaScript for disabling form submissions if there are invalid fields -->
         <script type="text/javascript" src="../../js/main.js"></script>
         <script type="text/javascript" src="../../js/popup-pages.js"></script>
-
+        <script>
+        $("#datetime-request").datetimepicker();
+        $("#datetime-change").datetimepicker();
+        </script>
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
@@ -509,9 +410,19 @@
         <script src="../../vendor/chartjs/Chart.bundle.min.js"></script>
         <script src="../../vendor/select2/select2.min.js">
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+
+
+        <!-- Request form -->
         <script src="../../js/requestForm.js"></script>
         <!-- Get all requests script-->
-        <script src="../../js/getRequests.js"></script>
+        <script src="../../js/request-history.js"></script>
+
+        <!-- Settings -->
+        <script src="../../js/settings.js"></script>
+        <!--  Always executes -->
+        <script src="../../js/autoexecute.js"></script>
         <!--Date picker -->
           <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
         <!-- Popup JS-->
@@ -519,12 +430,12 @@
         <!-- Main JS-->
         <script src="../../js/main.js"></script>
 		<!-- Form JS-->
-		<script type="text/javascript">
+		<!-- <script type="text/javascript">
 			function adjust_textarea(h) {
 			h.style.height = "20px";
 			h.style.height = (h.scrollHeight)+"px";
 			}
-		</script>
+		</script> -->
   </body>
 
 </html>
