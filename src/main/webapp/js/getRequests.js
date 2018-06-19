@@ -50,8 +50,56 @@ $(document).ready(function() {
       $('.accept-button').on('click', function(event){
         event.stopPropagation();
         var list = $(this).siblings('ul');
-        var thisID = list.find('li').first().text();
-        console.log(thisID);
+        var thisrequest = list.find('li').first().text();
+        var thisID = thisrequest.substr(12, 2); //get the request id
+        var toSend = JSON.stringify({
+          'status' : 'accepted',
+          'id' : thisID
+        });
+
+            $.ajax({
+              url: '/horus/requests/statusChange',
+              type: 'PUT',
+              dataType: 'json',
+              data: toSend
+            })
+            .done(function(data) {
+              console.log("accepted ok!");
+              location.reload();
+            })
+            .fail(function(data) {
+              console.log(data.status + " " + data.errorMessage);
+            })
+            .always(function() {
+            });
+      });
+
+      $('.decline-button').on('click', function(event){
+        event.stopPropagation();
+        var list = $(this).siblings('ul');
+        var thisrequest = list.find('li').first().text();
+        var thisID = thisrequest.substr(12, 2); //get the request id
+        var toSend = JSON.stringify({
+          'status' : 'cancelled',
+          'id' : thisID
+        });
+
+            $.ajax({
+              url: '/horus/requests/statusChange',
+              type: 'PUT',
+              dataType: 'json',
+              data: toSend
+            })
+            .done(function(data) {
+              console.log("accepted ok!");
+              location.reload();
+            })
+            .fail(function(data) {
+              console.log(data.status + " " + data.errorMessage);
+              //location.reload();
+            })
+            .always(function() {
+            });
       });
     }
     //for(i = totalData; i >= totalData - 5; i--);
