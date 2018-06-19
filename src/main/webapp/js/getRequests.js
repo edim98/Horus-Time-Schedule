@@ -47,7 +47,12 @@ $(document).ready(function() {
         hidden_tr.slideToggle('fast');
       });
 
-      $('.accept-button')
+      $('.accept-button').on('click', function(event){
+        event.stopPropagation();
+        var list = $(this).siblings('ul');
+        var thisID = list.find('li').first().text();
+        console.log(thisID);
+      });
     }
     //for(i = totalData; i >= totalData - 5; i--);
     //console.log('This is the value: ' + $("#old-room").val());
