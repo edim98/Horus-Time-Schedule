@@ -26,9 +26,11 @@ $("#cancel-button").hide();
 $('#reschedule-button').hide();
 $('#incomplete-fields').hide();
 $('#psw-change-form').hide();
-$('#faculty-preference').hide();
+$('#email-input').hide();
 $('#new-name-input').hide();
 
+
+  $('#faculty').val("99");
 
 $('#cancel-button').click(function(event){
   event.preventDefault();
