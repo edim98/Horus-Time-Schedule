@@ -19,18 +19,21 @@ $(document).ready(function() {
 
       complete: function(result) {
         if(result.status == 200) {
-
           var responseJSON = result.responseJSON;
           var name = responseJSON.name;
           var teacherID = responseJSON.teacherID;
+          var email = responseJSON.email;
           var isAdmin = responseJSON.isAdmin;
+
+          Cookies.set('relevantData', {name : responseJSON.name, teacherID : responseJSON.teacherID, email : responseJSON.email, isAdmin : responseJSON.isAdmin});
+          
           //console.log(name + " " + teacherID + " " + isAdmin);
           if(isAdmin){
             url='./components/admin.html';
             $(location).attr('href', url);
           } else {
-            alert('you are not an admin!');
-            location.reload();
+            url = './components/userView.html';
+            $(location).attr('href', url);
           }
         //  $(location).attr('href', url);
 
