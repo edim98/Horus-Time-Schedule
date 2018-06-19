@@ -318,7 +318,8 @@ section {
     background: #e5e5e5;
     padding-left: 250px;
     padding-right: 25px;
-    height: auto;
+    height: 100%;
+    min-height: 97.5vh;
 }
 
 @media (max-width: 991px) {
@@ -326,6 +327,7 @@ section {
         position: relative;
         top: 88px;
         padding-left: 0;
+        height: 100%;
     }
 }
 

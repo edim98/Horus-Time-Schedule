@@ -1,3 +1,47 @@
+$('#change-radio').on('click', function(){
+  $('#cancel-button').hide();
+  if($(this).prop(':checked')){
+      $('#change-form').hide();
+      $('#reschedule-button').hide();
+  } else {
+      $('#change-form').show();
+      $('#reschedule-button').show();
+  }
+});
+
+$('#cancel-radio').on('click', function(){
+  $('#change-form').hide();
+  $('#reschedule-button').hide();
+  if($(this).prop(':checked')){
+      $('#cancel-button').hide();
+  } else {
+      $('#cancel-button').show();
+  }
+});
+
+
+
+$("#change-form").hide();
+$("#cancel-button").hide();
+$('#reschedule-button').hide();
+$('#incomplete-fields').hide();
+$('#psw-change-form').hide();
+$('#faculty-preference').hide();
+$('#new-name-input').hide();
+$(this).prop(':checked', false);
+$('.selectpicker').selectpicker({
+style: 'btn-info',
+ size: 6
+});
+
+$('#reschedule-button').click(function(){
+  if ($('#desired-room').val().length === 0 || $('#datetime-change').val().length === 0 || $('#nr-of-students').val().length === 0){
+    $('#incomplete-fields').show();
+  } else {
+    $('#incomplete-fields').hide();
+  }
+});
+
 $(document).ready(function() {
 
 $('#cancel-button').click(function(event){
