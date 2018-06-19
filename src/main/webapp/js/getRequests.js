@@ -17,6 +17,7 @@ $(document).ready(function() {
       var oldRoom = data[i].oldRoom.roomNumber;
       var numberOfStudents = data[i].numberOfStudents;
       var notes = data[i].notes;
+      var status = data[i].status;
 
       var requestTableBody = $('#request-table').find('tbody');
       var html = '<tr class="tr-shadow" request-entry>' +
@@ -33,6 +34,7 @@ $(document).ready(function() {
       '<li>Teacher ID: '+teacherID+'</li>'+
       '<li>Old Room: '+oldRoom+'</li>'+
       '<li>Number of students: '+numberOfStudents+'</li>'+
+      '<li>Status: '+status+'</li>'+
       '<li>Other notes: '+notes+'</li></ul><br>'+
       '<button type="button" class="btn btn-success show-info accept-button">Accept</button>'+
       '<button type="button" class="btn btn-danger show-info pull-right decline-button">Decline</button>'+
@@ -61,17 +63,20 @@ $(document).ready(function() {
               url: '/horus/requests/statusChange',
               type: 'PUT',
               dataType: 'json',
-              data: toSend
+              data: toSend,
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type' : 'application/json'
+              },
+              complete: function(result){
+                if(result.status == 200) {
+                  console.log("accepted ok!");
+                  location.reload();
+                } else {
+                  console.log(result.status + " " + result.errorMessage);
+                }
+              }
             })
-            .done(function(data) {
-              console.log("accepted ok!");
-              location.reload();
-            })
-            .fail(function(data) {
-              console.log(data.status + " " + data.errorMessage);
-            })
-            .always(function() {
-            });
       });
 
       $('.decline-button').on('click', function(event){
@@ -88,18 +93,20 @@ $(document).ready(function() {
               url: '/horus/requests/statusChange',
               type: 'PUT',
               dataType: 'json',
-              data: toSend
+              data: toSend,
+              headers: {
+                'Accept' : 'application/json',
+                'Content-Type' : 'application/json'
+              },
+              complete: function(result){
+                if(result.status == 200) {
+                  console.log("accepted ok!");
+                  location.reload();
+                } else {
+                  console.log(result.status + " " + result.errorMessage);
+                }
+              }
             })
-            .done(function(data) {
-              console.log("accepted ok!");
-              location.reload();
-            })
-            .fail(function(data) {
-              console.log(data.status + " " + data.errorMessage);
-              //location.reload();
-            })
-            .always(function() {
-            });
       });
     }
     //for(i = totalData; i >= totalData - 5; i--);
