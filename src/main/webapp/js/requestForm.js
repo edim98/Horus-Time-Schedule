@@ -28,21 +28,7 @@ $('#incomplete-fields').hide();
 $('#psw-change-form').hide();
 $('#email-input').hide();
 $('#new-name-input').hide();
-$(this).prop(':checked', false);
-$('.selectpicker').selectpicker({
-style: 'btn-info',
- size: 6
-});
 
-$('#reschedule-button').click(function(){
-  if ($('#desired-room').val().length === 0 || $('#datetime-change').val().length === 0 || $('#nr-of-students').val().length === 0){
-    $('#incomplete-fields').show();
-  } else {
-    $('#incomplete-fields').hide();
-  }
-});
-
-$(document).ready(function() {
 
   $('#faculty').val("99");
 
@@ -53,10 +39,10 @@ $('#cancel-button').click(function(event){
     'oldRoom' : $('#current-room').val(),
     'oldDate' : $('#datetime-request').val(),
     'newDate' : 'Not specified',
-    'teacherID' : 't12345',
+    'teacherID' : Cookies.getJSON('relevantData').teacherID,
     'numberOfStudents' : '0',
-    'type' : 'Cancel',
-    'name' : 'Rom Langerak',
+    'type' : 'cancel',
+    'name' : Cookies.getJSON('relevantData').name,
     'courseType' : 'lecture',
     'faculty' : $('#faculty option:selected').val(),
     'notes' : 'Not specified'
@@ -97,10 +83,10 @@ $('#reschedule-button').click(function(event) {
     'oldRoom' : $('#current-room').val(),
     'oldDate' : $('#datetime-request').val(),
     'newDate' : $('#datetime-change').val(),
-    'teacherID' : 't12345',
+    'teacherID' : Cookies.getJSON('relevantData').teacherID,
     'numberOfStudents' : $('#nr-of-students').val(),
     'type' : 'reschedule',
-    'name' : 'Rom Langerak',
+    'name' : Cookies.getJSON('relevantData').name,
     'courseType' : 'lecture',
     'faculty' : $('#faculty option:selected').val(),
     'notes' : $('#notes-input').val()
@@ -131,4 +117,3 @@ $('#reschedule-button').click(function(event) {
   });
 
   });
-})

@@ -57,8 +57,14 @@
                 <div class="container-fluid">
                     <ul class="navbar-mobile__list list-unstyled">
                         <li>
+                            <a href="#">
+                                <i class="fas fa-tachometer-alt"></i>Dashboard</a>
+
+                        </li>
+
+                        <li>
                             <a data-toggle="modal" data-target="#myModal">
-                                <i class="fas fa-file"></i>New Request</a>
+                                <i class="fas fa-file"></i>Requests</a>
                         </li>
                         <li>
                             <a href="map.html">
@@ -69,7 +75,7 @@
                                 <i class="fas fa-address-book"></i>Contact Us</a>
                         </li>
                         <li>
-                          <a href="../login.html">
+                          <a href="login.html">
                               <i class="fas fa-sign-out-alt"></i>Logout</a>
                         </li>
                     </ul>
@@ -87,8 +93,14 @@
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
                       <li>
+                          <a href="#">
+                              <i class="fas fa-tachometer-alt"></i>Dashboard</a>
+
+                      </li>
+
+                      <li>
                           <a  href="#" data-toggle="modal" data-target="#myModal">
-                              <i class="fas fa-file"></i>New Request</a>
+                              <i class="fas fa-file"></i>Requests</a>
                       </li>
                       <li>
                           <a href="#" data-toggle="modal" data-target="#settingsModal">
@@ -165,7 +177,7 @@
             <!-- HEADER DESKTOP-->
 
             <div class="row m-t-25">
-                <div class="col-xl-4 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="overview-item overview-item--c1">
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
@@ -173,8 +185,8 @@
                                     <i class="fas fa-door-open"></i>
                                 </div>
                                 <div class="text">
-                                    <h2>2</h2>
-                                    <span>Pending requests</span>
+                                    <h2>10</h2>
+                                    <span>Not resolved requests</span>
                                 </div>
                             </div>
                             <div class="overview-chart">
@@ -184,8 +196,8 @@
                     </div>
                 </div>
 
-                <div class="col-xl-4 col-lg-3">
-                    <div class="overview-item overview-item--c2">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="overview-item overview-item--c3">
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
@@ -193,7 +205,7 @@
                                 </div>
                                 <div class="text">
                                     <h2>30</h2>
-                                    <span>Requests made this week</span>
+                                    <span>Requests solved this week</span>
                                 </div>
                             </div>
                             <div class="overview-chart">
@@ -202,8 +214,8 @@
                         </div>
                     </div>
                 </div>
-                 <div class="col-xl-4 col-lg-3">
-                     <div class="overview-item overview-item--c3">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="overview-item overview-item--c2">
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
@@ -219,9 +231,9 @@
                             </div>
                         </div>
                     </div>
-                 </div>
-                <!-- <div class="col-sm-6 col-lg-3"> -->
-                    <!-- <div class="overview-item overview-item--c4">
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="overview-item overview-item--c4">
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
@@ -236,8 +248,8 @@
                                 <canvas id="widgetChart4"></canvas>
                             </div>
                         </div>
-                    </div> -->
-                <!-- </div> -->
+                    </div>
+                </div>
             </div>
 
 
@@ -252,8 +264,10 @@
                                 <tr>
                                     <th>Old Room</th>
                                     <th>Old date</th>
-                                    <th>Request Type</th>
-                                    <th>Status</th>
+                                    <th class="text-right">New Date</th>
+                                    <th class="text-right">Request Type</th>
+                                    <th class="text-right">Status</th>
+                                    <th class="text-right"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -270,7 +284,6 @@
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
-          <h1>New Request</h1>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 	<div class="modal-body" style="padding: 40px">
@@ -280,12 +293,9 @@
 			<label for="faculty">Faculty</label>
 			<div class="ui-select">
 			<select id="faculty" name="faculty">
-      <option value="99" selected disabled hidden></option>
-      <option value="0">BMS</option>
-			<option value="1">ET</option>
-			<option value="2">EEMCS/EWI</option>
-			<option value="3">TNW</option>
-      <option value="4">ITC</option>
+			<option value="0">Faculty A</option>
+			<option value="1">Faculty B</option>
+			<option value="2">Faculty C</option>
 			</select>
 			</div>
 			<span>Please select your faculty</span>
@@ -318,7 +328,7 @@
 		</li>
 		<li>
 			<label for="notes-input">Notes</label>
-			<textarea id="notes-input" onkeyup="adjust_textarea(this)"></textarea>
+			<textarea id="notes-input"></textarea>
 			<span>If you have any comments for the scheduler please specifiy them here</span>
 		</li>
 		</ul>
@@ -346,7 +356,8 @@
   <select class="custom-select my-1 mr-sm-2" id="settingsOptions">
     <option value="0" selected hidden>Choose what you want to change</option>
     <option value="1">Password</option>
-    <option value="2">E-mail</option>
+    <option value="2">Default faculty</option>
+    <!-- <option value="3">Security question</option> -->
     <option value="4">Name</option>
   </select>
 
@@ -361,7 +372,14 @@
   </div>
 </form>
 
-<input type="email" class="form-control" id="email-input" placeholder="Enter new e-mail">
+<select class="custom-select my-1 mr-sm-2" id="faculty-preference">
+  <option value="" selected hidden>Choose a default faculty</option>
+  <option value="1">BMS</option>
+  <option value="2">ET</option>
+  <option value="3">EEMCS/EWI</option>
+  <option value="4">TNW</option>
+  <option value="5">ITC</option>
+</select>
 
 
 <form>
