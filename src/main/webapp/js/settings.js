@@ -1,8 +1,7 @@
 $('#settings-button').hide();
 
 $('#settingsOptions').on('hidden', function(){
-        alert("ia pula");
-        $('settingsOptions').val("99");
+        $('settingsOptions').val("0");
      });
 
 $(document).ready(function() {
@@ -25,6 +24,9 @@ $(document).ready(function() {
       $('#new-name-input').show();
     } else {
       $('#settings-button').hide();
+      $('#psw-change-form').hide();
+      $('#email-input').hide();
+      $('#new-name-input').hide();
     }
   });
 });
