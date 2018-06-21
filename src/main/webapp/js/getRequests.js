@@ -17,6 +17,7 @@ $(document).ready(function() {
       var oldRoom = data[i].oldRoom.roomNumber;
       var numberOfStudents = data[i].numberOfStudents;
       var notes = data[i].notes;
+      var status = data[i].status;
 
       var requestTableBody = $('#request-table').find('tbody');
       var html = '<tr class="tr-shadow" request-entry>' +
@@ -33,8 +34,11 @@ $(document).ready(function() {
       '<li>Teacher ID: '+teacherID+'</li>'+
       '<li>Old Room: '+oldRoom+'</li>'+
       '<li>Number of students: '+numberOfStudents+'</li>'+
-      '<li>Other notes: '+notes+'</li>'+
-      '</ul></div></td></tr>'
+      '<li>Status: '+status+'</li>'+
+      '<li>Other notes: '+notes+'</li></ul><br>'+
+      '<button type="button" class="btn btn-success show-info accept-button">Accept</button>'+
+      '<button type="button" class="btn btn-danger show-info pull-right decline-button">Decline</button>'+
+      '</div></td></tr>'
 
       requestTableBody.append(html);
 
@@ -43,6 +47,66 @@ $(document).ready(function() {
         var closest_tr = $(this).closest('tr');
         var hidden_tr = $(closest_tr).next('.hidden-info');
         hidden_tr.slideToggle('fast');
+      });
+
+      $('.accept-button').on('click', function(event){
+        event.stopPropagation();
+        var list = $(this).siblings('ul');
+        var thisrequest = list.find('li').first().text();
+        var thisID = thisrequest.substr(12, 2); //get the request id
+        var toSend = JSON.stringify({
+          'status' : 'accepted',
+          'id' : thisID
+        });
+
+            $.ajax({
+              url: '/horus/requests/statusChange',
+              type: 'PUT',
+              dataType: 'json',
+              data: toSend,
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type' : 'application/json'
+              },
+              complete: function(result){
+                if(result.status == 200) {
+                  console.log("accepted ok!");
+                  location.reload();
+                } else {
+                  console.log(result.status + " " + result.errorMessage);
+                }
+              }
+            })
+      });
+
+      $('.decline-button').on('click', function(event){
+        event.stopPropagation();
+        var list = $(this).siblings('ul');
+        var thisrequest = list.find('li').first().text();
+        var thisID = thisrequest.substr(12, 2); //get the request id
+        var toSend = JSON.stringify({
+          'status' : 'cancelled',
+          'id' : thisID
+        });
+
+            $.ajax({
+              url: '/horus/requests/statusChange',
+              type: 'PUT',
+              dataType: 'json',
+              data: toSend,
+              headers: {
+                'Accept' : 'application/json',
+                'Content-Type' : 'application/json'
+              },
+              complete: function(result){
+                if(result.status == 200) {
+                  console.log("accepted ok!");
+                  location.reload();
+                } else {
+                  console.log(result.status + " " + result.errorMessage);
+                }
+              }
+            })
       });
     }
     //for(i = totalData; i >= totalData - 5; i--);

@@ -1,4 +1,36 @@
-$(document).ready(function() {
+$('#change-radio').on('click', function(){
+  $('#cancel-button').hide();
+  if($(this).prop(':checked')){
+      $('#change-form').hide();
+      $('#reschedule-button').hide();
+  } else {
+      $('#change-form').show();
+      $('#reschedule-button').show();
+  }
+});
+
+$('#cancel-radio').on('click', function(){
+  $('#change-form').hide();
+  $('#reschedule-button').hide();
+  if($(this).prop(':checked')){
+      $('#cancel-button').hide();
+  } else {
+      $('#cancel-button').show();
+  }
+});
+
+
+
+$("#change-form").hide();
+$("#cancel-button").hide();
+$('#reschedule-button').hide();
+$('#incomplete-fields').hide();
+$('#psw-change-form').hide();
+$('#email-input').hide();
+$('#new-name-input').hide();
+
+
+  $('#faculty').val("99");
 
 $('#cancel-button').click(function(event){
   event.preventDefault();
@@ -7,10 +39,10 @@ $('#cancel-button').click(function(event){
     'oldRoom' : $('#current-room').val(),
     'oldDate' : $('#datetime-request').val(),
     'newDate' : 'Not specified',
-    'teacherID' : 't12345',
+    'teacherID' : Cookies.getJSON('relevantData').teacherID,
     'numberOfStudents' : '0',
-    'type' : 'Cancel',
-    'name' : 'Rom Langerak',
+    'type' : 'cancel',
+    'name' : Cookies.getJSON('relevantData').name,
     'courseType' : 'lecture',
     'faculty' : $('#faculty option:selected').val(),
     'notes' : 'Not specified'
@@ -51,10 +83,10 @@ $('#reschedule-button').click(function(event) {
     'oldRoom' : $('#current-room').val(),
     'oldDate' : $('#datetime-request').val(),
     'newDate' : $('#datetime-change').val(),
-    'teacherID' : 't12345',
+    'teacherID' : Cookies.getJSON('relevantData').teacherID,
     'numberOfStudents' : $('#nr-of-students').val(),
     'type' : 'reschedule',
-    'name' : 'Rom Langerak',
+    'name' : Cookies.getJSON('relevantData').name,
     'courseType' : 'lecture',
     'faculty' : $('#faculty option:selected').val(),
     'notes' : $('#notes-input').val()
@@ -85,4 +117,3 @@ $('#reschedule-button').click(function(event) {
   });
 
   });
-})
