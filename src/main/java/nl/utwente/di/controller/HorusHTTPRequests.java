@@ -146,4 +146,16 @@ public class HorusHTTPRequests {
         DatabaseCommunication.changeName(newName, userID);
         return Response.status(Response.Status.OK).build();
     }
+
+    @PUT
+    @Consumes("application/json")
+    public Response setNewRoom(@HeaderParam("newRoom") String newRoom,
+                           @HeaderParam("id") int requestID) throws InvalidInputException {
+        Map<String, Room> rooms = DatabaseCommunication.getRooms();
+        if (!rooms.containsKey(newRoom)) {
+            throw new InvalidInputException();
+        }
+        DatabaseCommunication.setNewRoom(newRoom, requestID);
+        return Response.status(Response.Status.OK).build();
+    }
 }
