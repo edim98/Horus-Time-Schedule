@@ -14698,3 +14698,28 @@ section {
 .vue-lists ul, .vue-lists ol {
     padding-left: 30px;
 }
+
+/* Will write anything here. too many lines above */
+/* Will write anything here. too many lines above */
+/* Will write anything here. too many lines above */
+
+#faculty,
+#current-room,
+#change-radio,
+#cancel-radio,
+#change-form,
+#datetime-request,
+#datetime-change,
+#nr-of-students,
+#notes-input,
+#reschedule-button,
+#cancel-button,
+#email-input,
+#settingsOptions,
+#contact-h1,
+#settings-h1,
+#request-h1,
+#history-h1 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+}
