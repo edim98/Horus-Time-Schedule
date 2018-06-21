@@ -36,8 +36,8 @@ $(document).ready(function() {
       '<li>Number of students: '+numberOfStudents+'</li>'+
       '<li>Status: '+status+'</li>'+
       '<li>Other notes: '+notes+'</li></ul><br>'+
-      '<button type="button" class="btn btn-success show-info accept-button">Accept</button>'+
-      '<button type="button" class="btn btn-danger show-info pull-right decline-button">Decline</button>'+
+      '<div class = "text-center"><button type="button" class="btn btn-success btn-lg show-info accept-button">Accept</button>'+
+      '<button type="button" class="btn btn-danger btn-lg show-info decline-button">Decline</button></div>'+
       '</div></td></tr>'
 
       requestTableBody.append(html);

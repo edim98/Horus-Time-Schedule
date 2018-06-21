@@ -1,20 +1,22 @@
 $(document).ready(function() {
+
   $('.login-form').on('submit', function(event) {
     event.preventDefault();
 
-    var formData = JSON.stringify({
-      'user' : $('#email').val(),
-      'password' : $('#password').val()
-    });
+    if(!Date.now){
+      Date.now = function(){return new Date.getTime();}
+    }
 
     $.ajax({
       url: '/horus/requests/login', // de completat
       type: 'POST',
       dataType: 'json',
-      data: formData,
       headers : {
         'Accept' : 'application/json',
-        'Content-Type' : 'application/json'
+        'Content-Type' : 'application/json',
+        'username' : $('#email').val(),
+        'password' : $('#password').val(),
+        'timestamp' : Date.now()
       },
 
       complete: function(result) {
@@ -26,7 +28,7 @@ $(document).ready(function() {
           var isAdmin = responseJSON.isAdmin;
 
           Cookies.set('relevantData', {name : responseJSON.name, teacherID : responseJSON.teacherID, email : responseJSON.email, isAdmin : responseJSON.isAdmin});
-          
+
           //console.log(name + " " + teacherID + " " + isAdmin);
           if(isAdmin){
             url='./components/admin.html';
