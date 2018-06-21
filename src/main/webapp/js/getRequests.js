@@ -8,6 +8,50 @@ if(!Cookies.get('relevantData')){
   }
 }
 
+function templateNew(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes) {
+  var html = '<tr class="tr-shadow" request-entry>' +
+  '<td>'+teacherName+'</td>'+
+  '<td>'+type+'</td>'+
+  '<td>'+courseType+'</td>'+
+  '<td>'+oldDate+'</td>'+
+  '<td>'+newDate+'</td>'+
+  '<td><button type="button" class="btn btn-secondary show-info">+</button></td></tr>' +
+  '<tr class="tr-shadow hidden-info" style="display:none">'+
+  '<td colspan="6">'+
+  '<div><ul>'+
+  '<li>Request ID: '+id+'</li>'+
+  '<li>Teacher ID: '+teacherID+'</li>'+
+  '<li>Old Room: '+oldRoom+'</li>'+
+  '<li>Number of students: '+numberOfStudents+'</li>'+
+  '<li>Status: '+status+'</li>'+
+  '<li>Other notes: '+notes+'</li></ul><br>'+
+  '<div class = "text-center"><button type="button" class="btn btn-success btn-lg show-info accept-button" style="margin-right: 50px">Accept</button>'+
+  '<button type="button" class="btn btn-danger btn-lg show-info decline-button">Decline</button></div>'+
+  '</div></td></tr>';
+  return html;
+}
+
+function templateHistory(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes){
+  var html = '<tr class="tr-shadow" request-entry>' +
+  '<td>'+teacherName+'</td>'+
+  '<td>'+type+'</td>'+
+  '<td>'+courseType+'</td>'+
+  '<td>'+oldDate+'</td>'+
+  '<td>'+newDate+'</td>'+
+  '<td><button type="button" class="btn btn-secondary show-info">+</button></td></tr>' +
+  '<tr class="tr-shadow hidden-info" style="display:none">'+
+  '<td colspan="6">'+
+  '<div><ul>'+
+  '<li>Request ID: '+id+'</li>'+
+  '<li>Teacher ID: '+teacherID+'</li>'+
+  '<li>Old Room: '+oldRoom+'</li>'+
+  '<li>Number of students: '+numberOfStudents+'</li>'+
+  '<li>Status: '+status+'</li>'+
+  '<li>Other notes: '+notes+'</li></ul><br>'+
+  '</div></td></tr>';
+  return html;
+}
+
 $(document).ready(function() {
 
 
@@ -32,30 +76,18 @@ $(document).ready(function() {
       var status = data[i].status;
 
       var requestTableBody = $('#request-table').find('tbody');
-      var html = '<tr class="tr-shadow" request-entry>' +
-      '<td>'+teacherName+'</td>'+
-      '<td>'+type+'</td>'+
-      '<td>'+courseType+'</td>'+
-      '<td>'+oldDate+'</td>'+
-      '<td>'+newDate+'</td>'+
-      '<td><button type="button" class="btn btn-secondary show-info">+</button></td></tr>' +
-      '<tr class="tr-shadow hidden-info" style="display:none">'+
-      '<td colspan="6">'+
-      '<div><ul>'+
-      '<li>Request ID: '+id+'</li>'+
-      '<li>Teacher ID: '+teacherID+'</li>'+
-      '<li>Old Room: '+oldRoom+'</li>'+
-      '<li>Number of students: '+numberOfStudents+'</li>'+
-      '<li>Status: '+status+'</li>'+
-      '<li>Other notes: '+notes+'</li></ul><br>'+
-      '<div class = "text-center"><button type="button" class="btn btn-success btn-lg show-info accept-button" style="margin-right: 50px">Accept</button>'+
-      '<button type="button" class="btn btn-danger btn-lg show-info decline-button">Decline</button></div>'+
-      '</div></td></tr>'
+      var historyTableBody = $('#history-table').find('tbody');
 
       if(status == 'pending'){
+        var html = templateNew(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes);
         requestTableBody.append(html);
+      } else {
+        var html = templateHistory(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes);
+        historyTableBody.append(html);
       }
-      
+}
+
+
       var thisID;
 
       $('.show-info').off().on('click', function(event){
@@ -151,7 +183,6 @@ $(document).ready(function() {
             });
       });
 
-    }
     //for(i = totalData; i >= totalData - 5; i--);
     //console.log('This is the value: ' + $("#old-room").val());
   })

@@ -84,11 +84,16 @@
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
                       <li>
+                        <a href="#" data-toggle="modal" data-target="#historyModal">
+                          <i class = "fas fa-history"></i>History
+                        </a>
+                      </li>
+                      <li>
                           <a href="#" data-toggle="modal" data-target="#settingsModal">
                               <i class="fas fa-cogs"></i>Settings</a>
                       </li>
                       <li>
-                          <a href="#">
+                          <a href="#" data-toggle="modal" data-target="#contactPopup">
                               <i class="fas fa-address-book"></i>Contact Us</a>
                       </li>
                       <li>
@@ -350,6 +355,84 @@
     </div>
   </div>
 
+  <!-- history modal -->
+  <div class="modal fade" id="historyModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+            <h1>History</h1>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+  <div class="modal-body" style="padding: 40px">
+    <div class="table-responsive table-responsive-data2" id ="demo">
+        <table class="table table-data2" id ="history-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Course Type</th>
+                    <th>Old Date</th>
+                    <th>New Date</th>
+                </tr>
+            </thead>
+            <tbody id ="history-body">
+            </tbody>
+        </table>
+    </div>
+    </div>
+        </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="settingsModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+                <h1>Settings</h1>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+      <div class="modal-body" style="padding: 40px">
+        <form>
+  <select class="custom-select my-1 mr-sm-2" id="settingsOptions">
+    <option value="0" selected hidden>Choose what you want to change</option>
+    <option value="1">Password</option>
+    <option value="2">E-mail</option>
+    <option value="4">Name</option>
+  </select>
+
+  <form >
+  <div class="form-row" id="psw-change-form">
+    <div class="col">
+      <input type="password" class="form-control" placeholder="Old password" id="old-psw-input">
+    </div>
+    <div class="col">
+      <input type="password" class="form-control" placeholder="New password" id="new-psw-input">
+    </div>
+  </div>
+</form>
+
+<input type="email" class="form-control" id="email-input" placeholder="Enter new e-mail">
+
+
+<form>
+  <input type="text" class="form-control" placeholder="New name" id="new-name-input">
+</form>
+
+
+
+</form>
+            <div class="modal-footer">
+                  <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" onclick="alert('Settings updated!')" id="settings-button">Confirm changes</button>
+            </div>
+        </div>
+            </div>
+            </div>
+          </div>
+
 
       <!-- CONTACT US POP-UP -->
 <div class="modal fade" id="contactPopup" role="dialog">
@@ -358,6 +441,7 @@
   <!-- POP-UP CONTENT -->
     <div class="modal-content">
       <div class="modal-header">
+        <h2>Contact us</h2>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">
@@ -412,10 +496,13 @@
         <script src="../../vendor/select2/select2.min.js">
         </script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+        <script src="http://pagination.js.org/dist/2.1.2/pagination.min.js">
+        </script>
 
       <!--  <script src="../../js/requestForm.js"></script>-->
         <!-- Get all requests script-->
         <script src="../../js/getRequests.js"></script>
+        <script src="../../js/settings.js"></script>
         <script src="../../js/logout.js"></script>
         <!-- Settings -->
         <script src="../../js/settings.js"></script>

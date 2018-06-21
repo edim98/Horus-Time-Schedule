@@ -65,7 +65,7 @@
                                 <i class="fas fa-cogs"></i>Settings</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="#" class="contact-button">
                                 <i class="fas fa-address-book"></i>Contact Us</a>
                         </li>
                         <li>
@@ -91,11 +91,16 @@
                               <i class="fas fa-file"></i>New Request</a>
                       </li>
                       <li>
+                        <a href="#" data-toggle="modal" data-target="#historyModal">
+                          <i class = "fas fa-history"></i>History
+                        </a>
+                      </li>
+                      <li>
                           <a href="#" data-toggle="modal" data-target="#settingsModal">
                               <i class="fas fa-cogs"></i>Settings</a>
                       </li>
                       <li>
-                          <a href="#">
+                          <a href="#" data-toggle="modal" data-target="#contactModal">
                               <i class="fas fa-address-book"></i>Contact Us</a>
                       </li>
                       <li>
@@ -276,7 +281,7 @@
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 	<div class="modal-body" style="padding: 40px">
-		<form class="form-style-7" name="clearForm">
+		<form class="form-style-7" name="clearForm" autocomplete="off">
 		<ul>
 		<li>
 			<label for="faculty">Faculty</label>
@@ -294,12 +299,12 @@
 		</li>
 		<li>
 			<label for="current-room">Current room</label>
-			<input type="text" maxlength="20" id="current-room">
+			<input type="text" maxlength="20" id="current-room" autocomplete="off">
 			<span>Please specify for which room your current class is scheduled</span>
 		</li>
 		<li>
 			<label for="datetime-request">Date and time</label>
-			<input type="text" id="datetime-request">
+			<input type="text" id="datetime-request" autocomplete="off">
 			<span>The date and time at which your class starts</span>
 		</li>
 		<input type="radio" name="type-of-request" value="RESCHEDULE" id="change-radio"> Make a schedule change<br>
@@ -309,13 +314,13 @@
 		<form id="change-form" class="form-style-7">
 		<ul>
 		<li>
-			<label for="datetime-change">Date and time</label>
-			<input type="text" id="datetime-change">
+			<label for="datetime-change ">Date and time</label>
+			<input type="text" id="datetime-change" autocomplete="off">
 			<span>The new date and time for your class</span>
 		</li>
 		<li>
 			<label for="nr-of-students">Number of students</label>
-			<input type="text" maxlength="4" id="nr-of-students">
+			<input type="text" maxlength="4" id="nr-of-students" autocomplete="off">
 			<span>The number of students that will be attending this class</span>
 		</li>
 		<li>
