@@ -67,36 +67,40 @@ public class DatabaseCommunication {
         return rooms;
     }
 
-    public static List<Request> getRequests() {
+    private static List<Request> createRequestList(ResultSet resultSet) throws SQLException {
         List<Request> requests = new ArrayList<>();
+        Map<String, Room> rooms = getRooms();
+        while (resultSet.next()) {
+            int id = resultSet.getInt(1);
+            Room oldRoom = rooms.get(resultSet.getString(2));
+            String oldDate = resultSet.getString(3);
+            String newDate = resultSet.getString(4);
+            String teacherID = resultSet.getString(5);
+            String name = resultSet.getString(6);
+            int numberOfStrudents = resultSet.getInt(7);
+            String type = resultSet.getString(8);
+            String notes = resultSet.getString(9);
+            String courseType = resultSet.getString(10);
+            String faculty = resultSet.getString(11);
+            String status = resultSet.getString(12);
+            Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name,
+                    numberOfStrudents, type, notes, courseType, faculty);
+            request.setStatus(status);
+            requests.add(request);
+        }
+        return requests;
+    }
+
+    public static List<Request> getRequests() {
         String sql = "SELECT * FROM request ORDER BY id DESC;";
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)){
             ResultSet result = pstmt.executeQuery();
-            Map<String, Room> rooms = getRooms();
-            while (result.next()) {
-                int id = result.getInt(1);
-                Room oldRoom = rooms.get(result.getString(2));
-                String oldDate = result.getString(3);
-                String newDate = result.getString(4);
-                String teacherID = result.getString(5);
-                String name = result.getString(6);
-                int numberOfStrudents = result.getInt(7);
-                String type = result.getString(8);
-                String notes = result.getString(9);
-                String courseType = result.getString(10);
-                String faculty = result.getString(11);
-                String status = result.getString(12);
-                Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name,
-                        numberOfStrudents, type, notes, courseType, faculty);
-                request.setStatus(status);
-                requests.add(request);
-            }
-            return requests;
+            return createRequestList(result);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return requests;
+        return null;
     }
 
     public static void addNewRequest(Request request) {
@@ -155,7 +159,6 @@ public class DatabaseCommunication {
                 l.setTimetabler(resultSet.getBoolean("is_timetabler"));
                 return l;
             }
-            return null;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -227,35 +230,41 @@ public class DatabaseCommunication {
 
     public static List<Request> getRequests(String user) {
         String sql = "SELECT * FROM request WHERE teachername = ?;";
-        List<Request> requests = new ArrayList<>();
-        Map<String, Room> rooms = getRooms();
         try (Connection connection = connect();
             PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, user);
             ResultSet result = pstmt.executeQuery();
-            while (result.next()) {
-                int id = result.getInt(1);
-                Room oldRoom = rooms.get(result.getString(2));
-                String oldDate = result.getString(3);
-                String newDate = result.getString(4);
-                String teacherID = result.getString(5);
-                String name = result.getString(6);
-                int numberOfStrudents = result.getInt(7);
-                String type = result.getString(8);
-                String notes = result.getString(9);
-                String courseType = result.getString(10);
-                String faculty = result.getString(11);
-                String status = result.getString(12);
-                Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name,
-                        numberOfStrudents, type, notes, courseType, faculty);
-                request.setStatus(status);
-                requests.add(request);
-            }
-            return requests;
+            return createRequestList(result);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return requests;
+        return null;
+    }
+
+    private static void update(String sql, String change, int userID) {
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, change);
+            pstmt.setInt(2, userID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void changeEmail(String newEmail, int userid ) {
+        String sql = "UPDATE users SET email = ? WHERE user_id = ?;";
+        update(sql, newEmail, userid);
+    }
+
+    public static void changePassword(String password, int userID) {
+        String sql = "UPDATE users SET password = ? WHERE user_id = ?;";
+        update(sql, password, userID);
+    }
+
+    public static void changeName(String name, int userID) {
+        String sql = "UPDATE users SET faculty = ? WHERE user_id = ?;";
+        update(sql, name, userID);
     }
 
     public static void main(String[] args) {

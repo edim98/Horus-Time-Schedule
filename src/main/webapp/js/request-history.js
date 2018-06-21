@@ -40,7 +40,7 @@ $(document).ready(function() {
       '<td colspan="6">'+
       '<div><ul>'+
       '<li>Requset ID: '+id+'</li>'+
-      '<li>Course Type: '+courseType+'<li>'+
+      '<li>Course Type: '+courseType+'</li>'+
       '<li>Number of students: '+numberOfStudents+'</li>'+
       '<li>Other notes: '+notes+'</li>'+
       '</ul></div></td></tr>'
