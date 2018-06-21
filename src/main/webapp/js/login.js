@@ -1,5 +1,16 @@
 $(document).ready(function() {
 
+  if(Cookies.get('relevantData')){
+    var isAdmin = Cookies.getJSON('relevantData').isAdmin;
+    if(isAdmin){
+      url='./components/admin.html';
+      $(location).attr('href', url);
+    } else {
+      url = './components/userView.html';
+      $(location).attr('href', url);
+    }
+  }
+
   $('.login-form').on('submit', function(event) {
     event.preventDefault();
 
@@ -7,16 +18,18 @@ $(document).ready(function() {
       Date.now = function(){return new Date.getTime();}
     }
 
+    var timestamp = Date.now();
+    console.log(timestamp);
     $.ajax({
       url: '/horus/requests/login', // de completat
       type: 'POST',
       dataType: 'json',
       headers : {
-        'Accept' : 'application/json',
-        'Content-Type' : 'application/json',
         'username' : $('#email').val(),
         'password' : $('#password').val(),
-        'timestamp' : Date.now()
+        'timestamp' : timestamp,
+        'Accept' : 'application/json',
+        'Content-Type' : 'application/json'
       },
 
       complete: function(result) {
@@ -26,10 +39,12 @@ $(document).ready(function() {
           var teacherID = responseJSON.teacherID;
           var email = responseJSON.email;
           var isAdmin = responseJSON.isAdmin;
+          var sessionID = responseJSON.sessionID;
 
-          Cookies.set('relevantData', {name : responseJSON.name, teacherID : responseJSON.teacherID, email : responseJSON.email, isAdmin : responseJSON.isAdmin});
+          Cookies.set('relevantData', {name: name, teacherID: teacherID, email: email, sessionID: sessionID, isAdmin: isAdmin});
+          // Cookies.set('relevantData', {session : sessionID});
+          //TODO: make a GET from the server that returns details that has this sesssion
 
-          //console.log(name + " " + teacherID + " " + isAdmin);
           if(isAdmin){
             url='./components/admin.html';
             $(location).attr('href', url);
@@ -37,7 +52,7 @@ $(document).ready(function() {
             url = './components/userView.html';
             $(location).attr('href', url);
           }
-        //  $(location).attr('href', url);
+
 
         } else {
           alert('Failed!' + result.status + result.errorMessage);

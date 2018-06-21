@@ -34,14 +34,16 @@ public class HorusHTTPRequests {
     @Produces("application/json")
     public Response logIn(@HeaderParam("username") String username,
                           @HeaderParam("password") String password,
-                          @HeaderParam("timestamp") int timestamp) {
+                          @HeaderParam("timestamp") long timestamp) {
+        //System.out.println(username + " " + password + " " + timestamp);
         Lecturer lecturer = DatabaseCommunication.getUSer(username, password);
-        String sessionID = lecturer.getTeacherId() + Integer.toString(timestamp);
+        String sessionID = lecturer.getTeacherId() + String.valueOf(timestamp);
         if (lecturer != null) {
             JSONObject jsonObject = new JSONObject().put("teacherID", lecturer.getTeacherId())
                                                     .put("name", lecturer.getName())
                                                     .put("email", lecturer.getEmail())
-                                                    .put("isAdmin", lecturer.isTimetabler());
+                                                    .put("isAdmin", lecturer.isTimetabler())
+                                                    .put("sessionID", sessionID);
             return Response.ok(jsonObject.toString(), "application/json").build();
         }  else {
             return Response.status(Response.Status.BAD_REQUEST).build();

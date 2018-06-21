@@ -51,7 +51,7 @@ $(document).ready(function() {
 
       $('.accept-button').on('click', function(event){
         event.stopPropagation();
-        var list = $(this).siblings('ul');
+        var list = $(this).closest('div').siblings('ul');
         var thisrequest = list.find('li').first().text();
         var thisID = thisrequest.substr(12, 2); //get the request id
         var toSend = JSON.stringify({
@@ -81,7 +81,7 @@ $(document).ready(function() {
 
       $('.decline-button').on('click', function(event){
         event.stopPropagation();
-        var list = $(this).siblings('ul');
+        var list = $(this).closest('div').siblings('ul');
         var thisrequest = list.find('li').first().text();
         var thisID = thisrequest.substr(12, 2); //get the request id
         var toSend = JSON.stringify({

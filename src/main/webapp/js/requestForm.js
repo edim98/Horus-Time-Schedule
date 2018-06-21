@@ -40,7 +40,7 @@ $('#cancel-button').click(function(event){
     'oldDate' : $('#datetime-request').val(),
     'newDate' : 'Not specified',
     'teacherID' : Cookies.getJSON('relevantData').teacherID,
-    'numberOfStudents' : '0',
+    'numberOfStudents' : 'Not specified',
     'type' : 'cancel',
     'name' : Cookies.getJSON('relevantData').name,
     'courseType' : 'lecture',
