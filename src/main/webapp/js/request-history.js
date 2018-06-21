@@ -1,4 +1,15 @@
+if(!Cookies.get('relevantData')){
+  url = '../login.html';
+  $(location).attr('href', url);
+} else{
+  if(Cookies.getJSON('relevantData').isAdmin) {
+    url = './admin.html';
+    $(location).attr('href', url);
+  }
+}
+
 $(document).ready(function() {
+
   var cookie = Cookies.getJSON('relevantData');
   var name = cookie.name;
 

@@ -1,4 +1,16 @@
+if(!Cookies.get('relevantData')){
+  url = '../login.html';
+  $(location).attr('href', url);
+} else {
+  if(!Cookies.getJSON('relevantData').isAdmin){
+    url = './userView.html';
+    $(location).attr('href', url);
+  }
+}
+
 $(document).ready(function() {
+
+
   $.ajax({
     url: '/horus/requests',
     type: 'GET',
