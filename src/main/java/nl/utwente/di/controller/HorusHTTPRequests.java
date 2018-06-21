@@ -32,11 +32,11 @@ public class HorusHTTPRequests {
     @Path("/login")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response logIn(String loginString) {
-        JSONObject loginJson = new JSONObject(loginString);
-        String username = loginJson.getString("user");
-        String password = loginJson.getString("password");
+    public Response logIn(@HeaderParam("username") String username,
+                          @HeaderParam("password") String password,
+                          @HeaderParam("timestamp") int timestamp) {
         Lecturer lecturer = DatabaseCommunication.getUSer(username, password);
+        String sessionID = lecturer.getTeacherId() + Integer.toString(timestamp);
         if (lecturer != null) {
             JSONObject jsonObject = new JSONObject().put("teacherID", lecturer.getTeacherId())
                                                     .put("name", lecturer.getName())
