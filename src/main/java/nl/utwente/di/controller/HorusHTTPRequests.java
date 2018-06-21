@@ -117,7 +117,7 @@ public class HorusHTTPRequests {
     public Response changeStatus(String jsonBody) {
         JSONObject jsonObject = new JSONObject(jsonBody);
         String status = jsonObject.getString("status");
-        int id = jsonObject.getInt("id");
+            int id = jsonObject.getInt("id");
         DatabaseCommunication.changeRequestStatus(Status.valueOf(status), id);
         return Response.status(Response.Status.OK).build();
     }
@@ -150,6 +150,7 @@ public class HorusHTTPRequests {
     }
 
     @PUT
+    @Path("/newRoom")
     @Consumes("application/json")
     public Response setNewRoom(@HeaderParam("newRoom") String newRoom,
                            @HeaderParam("id") int requestID) throws InvalidInputException {

@@ -48,11 +48,15 @@ $(document).ready(function() {
       '<li>Number of students: '+numberOfStudents+'</li>'+
       '<li>Status: '+status+'</li>'+
       '<li>Other notes: '+notes+'</li></ul><br>'+
-      '<div class = "text-center"><button type="button" class="btn btn-success btn-lg show-info accept-button">Accept</button>'+
+      '<div class = "text-center"><button type="button" class="btn btn-success btn-lg show-info accept-button" style="margin-right: 50px">Accept</button>'+
       '<button type="button" class="btn btn-danger btn-lg show-info decline-button">Decline</button></div>'+
       '</div></td></tr>'
 
-      requestTableBody.append(html);
+      if(status == 'pending'){
+        requestTableBody.append(html);
+      }
+      
+      var thisID;
 
       $('.show-info').off().on('click', function(event){
         event.stopPropagation();
@@ -62,41 +66,67 @@ $(document).ready(function() {
       });
 
       $('.accept-button').on('click', function(event){
-        event.stopPropagation();
-        var list = $(this).closest('div').siblings('ul');
-        var thisrequest = list.find('li').first().text();
-        var thisID = thisrequest.substr(12, 2); //get the request id
-        var toSend = JSON.stringify({
-          'status' : 'accepted',
-          'id' : thisID
-        });
+        $('#accept-modal').modal('toggle');
+        thisID = $(this).closest('div').siblings('ul').find('li').first().text().substr(12, 2);
+        //console.log(thisID);
+      });
 
+      $('.decline-button').on('click', function(event){
+        $('#cancel-modal').modal('toggle');
+        thisID = $(this).closest('div').siblings('ul').find('li').first().text().substr(12, 2);
+        //console.log(thisID);
+      });
+
+      $('.accept-request').off().on('click', function(event){
+        event.stopPropagation();
+        var newRoom = $(this).closest('.modal-content').find('.new-room').val();
+        var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
+        console.log(newRoom);
+        var changeStatus = JSON.stringify({
+          'status' : 'accepted',
+          'id' : thisID,
+        });
             $.ajax({
               url: '/horus/requests/statusChange',
               type: 'PUT',
               dataType: 'json',
-              data: toSend,
+              data: changeStatus,
               headers: {
                 'Accept': 'application/json',
                 'Content-Type' : 'application/json'
               },
               complete: function(result){
                 if(result.status == 200) {
-                  console.log("accepted ok!");
-                  location.reload();
+                  console.log("Status changed!");
                 } else {
                   console.log(result.status + " " + result.errorMessage);
                 }
               }
-            })
+            });
+
+            $.ajax({
+              url: '/horus/requests/newRoom',
+              type: 'PUT',
+              dataType: 'json',
+              headers: {
+                'id' : thisID,
+                'newRoom' : newRoom
+              },
+              complete: function(result) {
+                if(result.status == 200){
+                  console.log("New room changed!");
+                  location.reload();
+                } else{
+                  console.log(result.status + " " + result.errorMessage);
+                }
+              }
+            });
+
       });
 
-      $('.decline-button').on('click', function(event){
+      $('.cancel-request').off().on('click', function(event){
         event.stopPropagation();
-        var list = $(this).closest('div').siblings('ul');
-        var thisrequest = list.find('li').first().text();
-        var thisID = thisrequest.substr(12, 2); //get the request id
-        var toSend = JSON.stringify({
+        var changeStatus = JSON.stringify({
           'status' : 'cancelled',
           'id' : thisID
         });
@@ -105,7 +135,7 @@ $(document).ready(function() {
               url: '/horus/requests/statusChange',
               type: 'PUT',
               dataType: 'json',
-              data: toSend,
+              data: changeStatus,
               headers: {
                 'Accept' : 'application/json',
                 'Content-Type' : 'application/json'
@@ -118,8 +148,9 @@ $(document).ready(function() {
                   console.log(result.status + " " + result.errorMessage);
                 }
               }
-            })
+            });
       });
+
     }
     //for(i = totalData; i >= totalData - 5; i--);
     //console.log('This is the value: ' + $("#old-room").val());
@@ -131,7 +162,4 @@ $(document).ready(function() {
   .always(function() {
     console.log("complete");
   });
-
-
-
 });
