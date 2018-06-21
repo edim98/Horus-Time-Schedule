@@ -181,7 +181,7 @@ public class DatabaseCommunication {
         String sql = "SELECT * FROM users WHERE email = ?;";
         return check(sql, lecturerid);
     }
-    
+
     public static void addNewUser(Lecturer lecturer) {
         String sql = "INSERT INTO users VALUES(?, ?, ?, ?, ?)";
         try(Connection conn = connect();

@@ -41,8 +41,12 @@ $(document).ready(function() {
           var isAdmin = responseJSON.isAdmin;
           var sessionID = responseJSON.sessionID;
 
-          Cookies.set('relevantData', {name: name, teacherID: teacherID, email: email, sessionID: sessionID, isAdmin: isAdmin});
-          // Cookies.set('relevantData', {session : sessionID});
+          if($('#remember-me').is(':checked')){
+            Cookies.set('relevantData', {name: name, teacherID: teacherID, email: email, sessionID: sessionID, isAdmin: isAdmin}, {expires: 1});
+            alert('remember me!');
+          } else {
+            Cookies.set('relevantData', {name: name, teacherID: teacherID, email: email, sessionID: sessionID, isAdmin: isAdmin});
+          }
           //TODO: make a GET from the server that returns details that has this sesssion
 
           if(isAdmin){
