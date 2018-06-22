@@ -83,9 +83,13 @@ public class DatabaseCommunication {
             String courseType = resultSet.getString(10);
             String faculty = resultSet.getString(11);
             String status = resultSet.getString(12);
+            String newRoom = resultSet.getString(13);
+            String comments = resultSet.getString(14);
             Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name,
                     numberOfStrudents, type, notes, courseType, faculty);
             request.setStatus(status);
+            request.setNewRoom(newRoom);
+            request.setComments(comments);
             requests.add(request);
         }
         return requests;
@@ -104,8 +108,8 @@ public class DatabaseCommunication {
     }
 
     public static void addNewRequest(Request request) {
-        String sql = "INSERT INTO request(oldroom, olddate, newdate, teacherid, teachername, numberofstudents, requesttype, notes, coursetype, faculty, status)" +
-                " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO request(oldroom, olddate, newdate, teacherid, teachername, numberofstudents, requesttype, notes, coursetype, faculty, status, newroom, comms)" +
+                " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, request.getOldRoom().getRoomNumber());
@@ -119,6 +123,8 @@ public class DatabaseCommunication {
             pstmt.setString(9, request.getCourseType());
             pstmt.setString(10, request.getFaculty());
             pstmt.setString(11, request.getStatus().toString());
+            pstmt.setString(12, request.getNewRoom());
+            pstmt.setString(13, request.getComments());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
