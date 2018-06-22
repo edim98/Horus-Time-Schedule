@@ -69,8 +69,13 @@
                                 <i class="fas fa-cogs"></i>Settings</a>
                         </li>
                         <li>
+<<<<<<< HEAD
                             <a href="#">
                                 <i class="fas fa-address-book" data-target="#contactModal"></i>Contact Us</a>
+=======
+                            <a href="#" class="contact-button">
+                                <i class="fas fa-address-book"></i>Contact Us</a>
+>>>>>>> d1edcbb1f5e8cbb9e4ac403485c604322bbb7bf5
                         </li>
                         <li>
                           <a href="#" class="logout">
@@ -95,8 +100,14 @@
                               <i class="fas fa-file"></i>New Request</a>
                       </li>
                       <li>
+<<<<<<< HEAD
                           <a href="#" data-toggle="modal" data-target="#historyModal">
                               <i class="far fa-calendar-alt"></i>Full History</a>
+=======
+                        <a href="#" data-toggle="modal" data-target="#historyModal">
+                          <i class = "fas fa-history"></i>History
+                        </a>
+>>>>>>> d1edcbb1f5e8cbb9e4ac403485c604322bbb7bf5
                       </li>
                       <li>
                           <a href="#" data-toggle="modal" data-target="#settingsModal">
@@ -266,7 +277,7 @@
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 	<div class="modal-body" style="padding: 40px">
-		<form class="form-style-7" name="clearForm">
+		<form class="form-style-7" name="clearForm" autocomplete="off">
 		<ul>
 		<li>
 			<label for="faculty">Faculty</label>
@@ -284,12 +295,12 @@
 		</li>
 		<li>
 			<label for="current-room">Current room</label>
-			<input type="text" maxlength="20" id="current-room">
+			<input type="text" maxlength="20" id="current-room" autocomplete="off">
 			<span>Please specify for which room your current class is scheduled</span>
 		</li>
 		<li>
 			<label for="datetime-request">Date and time</label>
-			<input type="text" id="datetime-request">
+			<input type="text" id="datetime-request" autocomplete="off">
 			<span>The date and time at which your class starts</span>
 		</li>
 		<input type="radio" name="type-of-request" value="RESCHEDULE" id="change-radio"> Make a schedule change<br>
@@ -299,13 +310,13 @@
 		<form id="change-form" class="form-style-7">
 		<ul>
 		<li>
-			<label for="datetime-change">Date and time</label>
-			<input type="text" id="datetime-change">
+			<label for="datetime-change ">Date and time</label>
+			<input type="text" id="datetime-change" autocomplete="off">
 			<span>The new date and time for your class</span>
 		</li>
 		<li>
 			<label for="nr-of-students">Number of students</label>
-			<input type="text" maxlength="4" id="nr-of-students">
+			<input type="text" maxlength="4" id="nr-of-students" autocomplete="off">
 			<span>The number of students that will be attending this class</span>
 		</li>
 		<li>
@@ -375,25 +386,49 @@
 
 </form>
             <div class="modal-footer">
-                  <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" onclick="alert('Settings updated!')" id="settings-button">Confirm changes</button>
+                  <button class="btn btn-default btn-block request-button" data-dismiss="modal" type="submit" id="settings-button">Confirm changes</button>
             </div>
         </div>
             </div>
             </div>
           </div>
 
+<<<<<<< HEAD
 <!-- history modal -->
+=======
+          <!-- history modal -->
+>>>>>>> d1edcbb1f5e8cbb9e4ac403485c604322bbb7bf5
           <div class="modal fade" id="historyModal" role="dialog">
             <div class="modal-dialog modal-lg">
 
               <!-- Modal content-->
               <div class="modal-content">
                 <div class="modal-header">
+<<<<<<< HEAD
                     <h1 id="history-h1">History</h1>
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
           <div class="modal-body" style="padding: 40px">
             <label>Pula</label>
+=======
+                    <h1>History</h1>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+          <div class="modal-body ">
+            <div class="table-responsive table-responsive-data2">
+            <table id="history-table" class="table table-borderless table-striped table-earning">
+                <thead>
+                    <tr>
+                        <th>Old Room</th>
+                        <th>New Room</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table></div>
+>>>>>>> d1edcbb1f5e8cbb9e4ac403485c604322bbb7bf5
             </div>
                 </div>
                 </div>
@@ -406,7 +441,11 @@
                   <!-- Modal content-->
                   <div class="modal-content">
                     <div class="modal-header">
+<<<<<<< HEAD
                         <h1 id="contact-h1">Contact us</h1>
+=======
+                        <h1>Contact us</h1>
+>>>>>>> d1edcbb1f5e8cbb9e4ac403485c604322bbb7bf5
                       <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
               <div class="modal-body" style="padding: 40px">
@@ -417,6 +456,12 @@
                     </div>
                     </div>
                   </div>
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> d1edcbb1f5e8cbb9e4ac403485c604322bbb7bf5
 
 
 <!-- // Example starter JavaScript for disabling form submissions if there are invalid fields -->
