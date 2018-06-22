@@ -1,13 +1,13 @@
 package nl.utwente.di.model;
 
 public class Lecturer {
-    private String teacherId;
+    private int teacherId;
     private String name;
     private String email;
     private String password;
     private boolean isTimetabler;
 
-    public Lecturer(String teacherId, String name, String email) {
+    public Lecturer(int teacherId, String name, String email) {
         this.teacherId = teacherId;
         this.name = name;
         this.email = email;
@@ -22,7 +22,7 @@ public class Lecturer {
         return name;
     }
 
-    public String getTeacherId() {
+    public int getTeacherId() {
         return teacherId;
     }
     
@@ -42,7 +42,7 @@ public class Lecturer {
         this.name = name;
     }
 
-    public void setTeacherId(String teacherId) {
+    public void setTeacherId(int teacherId) {
         this.teacherId = teacherId;
     }
     

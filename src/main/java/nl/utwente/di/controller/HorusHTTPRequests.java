@@ -90,7 +90,7 @@ public class HorusHTTPRequests {
     @Consumes("application/json")
     public Response addUser(String lecturerString) {
         JSONObject lecturerJson = new JSONObject(lecturerString);
-        String teacherid = lecturerJson.getString("teacherid");
+        int teacherid = lecturerJson.getInt("teacherid");
         String name = lecturerJson.getString("name");
         String password = lecturerJson.getString("password");
         String email = lecturerJson.getString("email");
@@ -148,9 +148,9 @@ public class HorusHTTPRequests {
     @PUT
     @Path("/changeName")
     @Consumes("application/json")
-    public Response changeName(@HeaderParam("newName") String newName,
-                                @HeaderParam("user") int userID) {
-        DatabaseCommunication.changeName(newName, userID);
+    public Response setDefaultFaculty(@HeaderParam("faculty") String faculty,
+                                      @HeaderParam("user") String name) {
+        DatabaseCommunication.setDefaultFaculty(faculty, name);
         return Response.status(Response.Status.OK).build();
     }
 }
