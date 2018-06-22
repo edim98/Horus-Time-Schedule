@@ -73,7 +73,7 @@ textarea:focus {
 }
 
 input, textarea {
-    
+
 }
 
 button {
@@ -243,6 +243,7 @@ a:hover {
   padding-right: 1em;
   height: 2.5em;
   width: 10em;
+  pointer-events: none;
 }
 
 #top-bar {
@@ -377,6 +378,7 @@ section {
 .login-logo {
     text-align: center;
     margin-bottom: 30px;
+    pointer-events: none;
 }
 
 .login-checkbox {
@@ -14722,4 +14724,14 @@ section {
 #history-h1 {
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
+}
+
+.unselectable {
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
 }

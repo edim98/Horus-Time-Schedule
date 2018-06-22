@@ -1,17 +1,29 @@
 $('#settings-button').hide();
 
-$('#settingsOptions').on('hidden', function(){
-        $('settingsOptions').val("0");
+
+     $('#settingsModal').on('hidden.bs.modal', function () {
+        $('#settingsOptions').val('0');
+        $('#old-psw-input').val('');
+        $('#new-psw-input').val('');
+        $('#email-input').val('');
+        $('#new-name-input').val('');
+        $('#facultyOptions').val("99");
+
+        $('#settings-button').hide();
+        $('#psw-change-form').hide();
+        $('#email-input').hide();
+        $('#new-name-input').hide();
+        $("#facultyOptions").hide();
      });
 
 
 $('#old-psw-input').on('input',function() {
-  if ((!$('#old-psw-input').val() == '') && (!$('#new-psw-input').val() == '') && $('#settingsOptions').val() == "1") {
+  if ($('#old-psw-input').val().length > 5 && $('#new-psw-input').val().length > 5) {
       $('#settings-button').show();
     } else $('#settings-button').hide();
 });
 $('#new-psw-input').on('input',function() {
-  if ((!$('#old-psw-input').val() == '') && (!$('#new-psw-input').val() == '') && $('#settingsOptions').val() == "1") {
+  if ($('#old-psw-input').val().length > 5 && $('#new-psw-input').val().length > 5) {
       $('#settings-button').show();
     } else $('#settings-button').hide();
 });

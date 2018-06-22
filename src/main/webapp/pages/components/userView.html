@@ -57,23 +57,26 @@
                 <div class="container-fluid">
                     <ul class="navbar-mobile__list list-unstyled">
                         <li>
-                            <a data-toggle="modal" data-target="#myModal">
+                            <a href="#" data-toggle="modal" data-target="#requestModal">
                                 <i class="fas fa-file"></i>New Request</a>
                         </li>
                         <li>
                             <a href="#" data-toggle="modal" data-target="#historyModal">
-                                <i class="far fa-calendar-alt"></i>Full History</a>
+                                <i class="far fa-calendar-alt"></i>History</a>
                         </li>
                         <li>
-                            <a href="map.html">
-                                <i class="fas fa-cogs"></i>Settings</a>
+                          <a href="https://rooster.utwente.nl/" target="_blank">
+                              <i class="far fa-calendar-alt"></i>Timetable</a>
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#settingsModal">
+                                <i class="fas fa-cog" ></i>Settings</a>
                         </li>
                         <li>
 
-                            <a href="#">
-                                <i class="fas fa-address-book" data-target="#contactModal"></i>Contact Us</a>
-                            <a href="#" class="contact-button">
-                                <i class="fas fa-address-book"></i>Contact Us</a>
+                            <a href="#" data-toggle="modal" data-target="#contactModal">
+                                <i class="fas fa-address-book" ></i>Contact </a>
+
                         </li>
                         <li>
                           <a href="#" class="logout">
@@ -88,28 +91,29 @@
         <!-- MENU SIDEBAR-->
         <aside class="menu-sidebar d-none d-lg-block">
             <div class="logo">
-                  <img src="../../images/LOGO.png" id="logo-image"></img>
+                  <img src="../../images/LOGO.png" draggable="false" (dragstart)="false;" class="unselectable" id="logo-image"></img>
+
             </div>
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
                       <li>
-                          <a  href="#" data-toggle="modal" data-target="#myModal">
+                          <a  href="#" data-toggle="modal" data-target="#requestModal">
                               <i class="fas fa-file"></i>New Request</a>
                       </li>
                       <li>
-
-                          <a href="#" data-toggle="modal" data-target="#historyModal">
-                              <i class="far fa-calendar-alt"></i>Full History</a>
-
                         <a href="#" data-toggle="modal" data-target="#historyModal">
                           <i class = "fas fa-history"></i>History
                         </a>
 
                       </li>
                       <li>
+                        <a href="https://rooster.utwente.nl/" target="_blank">
+                            <i class="far fa-calendar-alt"></i>Timetable</a>
+                      </li>
+                      <li>
                           <a href="#" data-toggle="modal" data-target="#settingsModal">
-                              <i class="fas fa-cogs"></i>Settings</a>
+                              <i class="fas fa-cog"></i>Settings</a>
                       </li>
                       <li>
                           <a href="#" data-toggle="modal" data-target="#contactModal">
@@ -119,6 +123,10 @@
                         <a href="#" class = "logout">
                             <i class="fas fa-sign-out-alt"></i>Logout</a>
                       </li>
+
+
+
+
                 </nav>
             </div>
         </aside>
@@ -265,7 +273,7 @@
             </div>
 
   <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
+  <div class="modal fade" id="requestModal" role="dialog">
     <div class="modal-dialog modal-lg">
 
       <!-- Modal content-->
@@ -319,7 +327,7 @@
 		</li>
 		<li>
 			<label for="notes-input">Notes</label>
-			<textarea id="notes-input" onkeyup="adjust_textarea(this)"></textarea>
+			<textarea id="notes-input" onkeyup="adjust_textarea(this)" placeholder="optional"></textarea>
 			<span>If you have any comments for the scheduler please specifiy them here</span>
 		</li>
 		</ul>
@@ -437,11 +445,7 @@
                   <!-- Modal content-->
                   <div class="modal-content">
                     <div class="modal-header">
-
-                        <h1 id="contact-h1">Contact us</h1>
-
-                        <h1>Contact us</h1>
-
+                        <h1 id="contact-h1">Contact the developers</h1>
                       <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
               <div class="modal-body" style="padding: 40px">
