@@ -272,25 +272,10 @@ public class DatabaseCommunication {
         update(sql, room, id);
     }
 
-    public static void ceva() {
-        String sql = "CREATE TABLE favourites(" +
-                "id serial PRIMARY KEY," +
-                "fav_id int," +
-                "fav_faculty varchar(10)," +
-                "FOREIGN KEY (fav_id) REFERENCES users(user_id)" +
-                ");";
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void main(String[] args) {
 //        DatabaseCommunication.change();
 //        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
-        DatabaseCommunication.ceva();
     }
 
 }
