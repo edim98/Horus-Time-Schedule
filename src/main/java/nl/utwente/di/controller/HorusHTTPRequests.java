@@ -121,10 +121,8 @@ public class HorusHTTPRequests {
         String comments = jsonObject.getString("comments");
         String newRoom = jsonObject.getString("newRoom");
         DatabaseCommunication.changeRequestStatus(Status.valueOf(status), id);
-        if (status.equals(Status.accepted.toString())) {
-            DatabaseCommunication.setComments(comments, id);
-            DatabaseCommunication.setNewRoom(newRoom, id);
-        }
+        DatabaseCommunication.setComments(comments, id);
+        DatabaseCommunication.setNewRoom(newRoom, id);
         return Response.status(Response.Status.OK).build();
     }
 
