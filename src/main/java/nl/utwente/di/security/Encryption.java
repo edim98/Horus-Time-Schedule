@@ -5,10 +5,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
-import java.security.AlgorithmParameters;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
 import java.util.Base64;
@@ -16,6 +13,7 @@ import java.util.Base64;
 public class Encryption {
 
     private String sessionPassword;
+    private SecretKeySpec key;
 
     public Encryption() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890;";
@@ -29,7 +27,7 @@ public class Encryption {
     }
 
     public String encrypt(String message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidParameterSpecException, UnsupportedEncodingException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException, InvalidKeyException {
-        SecretKeySpec key = createSeceretKey(this.sessionPassword);
+        this.key = createSeceretKey(this.sessionPassword);
         Cipher pbeCipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         pbeCipher.init(Cipher.ENCRYPT_MODE, key);
         AlgorithmParameters parameters = pbeCipher.getParameters();
@@ -38,7 +36,15 @@ public class Encryption {
         byte[] iv = ivParameterSpec.getIV();
         String encodedIV = Base64.getEncoder().encodeToString(iv);
         String encodedCryptoText = Base64.getEncoder().encodeToString(cryptoText);
-        return encodedIV + encodedCryptoText;
+        return encodedIV + ":" + encodedCryptoText;
+    }
+
+    public String decrypt(String string) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
+        String iv = string.split(":")[0];
+        String message = string.split(":")[1];
+        Cipher pbeCipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        pbeCipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(Base64.getDecoder().decode(iv)));
+        return new String(pbeCipher.doFinal(Base64.getDecoder().decode(message)), "UTF-8");
     }
 
     private SecretKeySpec createSeceretKey(String sessionPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -59,6 +65,7 @@ public class Encryption {
         Encryption e = new Encryption();
         try {
             System.out.println(e.encrypt("Muie la ma-ta"));
+            System.out.println(e.decrypt(e.encrypt("Muie la ma-ta")));
         } catch (NoSuchPaddingException e1) {
             e1.printStackTrace();
         } catch (NoSuchAlgorithmException e1) {
@@ -74,6 +81,8 @@ public class Encryption {
         } catch (InvalidKeySpecException e1) {
             e1.printStackTrace();
         } catch (InvalidKeyException e1) {
+            e1.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e1) {
             e1.printStackTrace();
         }
     }
