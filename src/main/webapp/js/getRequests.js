@@ -1,4 +1,60 @@
+if(!Cookies.get('relevantData')){
+  url = '../login.html';
+  $(location).attr('href', url);
+} else {
+  if(!Cookies.getJSON('relevantData').isAdmin){
+    url = './userView.html';
+    $(location).attr('href', url);
+  }
+}
+
+function templateNew(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes) {
+  var html = '<tr class="tr-shadow" request-entry>' +
+  '<td>'+teacherName+'</td>'+
+  '<td>'+type+'</td>'+
+  '<td>'+courseType+'</td>'+
+  '<td>'+oldDate+'</td>'+
+  '<td>'+newDate+'</td>'+
+  '<td><button type="button" class="btn btn-secondary show-info">+</button></td></tr>' +
+  '<tr class="tr-shadow hidden-info" style="display:none">'+
+  '<td colspan="6">'+
+  '<div><ul>'+
+  '<li>Request ID: '+id+'</li>'+
+  '<li>Teacher ID: '+teacherID+'</li>'+
+  '<li>Old Room: '+oldRoom+'</li>'+
+  '<li>Number of students: '+numberOfStudents+'</li>'+
+  '<li>Status: '+status+'</li>'+
+  '<li>Other notes: '+notes+'</li></ul><br>'+
+  '<div class = "text-center"><button type="button" class="btn btn-success btn-lg show-info accept-button" style="margin-right: 50px">Accept</button>'+
+  '<button type="button" class="btn btn-danger btn-lg show-info decline-button">Decline</button></div>'+
+  '</div></td></tr>';
+  return html;
+}
+
+function templateHistory(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes){
+  var html = '<tr class="tr-shadow" request-entry>' +
+  '<td>'+teacherName+'</td>'+
+  '<td>'+type+'</td>'+
+  '<td>'+courseType+'</td>'+
+  '<td>'+oldDate+'</td>'+
+  '<td>'+newDate+'</td>'+
+  '<td><button type="button" class="btn btn-secondary show-info">+</button></td></tr>' +
+  '<tr class="tr-shadow hidden-info" style="display:none">'+
+  '<td colspan="6">'+
+  '<div><ul>'+
+  '<li>Request ID: '+id+'</li>'+
+  '<li>Teacher ID: '+teacherID+'</li>'+
+  '<li>Old Room: '+oldRoom+'</li>'+
+  '<li>Number of students: '+numberOfStudents+'</li>'+
+  '<li>Status: '+status+'</li>'+
+  '<li>Other notes: '+notes+'</li></ul><br>'+
+  '</div></td></tr>';
+  return html;
+}
+
 $(document).ready(function() {
+
+
   $.ajax({
     url: '/horus/requests',
     type: 'GET',
@@ -20,27 +76,19 @@ $(document).ready(function() {
       var status = data[i].status;
 
       var requestTableBody = $('#request-table').find('tbody');
-      var html = '<tr class="tr-shadow" request-entry>' +
-      '<td>'+teacherName+'</td>'+
-      '<td>'+type+'</td>'+
-      '<td>'+courseType+'</td>'+
-      '<td>'+oldDate+'</td>'+
-      '<td>'+newDate+'</td>'+
-      '<td><button type="button" class="btn btn-secondary show-info">+</button></td></tr>' +
-      '<tr class="tr-shadow hidden-info" style="display:none">'+
-      '<td colspan="6">'+
-      '<div><ul>'+
-      '<li>Request ID: '+id+'</li>'+
-      '<li>Teacher ID: '+teacherID+'</li>'+
-      '<li>Old Room: '+oldRoom+'</li>'+
-      '<li>Number of students: '+numberOfStudents+'</li>'+
-      '<li>Status: '+status+'</li>'+
-      '<li>Other notes: '+notes+'</li></ul><br>'+
-      '<button type="button" class="btn btn-success show-info accept-button">Accept</button>'+
-      '<button type="button" class="btn btn-danger show-info pull-right decline-button">Decline</button>'+
-      '</div></td></tr>'
+      var historyTableBody = $('#history-table').find('tbody');
 
-      requestTableBody.append(html);
+      if(status == 'pending'){
+        var html = templateNew(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes);
+        requestTableBody.append(html);
+      } else {
+        var html = templateHistory(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes);
+        historyTableBody.append(html);
+      }
+}
+
+
+      var thisID;
 
       $('.show-info').off().on('click', function(event){
         event.stopPropagation();
@@ -50,41 +98,67 @@ $(document).ready(function() {
       });
 
       $('.accept-button').on('click', function(event){
-        event.stopPropagation();
-        var list = $(this).siblings('ul');
-        var thisrequest = list.find('li').first().text();
-        var thisID = thisrequest.substr(12, 2); //get the request id
-        var toSend = JSON.stringify({
-          'status' : 'accepted',
-          'id' : thisID
-        });
+        $('#accept-modal').modal('toggle');
+        thisID = $(this).closest('div').siblings('ul').find('li').first().text().substr(12, 2);
+        //console.log(thisID);
+      });
 
+      $('.decline-button').on('click', function(event){
+        $('#cancel-modal').modal('toggle');
+        thisID = $(this).closest('div').siblings('ul').find('li').first().text().substr(12, 2);
+        //console.log(thisID);
+      });
+
+      $('.accept-request').off().on('click', function(event){
+        event.stopPropagation();
+        var newRoom = $(this).closest('.modal-content').find('.new-room').val();
+        var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
+        console.log(newRoom);
+        var changeStatus = JSON.stringify({
+          'status' : 'accepted',
+          'id' : thisID,
+        });
             $.ajax({
               url: '/horus/requests/statusChange',
               type: 'PUT',
               dataType: 'json',
-              data: toSend,
+              data: changeStatus,
               headers: {
                 'Accept': 'application/json',
                 'Content-Type' : 'application/json'
               },
               complete: function(result){
                 if(result.status == 200) {
-                  console.log("accepted ok!");
-                  location.reload();
+                  console.log("Status changed!");
                 } else {
                   console.log(result.status + " " + result.errorMessage);
                 }
               }
-            })
+            });
+
+            $.ajax({
+              url: '/horus/requests/newRoom',
+              type: 'PUT',
+              dataType: 'json',
+              headers: {
+                'id' : thisID,
+                'newRoom' : newRoom
+              },
+              complete: function(result) {
+                if(result.status == 200){
+                  console.log("New room changed!");
+                  location.reload();
+                } else{
+                  console.log(result.status + " " + result.errorMessage);
+                }
+              }
+            });
+
       });
 
-      $('.decline-button').on('click', function(event){
+      $('.cancel-request').off().on('click', function(event){
         event.stopPropagation();
-        var list = $(this).siblings('ul');
-        var thisrequest = list.find('li').first().text();
-        var thisID = thisrequest.substr(12, 2); //get the request id
-        var toSend = JSON.stringify({
+        var changeStatus = JSON.stringify({
           'status' : 'cancelled',
           'id' : thisID
         });
@@ -93,7 +167,7 @@ $(document).ready(function() {
               url: '/horus/requests/statusChange',
               type: 'PUT',
               dataType: 'json',
-              data: toSend,
+              data: changeStatus,
               headers: {
                 'Accept' : 'application/json',
                 'Content-Type' : 'application/json'
@@ -106,9 +180,9 @@ $(document).ready(function() {
                   console.log(result.status + " " + result.errorMessage);
                 }
               }
-            })
+            });
       });
-    }
+
     //for(i = totalData; i >= totalData - 5; i--);
     //console.log('This is the value: ' + $("#old-room").val());
   })
@@ -119,7 +193,4 @@ $(document).ready(function() {
   .always(function() {
     console.log("complete");
   });
-
-
-
 });

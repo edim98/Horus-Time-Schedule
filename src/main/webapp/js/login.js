@@ -1,18 +1,33 @@
 $(document).ready(function() {
+
+  if(Cookies.get('relevantData')){
+    var isAdmin = Cookies.getJSON('relevantData').isAdmin;
+    if(isAdmin){
+      url='./components/admin.html';
+      $(location).attr('href', url);
+    } else {
+      url = './components/userView.html';
+      $(location).attr('href', url);
+    }
+  }
+
   $('.login-form').on('submit', function(event) {
     event.preventDefault();
 
-    var formData = JSON.stringify({
-      'user' : $('#email').val(),
-      'password' : $('#password').val()
-    });
+    if(!Date.now){
+      Date.now = function(){return new Date.getTime();}
+    }
 
+    var timestamp = Date.now();
+    console.log(timestamp);
     $.ajax({
       url: '/horus/requests/login', // de completat
       type: 'POST',
       dataType: 'json',
-      data: formData,
       headers : {
+        'username' : $('#email').val(),
+        'password' : $('#password').val(),
+        'timestamp' : timestamp,
         'Accept' : 'application/json',
         'Content-Type' : 'application/json'
       },
@@ -24,10 +39,16 @@ $(document).ready(function() {
           var teacherID = responseJSON.teacherID;
           var email = responseJSON.email;
           var isAdmin = responseJSON.isAdmin;
+          var sessionID = responseJSON.sessionID;
 
-          Cookies.set('relevantData', {name : responseJSON.name, teacherID : responseJSON.teacherID, email : responseJSON.email, isAdmin : responseJSON.isAdmin});
-          
-          //console.log(name + " " + teacherID + " " + isAdmin);
+          if($('#remember-me').is(':checked')){
+            Cookies.set('relevantData', {name: name, teacherID: teacherID, email: email, sessionID: sessionID, isAdmin: isAdmin}, {expires: 1});
+            alert('remember me!');
+          } else {
+            Cookies.set('relevantData', {name: name, teacherID: teacherID, email: email, sessionID: sessionID, isAdmin: isAdmin});
+          }
+          //TODO: make a GET from the server that returns details that has this sesssion
+
           if(isAdmin){
             url='./components/admin.html';
             $(location).attr('href', url);
@@ -35,7 +56,7 @@ $(document).ready(function() {
             url = './components/userView.html';
             $(location).attr('href', url);
           }
-        //  $(location).attr('href', url);
+
 
         } else {
           alert('Failed!' + result.status + result.errorMessage);
