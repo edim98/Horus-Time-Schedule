@@ -27,7 +27,7 @@ function templatePending(oldRoom, oldDate, newDate, type, status, id, courseType
   return html;
 }
 
-function templateHistory(oldRoom, oldDate, newDate, type, status, id, courseType, numberOfStudents, notes, newRoom) {
+function templateHistory(oldRoom, oldDate, newDate, type, status, id, courseType, numberOfStudents, notes, newRoom, comments) {
   var html = '<tr class="tr-shadow" request-entry>' +
   '<td>'+oldRoom+'</td>'+
   '<td>'+newRoom+'</td>'+
@@ -41,9 +41,9 @@ function templateHistory(oldRoom, oldDate, newDate, type, status, id, courseType
   '<li>Old date: '+oldDate+'</li>'+
   '<li>New date '+newDate+'</li>'+
   '<li>Course type: '+courseType+'</li>'+
-  '<li>Course Type: '+courseType+'</li>'+
   '<li>Number of students: '+numberOfStudents+'</li>'+
   '<li>Other notes: '+notes+'</li>'+
+  '<li>Comments: '+comments+'</li>'+
   '</ul></div></td></tr>'
   return html;
 }
@@ -79,6 +79,7 @@ $(document).ready(function() {
       var teacherName = data[i].teacherName;
       var type = data[i].type;
       var newRoom;
+      var comments = data[i].comments;
       if(data[i].newRoom == null){
         newRoom = 'Not specified';
         console.log(newRoom);
@@ -96,7 +97,7 @@ $(document).ready(function() {
         var html = templatePending(oldRoom, oldDate, newDate, type, status, id, courseType, numberOfStudents, notes);
         requestTableBody.append(html);
       } else {
-        var html = templateHistory(oldRoom, oldDate, newDate, type, status, id, courseType, numberOfStudents, notes, newRoom);
+        var html = templateHistory(oldRoom, oldDate, newDate, type, status, id, courseType, numberOfStudents, notes, newRoom, comments);
         historyTableBody.append(html);
       }
 
