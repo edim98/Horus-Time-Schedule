@@ -117,8 +117,14 @@ public class HorusHTTPRequests {
     public Response changeStatus(String jsonBody) {
         JSONObject jsonObject = new JSONObject(jsonBody);
         String status = jsonObject.getString("status");
-            int id = jsonObject.getInt("id");
+        int id = jsonObject.getInt("id");
+        String comments = jsonObject.getString("comments");
+        String newRoom = jsonObject.getString("newRoom");
         DatabaseCommunication.changeRequestStatus(Status.valueOf(status), id);
+        if (status.equals(Status.accepted.toString())) {
+            DatabaseCommunication.setComments(comments, id);
+            DatabaseCommunication.setNewRoom(newRoom, id);
+        }
         return Response.status(Response.Status.OK).build();
     }
 
@@ -146,19 +152,6 @@ public class HorusHTTPRequests {
     public Response changeName(@HeaderParam("newName") String newName,
                                 @HeaderParam("user") int userID) {
         DatabaseCommunication.changeName(newName, userID);
-        return Response.status(Response.Status.OK).build();
-    }
-
-    @PUT
-    @Path("/newRoom")
-    @Consumes("application/json")
-    public Response setNewRoom(@HeaderParam("newRoom") String newRoom,
-                           @HeaderParam("id") int requestID) throws InvalidInputException {
-        Map<String, Room> rooms = DatabaseCommunication.getRooms();
-        if (!rooms.containsKey(newRoom)) {
-            throw new InvalidInputException();
-        }
-        DatabaseCommunication.setNewRoom(newRoom, requestID);
         return Response.status(Response.Status.OK).build();
     }
 }

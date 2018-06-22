@@ -258,9 +258,9 @@ public class DatabaseCommunication {
         }
     }
 
-    public static void changeEmail(String newEmail, int userid ) {
+    public static void changeEmail(String newEmail, int id) {
         String sql = "UPDATE users SET email = ? WHERE user_id = ?;";
-        update(sql, newEmail, userid);
+        update(sql, newEmail, id);
     }
 
     public static void changePassword(String password, int userID) {
@@ -278,6 +278,10 @@ public class DatabaseCommunication {
         update(sql, room, id);
     }
 
+    public static void setComments(String comments, int id) {
+        String sql = "UPDATE request SET comms = ? WHERE id = ?;";
+        update(sql, comments, id);
+    }
 
     public static void main(String[] args) {
 //        DatabaseCommunication.change();
