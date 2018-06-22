@@ -130,8 +130,8 @@ public class HorusHTTPRequests {
     @Path("/changeEmail")
     @Consumes("application/json")
     public Response changeEmail(@HeaderParam("newEmail") String newEmail,
-                                @HeaderParam("user") int userID) {
-        DatabaseCommunication.changeEmail(newEmail, userID);
+                                @HeaderParam("user") String userName) {
+        DatabaseCommunication.changeEmail(newEmail, userName);
         return Response.status(Response.Status.OK).build();
     }
 
@@ -139,8 +139,9 @@ public class HorusHTTPRequests {
     @Path("/changePassword")
     @Consumes("application/json")
     public Response changePassword(@HeaderParam("newPass") String newPass,
-                                @HeaderParam("user") int userID) {
-        DatabaseCommunication.changePassword(newPass, userID);
+                                   @HeaderParam("user") String userName,
+                                   @HeaderParam("oldPass") String oldPass) {
+        DatabaseCommunication.changePassword(newPass, userName, oldPass);
         return Response.status(Response.Status.OK).build();
     }
 

@@ -258,14 +258,29 @@ public class DatabaseCommunication {
         }
     }
 
-    public static void changeEmail(String newEmail, int id) {
-        String sql = "UPDATE users SET email = ? WHERE user_id = ?;";
-        update(sql, newEmail, id);
+    public static void changeEmail(String newEmail, String name) {
+        String sql = "UPDATE users SET email = ? WHERE staff_name = ?;";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newEmail);
+            pstmt.setString(2, name);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void changePassword(String password, int userID) {
-        String sql = "UPDATE users SET password = ? WHERE user_id = ?;";
-        update(sql, password, userID);
+    public static void changePassword(String password, String name, String oldPassword) {
+        String sql = "UPDATE users SET password = ? WHERE staff_name = ? AND password = ?;";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, password);
+            pstmt.setString(2, name);
+            pstmt.setString(3, oldPassword);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void changeName(String name, int userID) {
