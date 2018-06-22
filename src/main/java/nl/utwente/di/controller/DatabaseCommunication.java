@@ -181,7 +181,7 @@ public class DatabaseCommunication {
         String sql = "SELECT * FROM users WHERE email = ?;";
         return check(sql, lecturerid);
     }
-    
+
     public static void addNewUser(Lecturer lecturer) {
         String sql = "INSERT INTO users VALUES(?, ?, ?, ?, ?)";
         try(Connection conn = connect();
@@ -267,9 +267,30 @@ public class DatabaseCommunication {
         update(sql, name, userID);
     }
 
+    public static void setNewRoom(String room, int id) {
+        String sql = "UPDATE request SET newroom = ? WHERE id = ? AND requesttype = 'reschedule';";
+        update(sql, room, id);
+    }
+
+    public static void ceva() {
+        String sql = "CREATE TABLE favourites(" +
+                "id serial PRIMARY KEY," +
+                "fav_id int," +
+                "fav_faculty varchar(10)," +
+                "FOREIGN KEY (fav_id) REFERENCES users(user_id)" +
+                ");";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
-        DatabaseCommunication.change();
-        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
+//        DatabaseCommunication.change();
+//        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
+        DatabaseCommunication.ceva();
     }
 
 }

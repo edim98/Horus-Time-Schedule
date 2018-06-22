@@ -14,6 +14,7 @@ public class Request {
     private CourseType courseType;
     private String faculty;
     private Status status;
+    private String newRoom;
 
     public Request(int id, Room oldRoom, String oldDate, String newDate, String teacherID, String name,
                    int studentsNumber, String type, String notes, String courseType, String faculty) {
@@ -29,6 +30,10 @@ public class Request {
         this.faculty = faculty;
         this.teacherName = name;
         this.status = Status.pending;
+    }
+
+    public void setNewRoom(String newRoom) {
+        this.newRoom = newRoom;
     }
 
     public void setId(int id) {
@@ -125,5 +130,9 @@ public class Request {
 
     public Status getStatus() {
         return status;
+    }
+
+    public String getNewRoom() {
+        return newRoom;
     }
 }
