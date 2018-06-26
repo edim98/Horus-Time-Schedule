@@ -17,7 +17,7 @@ public class DatabaseCommunication {
 
     private static final String URL = "jdbc:postgresql://farm09.ewi.utwente.nl:7054/docker";
 
-    private static Connection connect() {
+    public static Connection connect() {
         try {
             Class.forName("org.postgresql.Driver");
             Connection conn = DriverManager.getConnection(URL, "docker", "YCPP2vGfS");
@@ -336,6 +336,16 @@ public class DatabaseCommunication {
         return false;
     }
 
+    private static void changeBuilding(){
+        String sql = "UPDATE room SET building = 'Carre' WHERE building = 'Carré'";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 //    public static String getPassword(int userID) {
 //        String sql = "SELECT password FROM user WHERE user_id = ?";
 //
@@ -345,10 +355,7 @@ public class DatabaseCommunication {
 //        DatabaseCommunication.change();
 //        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
 //        DatabaseCommunication.favourites();
-        Map<String, Room> rooms = DatabaseCommunication.getRooms();
-        for (Map.Entry<String, Room> search: rooms.entrySet()) {
-            System.out.println(search.getKey());
-        }
+        DatabaseCommunication.changeBuilding();
     }
 
 }
