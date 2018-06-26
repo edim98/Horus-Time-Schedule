@@ -62,30 +62,13 @@ public class Encryption {
         return new SecretKeySpec(keyTmp.getEncoded(), "AES");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchPaddingException, BadPaddingException, InvalidKeySpecException, NoSuchAlgorithmException, IllegalBlockSizeException, UnsupportedEncodingException, InvalidKeyException, InvalidParameterSpecException, InvalidAlgorithmParameterException {
         Encryption e = new Encryption();
-        try {
-            System.out.println(e.encrypt("Un text anume"));
-            System.out.println(e.decrypt(e.encrypt("Muie la ma-ta")));
-        } catch (NoSuchPaddingException e1) {
-            e1.printStackTrace();
-        } catch (NoSuchAlgorithmException e1) {
-            e1.printStackTrace();
-        } catch (InvalidParameterSpecException e1) {
-            e1.printStackTrace();
-        } catch (UnsupportedEncodingException e1) {
-            e1.printStackTrace();
-        } catch (BadPaddingException e1) {
-            e1.printStackTrace();
-        } catch (IllegalBlockSizeException e1) {
-            e1.printStackTrace();
-        } catch (InvalidKeySpecException e1) {
-            e1.printStackTrace();
-        } catch (InvalidKeyException e1) {
-            e1.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e1) {
-            e1.printStackTrace();
-        }
+        String mesaj = "Un text anume";
+        mesaj = e.encrypt(mesaj);
+        System.out.println(mesaj);
+        Encryption e1 = new Encryption();
+        System.out.println(e.decrypt(mesaj));
     }
 
 }

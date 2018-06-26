@@ -266,16 +266,20 @@ public class DatabaseCommunication {
         }
     }
 
-    public static void changeEmail(String newEmail, String name) {
-        String sql = "UPDATE users SET email = ? WHERE staff_name = ?;";
+    private static void sql(String sql, String string1, String string2) {
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, newEmail);
-            pstmt.setString(2, name);
+            pstmt.setString(1, string1);
+            pstmt.setString(2, string2);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void changeEmail(String newEmail, String name) {
+        String sql = "UPDATE users SET email = ? WHERE staff_name = ?;";
+        sql(sql, newEmail, name);
     }
 
     public static void changePassword(String password, String name, String oldPassword) {
@@ -294,14 +298,7 @@ public class DatabaseCommunication {
     public static void setDefaultFaculty(String faculty, String staffName) {
         String sql = "UPDATE favourites SET default_faculty = ? WHERE id IN " +
                 "(SELECT user_id FROM users WHERE staff_name = ?);";
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, faculty);
-            pstmt.setString(2, staffName);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        sql(sql, faculty, staffName);
     }
 
     public static void setNewRoom(String room, int id) {
@@ -314,20 +311,44 @@ public class DatabaseCommunication {
         update(sql, comments, id);
     }
 
-    private static void favourites() {
-        String sql = "INSERT INTO favourites(id) SELECT user_id FROM users;";
+    public static void addCookie(int user_id, String cookie) {
+        String sql = "INSERT INTO cookies VALUES(?, ?);";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, user_id);
+            pstmt.setString(2, cookie);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public static boolean checkAlreadyConnected(int userID) {
+        String sql = "SELECT user_id FROM cookies WHERE user_id = ?;";
+        try (Connection connection = connect();
+            PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, userID);
+            ResultSet resultSet = pstmt.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+//    public static String getPassword(int userID) {
+//        String sql = "SELECT password FROM user WHERE user_id = ?";
+//
+//    }
+
     public static void main(String[] args) {
 //        DatabaseCommunication.change();
 //        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
-        DatabaseCommunication.favourites();
+//        DatabaseCommunication.favourites();
+        Map<String, Room> rooms = DatabaseCommunication.getRooms();
+        for (Map.Entry<String, Room> search: rooms.entrySet()) {
+            System.out.println(search.getKey());
+        }
     }
 
 }

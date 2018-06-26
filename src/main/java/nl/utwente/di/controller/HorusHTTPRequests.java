@@ -1,14 +1,24 @@
 package nl.utwente.di.controller;
 
+import nl.utwente.di.exceptions.AlreadyConnectedException;
 import nl.utwente.di.exceptions.InvalidInputException;
 import nl.utwente.di.model.Lecturer;
 import nl.utwente.di.model.Request;
 import nl.utwente.di.model.Room;
 import nl.utwente.di.model.Status;
+import nl.utwente.di.security.Encryption;
 import org.json.JSONObject;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.InvalidParameterSpecException;
 import java.util.List;
 import java.util.Map;
 
@@ -34,10 +44,34 @@ public class HorusHTTPRequests {
     @Produces("application/json")
     public Response logIn(@HeaderParam("username") String username,
                           @HeaderParam("password") String password,
-                          @HeaderParam("timestamp") long timestamp) {
+                          @HeaderParam("timestamp") long timestamp) throws AlreadyConnectedException {
         //System.out.println(username + " " + password + " " + timestamp);
         Lecturer lecturer = DatabaseCommunication.getUSer(username, password);
         String sessionID = lecturer.getTeacherId() + String.valueOf(timestamp);
+        Encryption e = new Encryption();
+        try {
+            sessionID = e.encrypt(sessionID);
+        } catch (NoSuchPaddingException e1) {
+            e1.printStackTrace();
+        } catch (NoSuchAlgorithmException e1) {
+            e1.printStackTrace();
+        } catch (InvalidParameterSpecException e1) {
+            e1.printStackTrace();
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        } catch (BadPaddingException e1) {
+            e1.printStackTrace();
+        } catch (IllegalBlockSizeException e1) {
+            e1.printStackTrace();
+        } catch (InvalidKeySpecException e1) {
+            e1.printStackTrace();
+        } catch (InvalidKeyException e1) {
+            e1.printStackTrace();
+        }
+        if (DatabaseCommunication.checkAlreadyConnected(lecturer.getTeacherId())) {
+            throw new AlreadyConnectedException();
+        }
+        DatabaseCommunication.addCookie(lecturer.getTeacherId(), sessionID);
         if (lecturer != null) {
             JSONObject jsonObject = new JSONObject().put("teacherID", lecturer.getTeacherId())
                                                     .put("name", lecturer.getName())
@@ -88,7 +122,7 @@ public class HorusHTTPRequests {
     @POST
     @Path("/register")
     @Consumes("application/json")
-    public Response addUser(String lecturerString) {
+    public Response addUser(String lecturerString) throws NoSuchPaddingException, BadPaddingException, InvalidKeySpecException, NoSuchAlgorithmException, IllegalBlockSizeException, UnsupportedEncodingException, InvalidKeyException, InvalidParameterSpecException {
         JSONObject lecturerJson = new JSONObject(lecturerString);
         int teacherid = lecturerJson.getInt("teacherid");
         String name = lecturerJson.getString("name");
