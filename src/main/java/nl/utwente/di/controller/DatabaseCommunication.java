@@ -337,7 +337,7 @@ public class DatabaseCommunication {
     }
 
     private static void changeBuilding(){
-        String sql = "UPDATE room SET building = 'Carre' WHERE building = 'Carré'";
+        String sql = "DELETE FROM request";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.executeUpdate();
@@ -346,16 +346,12 @@ public class DatabaseCommunication {
         }
     }
 
-//    public static String getPassword(int userID) {
-//        String sql = "SELECT password FROM user WHERE user_id = ?";
-//
-//    }
-
     public static void main(String[] args) {
 //        DatabaseCommunication.change();
 //        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
 //        DatabaseCommunication.favourites();
         DatabaseCommunication.changeBuilding();
+//        DatabaseCommunication.setNewRoom("SP 3", 1);
     }
 
 }
