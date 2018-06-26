@@ -136,7 +136,7 @@ $(document).ready(function() {
               complete: function(result){
                 if(result.status == 200) {
                   console.log("Status changed!");
-                  $(location).reload();
+                  location.reload();
                 } else {
                   console.log(result.status + " " + result.errorMessage);
                 }
