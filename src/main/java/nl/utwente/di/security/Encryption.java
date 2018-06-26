@@ -34,14 +34,15 @@ public class Encryption {
         IvParameterSpec ivParameterSpec = parameters.getParameterSpec(IvParameterSpec.class);
         byte[] cryptoText = pbeCipher.doFinal(message.getBytes("UTF-8"));
         byte[] iv = ivParameterSpec.getIV();
-        String encodedIV = Base64.getEncoder().encodeToString(iv);
-        String encodedCryptoText = Base64.getEncoder().encodeToString(cryptoText);
-        return encodedIV + ":" + encodedCryptoText;
+        String encodedIV = Base64.getEncoder().encodeToString(iv).replace("==", "");
+        String encodedCryptoText = Base64.getEncoder().encodeToString(cryptoText).replace("==", "");
+        return new String(Base64.getEncoder().encode((encodedIV + ":" + encodedCryptoText).getBytes()));
     }
 
     public String decrypt(String string) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
-        String iv = string.split(":")[0];
-        String message = string.split(":")[1];
+        string = new String (Base64.getDecoder().decode(string));
+        String iv = string.split(":")[0].concat("==");
+        String message = string.split(":")[1].concat("==");
         Cipher pbeCipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         pbeCipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(Base64.getDecoder().decode(iv)));
         return new String(pbeCipher.doFinal(Base64.getDecoder().decode(message)), "UTF-8");
@@ -64,7 +65,7 @@ public class Encryption {
     public static void main(String[] args) {
         Encryption e = new Encryption();
         try {
-            System.out.println(e.encrypt("Muie la ma-ta"));
+            System.out.println(e.encrypt("Un text anume"));
             System.out.println(e.decrypt(e.encrypt("Muie la ma-ta")));
         } catch (NoSuchPaddingException e1) {
             e1.printStackTrace();
