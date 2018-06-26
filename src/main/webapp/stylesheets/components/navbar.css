@@ -14698,3 +14698,40 @@ section {
 .vue-lists ul, .vue-lists ol {
     padding-left: 30px;
 }
+
+
+#faculty,
+#current-room,
+#change-radio,
+#cancel-radio,
+#change-form,
+#datetime-request,
+#datetime-change,
+#nr-of-students,
+#notes-input,
+#reschedule-button,
+#cancel-button,
+#email-input,
+#settingsOptions,
+#contact-h1,
+#settings-h1,
+#request-h1,
+#history-h1 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+}
+
+.unselectable {
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
+}
+
+.modal-content {
+  border-radius: 1.5rem;
+  padding: 15px;
+}
