@@ -17,7 +17,7 @@ public class DatabaseCommunication {
 
     private static final String URL = "jdbc:postgresql://farm09.ewi.utwente.nl:7054/docker";
 
-    private static Connection connect() {
+    public static Connection connect() {
         try {
             Class.forName("org.postgresql.Driver");
             Connection conn = DriverManager.getConnection(URL, "docker", "YCPP2vGfS");
@@ -160,7 +160,7 @@ public class DatabaseCommunication {
             pstmt.setString(2, password);
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
-                l = new Lecturer(resultSet.getString("user_id"), resultSet.getString("staff_name"), resultSet.getString("email"));
+                l = new Lecturer(resultSet.getInt("user_id"), resultSet.getString("staff_name"), resultSet.getString("email"));
                 l.setPassowrd(resultSet.getString("password"));
                 l.setTimetabler(resultSet.getBoolean("is_timetabler"));
                 return l;
@@ -192,11 +192,19 @@ public class DatabaseCommunication {
         String sql = "INSERT INTO users VALUES(?, ?, ?, ?, ?)";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, lecturer.getTeacherId());
-            pstmt.setString(2, lecturer.getName());
-            pstmt.setString(3, lecturer.getEmail());
-            pstmt.setString(4, lecturer.getPassword());
+            pstmt.setInt(1, lecturer.getTeacherId());
+            pstmt.setString(2, lecturer.getEmail());
+            pstmt.setString(3, lecturer.getPassword());
+            pstmt.setString(4, lecturer.getName());
             pstmt.setBoolean(5, lecturer.isTimetabler());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        sql = "INSERT INTO favourites(id) VALUES (?);";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, lecturer.getTeacherId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -258,16 +266,20 @@ public class DatabaseCommunication {
         }
     }
 
-    public static void changeEmail(String newEmail, String name) {
-        String sql = "UPDATE users SET email = ? WHERE staff_name = ?;";
+    private static void sql(String sql, String string1, String string2) {
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, newEmail);
-            pstmt.setString(2, name);
+            pstmt.setString(1, string1);
+            pstmt.setString(2, string2);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void changeEmail(String newEmail, String name) {
+        String sql = "UPDATE users SET email = ? WHERE staff_name = ?;";
+        sql(sql, newEmail, name);
     }
 
     public static void changePassword(String password, String name, String oldPassword) {
@@ -283,9 +295,10 @@ public class DatabaseCommunication {
         }
     }
 
-    public static void changeName(String name, int userID) {
-        String sql = "UPDATE users SET faculty = ? WHERE user_id = ?;";
-        update(sql, name, userID);
+    public static void setDefaultFaculty(String faculty, String staffName) {
+        String sql = "UPDATE favourites SET default_faculty = ? WHERE id IN " +
+                "(SELECT user_id FROM users WHERE staff_name = ?);";
+        sql(sql, faculty, staffName);
     }
 
     public static void setNewRoom(String room, int id) {
@@ -298,9 +311,47 @@ public class DatabaseCommunication {
         update(sql, comments, id);
     }
 
+    public static void addCookie(int user_id, String cookie) {
+        String sql = "INSERT INTO cookies VALUES(?, ?);";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, user_id);
+            pstmt.setString(2, cookie);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean checkAlreadyConnected(int userID) {
+        String sql = "SELECT user_id FROM cookies WHERE user_id = ?;";
+        try (Connection connection = connect();
+            PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, userID);
+            ResultSet resultSet = pstmt.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private static void changeBuilding(){
+        String sql = "DELETE FROM request";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
 //        DatabaseCommunication.change();
 //        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
+//        DatabaseCommunication.favourites();
+        DatabaseCommunication.changeBuilding();
+//        DatabaseCommunication.setNewRoom("SP 3", 1);
     }
 
 }
