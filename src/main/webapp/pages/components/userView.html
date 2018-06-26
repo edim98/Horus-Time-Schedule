@@ -57,16 +57,26 @@
                 <div class="container-fluid">
                     <ul class="navbar-mobile__list list-unstyled">
                         <li>
-                            <a data-toggle="modal" data-target="#myModal">
+                            <a href="#" data-toggle="modal" data-target="#requestModal">
                                 <i class="fas fa-file"></i>New Request</a>
                         </li>
                         <li>
-                            <a href="map.html">
-                                <i class="fas fa-cogs"></i>Settings</a>
+                            <a href="#" data-toggle="modal" data-target="#historyModal">
+                                <i class="far fa-calendar-alt"></i>History</a>
                         </li>
                         <li>
-                            <a href="#" class="contact-button">
-                                <i class="fas fa-address-book"></i>Contact Us</a>
+                          <a href="https://rooster.utwente.nl/" target="_blank">
+                              <i class="far fa-calendar-alt"></i>Timetable</a>
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#settingsModal">
+                                <i class="fas fa-cog" ></i>Settings</a>
+                        </li>
+                        <li>
+
+                            <a href="#" data-toggle="modal" data-target="#contactModal">
+                                <i class="fas fa-address-book" ></i>Contact </a>
+
                         </li>
                         <li>
                           <a href="#" class="logout">
@@ -81,23 +91,29 @@
         <!-- MENU SIDEBAR-->
         <aside class="menu-sidebar d-none d-lg-block">
             <div class="logo">
-                  <img src="../../images/LOGO.png" id="logo-image"></img>
+                  <img src="../../images/LOGO.png" draggable="false" (dragstart)="false;" class="unselectable" id="logo-image"></img>
+
             </div>
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
                       <li>
-                          <a  href="#" data-toggle="modal" data-target="#myModal">
+                          <a  href="#" data-toggle="modal" data-target="#requestModal">
                               <i class="fas fa-file"></i>New Request</a>
                       </li>
                       <li>
                         <a href="#" data-toggle="modal" data-target="#historyModal">
                           <i class = "fas fa-history"></i>History
                         </a>
+
+                      </li>
+                      <li>
+                        <a href="https://rooster.utwente.nl/" target="_blank">
+                            <i class="far fa-calendar-alt"></i>Timetable</a>
                       </li>
                       <li>
                           <a href="#" data-toggle="modal" data-target="#settingsModal">
-                              <i class="fas fa-cogs"></i>Settings</a>
+                              <i class="fas fa-cog"></i>Settings</a>
                       </li>
                       <li>
                           <a href="#" data-toggle="modal" data-target="#contactModal">
@@ -107,6 +123,10 @@
                         <a href="#" class = "logout">
                             <i class="fas fa-sign-out-alt"></i>Logout</a>
                       </li>
+
+
+
+
                 </nav>
             </div>
         </aside>
@@ -225,24 +245,6 @@
                         </div>
                     </div>
                  </div>
-                <!-- <div class="col-sm-6 col-lg-3"> -->
-                    <!-- <div class="overview-item overview-item--c4">
-                        <div class="overview__inner">
-                            <div class="overview-box clearfix">
-                                <div class="icon">
-                                    <i class="fas fa-battery-quarter"></i>
-                                </div>
-                                <div class="text">
-                                    <h2>Gratz</h2>
-                                    <span>Total flow of the requests</span>
-                                </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart4"></canvas>
-                            </div>
-                        </div>
-                    </div> -->
-                <!-- </div> -->
             </div>
 
 
@@ -271,13 +273,13 @@
             </div>
 
   <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
+  <div class="modal fade" id="requestModal" role="dialog">
     <div class="modal-dialog modal-lg">
 
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
-          <h1>New Request</h1>
+          <h1 id="request-h1">New Request</h1>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 	<div class="modal-body" style="padding: 40px">
@@ -325,7 +327,7 @@
 		</li>
 		<li>
 			<label for="notes-input">Notes</label>
-			<textarea id="notes-input" onkeyup="adjust_textarea(this)"></textarea>
+			<textarea id="notes-input" onkeyup="adjust_textarea(this)" placeholder="optional"></textarea>
 			<span>If you have any comments for the scheduler please specifiy them here</span>
 		</li>
 		</ul>
@@ -339,13 +341,14 @@
         </div>
       </div>
 
+<!-- settings modal -->
       <div class="modal fade" id="settingsModal" role="dialog">
         <div class="modal-dialog modal-lg">
 
           <!-- Modal content-->
           <div class="modal-content">
             <div class="modal-header">
-                <h1>Settings</h1>
+                <h1 id="settings-h1">Settings</h1>
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
     	<div class="modal-body" style="padding: 40px">
@@ -354,10 +357,11 @@
     <option value="0" selected hidden>Choose what you want to change</option>
     <option value="1">Password</option>
     <option value="2">E-mail</option>
+    <option value="3">Default faculty</option>
     <option value="4">Name</option>
   </select>
 
-  <form >
+  <form>
   <div class="form-row" id="psw-change-form">
     <div class="col">
       <input type="password" class="form-control" placeholder="Old password" id="old-psw-input">
@@ -369,6 +373,15 @@
 </form>
 
 <input type="email" class="form-control" id="email-input" placeholder="Enter new e-mail">
+
+<select class="custom-select my-1 mr-sm-2" id="facultyOptions">
+<option value="99" selected disabled hidden>Select a faculty</option>
+<option value="0">BMS</option>
+<option value="1">ET</option>
+<option value="2">EEMCS/EWI</option>
+<option value="3">TNW</option>
+<option value="4">ITC</option>
+</select>
 
 
 <form>
@@ -386,6 +399,8 @@
             </div>
           </div>
 
+<!-- history modal -->
+
           <!-- history modal -->
           <div class="modal fade" id="historyModal" role="dialog">
             <div class="modal-dialog modal-lg">
@@ -393,6 +408,13 @@
               <!-- Modal content-->
               <div class="modal-content">
                 <div class="modal-header">
+
+                    <h1 id="history-h1">History</h1>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+          <div class="modal-body" style="padding: 40px">
+            <label>Pula</label>
+
                     <h1>History</h1>
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
@@ -410,6 +432,7 @@
                 <tbody>
                 </tbody>
             </table></div>
+
             </div>
                 </div>
                 </div>
@@ -422,7 +445,7 @@
                   <!-- Modal content-->
                   <div class="modal-content">
                     <div class="modal-header">
-                        <h1>Contact us</h1>
+                        <h1 id="contact-h1">Contact the developers</h1>
                       <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
               <div class="modal-body" style="padding: 40px">
@@ -433,9 +456,6 @@
                     </div>
                     </div>
                   </div>
-
-
-
 
 
 <!-- // Example starter JavaScript for disabling form submissions if there are invalid fields -->
