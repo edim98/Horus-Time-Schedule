@@ -91,6 +91,24 @@ $('#settings-button').on('click', function(event){
 
   } else if($('#settingsOptions option:selected').text() == 'Name'){
     var name = $('#new-name-input').val();
+    $.ajax({
+      url: '/horus/requests/changeName',
+      type: 'PUT',
+      dataType: 'json',
+      headers :{
+        'newName' : name,
+        'user' : Cookies.getJSON('relevantData').name
+      },
+      complete: function(result) {
+        if(result.status == 200) {
+          console.log('changed name success!');
+          logout();
+        } else {
+          alert('Something wrong happened! Please contact tech support!');
+          location.reload();
+        }
+      }
+    });
   }
 });
 

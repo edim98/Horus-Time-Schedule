@@ -58,7 +58,9 @@ $(document).ready(function() {
           }
 
 
-        } else {
+        } else if(result.status == 500) {
+          alert('Username or password incorrect!');
+        }else {
           alert('Failed!' + result.status + result.errorMessage);
           location.reload();
         }
