@@ -1,7 +1,7 @@
 $('.logout').on('click', function(event){
   event.stopPropagation();
   url = '../login.html';
-  $(location).attr('href', url);
+
 
   $.ajax({
     url: '/horus/requests/logout',
@@ -11,17 +11,15 @@ $('.logout').on('click', function(event){
       'Accept' : 'application/json',
       'Content-Type' : 'application/json',
       'user' : Cookies.getJSON('relevantData').teacherID
+    },
+    complete: function(result){
+      if(result.status == 202) {
+        console.log("success");
+        Cookies.remove('relevantData');
+        $(location).attr('href', url);
+      } else {
+        console.log("error: " + result.status + ". " + result.errorMessage);
+      }
     }
-  })
-  .done(function(result) {
-    console.log("success");
-    Cookies.remove('relevantData');
-  })
-  .fail(function(result) {
-    console.log("error: " + result.status + ". " + result.errorMessage);
-  })
-  .always(function() {
-    console.log("complete");
   });
-
 });
