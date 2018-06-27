@@ -1,6 +1,5 @@
 $('#settings-button').hide();
 
-
      $('#settingsModal').on('hidden.bs.modal', function () {
         $('#settingsOptions').val('0');
         $('#old-psw-input').val('');
