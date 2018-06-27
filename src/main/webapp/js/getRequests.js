@@ -47,7 +47,7 @@ function templateHistory(teacherName, type, courseType, oldDate, newDate, id, te
   '<li>Old Room: '+oldRoom+'</li>'+
   '<li>New Room: '+newRoom+'</li>'+
   '<li>Number of students: '+numberOfStudents+'</li>'+
-  '<li>Status: '+status+'</li>'+
+  '<li class="thisStatus">Status: '+status+'</li>'+
   '<li>Other notes: '+notes+'</li>'+
   '<li>Comments: '+comments+'</li></ul><br>'+
   '</div></td></tr>';
@@ -102,8 +102,19 @@ $(document).ready(function() {
       });
 
       $('.accept-button').on('click', function(event){
-        $('#accept-modal').modal('toggle');
-        thisID = $(this).closest('div').siblings('ul').find('li').first().text().substr(12, 2);
+        thisID = $(this).closest('div').siblings('ul').find('li').first().text().substr(12);
+        var thisType;
+        for(i = 0; i < data.length; i++){
+          if(data[i].id == thisID){
+            thisType = data[i].type;
+            break;
+          }
+        }
+        if(thisType == 'reschedule'){
+          $('#accept-modal').modal('toggle');
+        } else if(thisType == 'cancel'){
+          $('#accept2-modal').modal('toggle');
+        }
         //console.log(thisID);
       });
 
@@ -115,7 +126,7 @@ $(document).ready(function() {
 
       $('.accept-request').off().on('click', function(event){
         event.stopPropagation();
-        var newRoom = $(this).closest('.modal-content').find('.new-room').val();
+        var newRoom = $(this).closest('.modal-content').find('.new-room option:selected').val();
         var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
         console.log(newRoom);
         var changeStatus = JSON.stringify({
@@ -136,7 +147,38 @@ $(document).ready(function() {
               complete: function(result){
                 if(result.status == 200) {
                   console.log("Status changed!");
-                  $(location).reload();
+                  location.reload();
+                } else {
+                  console.log(result.status + " " + result.errorMessage);
+                }
+              }
+            });
+
+      });
+
+      $('.accept2-request').off().on('click', function(event){
+        event.stopPropagation();
+        var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
+        console.log(newRoom);
+        var changeStatus = JSON.stringify({
+          'status' : 'accepted',
+          'id' : thisID,
+          'comments' : otherDetails,
+          'newRoom' : 'Not specified!'
+        });
+            $.ajax({
+              url: '/horus/requests/statusChange',
+              type: 'PUT',
+              dataType: 'json',
+              data: changeStatus,
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type' : 'application/json'
+              },
+              complete: function(result){
+                if(result.status == 200) {
+                  console.log("Status changed!");
+                  location.reload();
                 } else {
                   console.log(result.status + " " + result.errorMessage);
                 }

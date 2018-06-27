@@ -142,21 +142,6 @@ public class DatabaseCommunication {
         return -1;
     }
 
-    private static int getInt(String sql, int id) {
-        try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            ResultSet resultSet = pstmt.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-            return 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
     public static int getId(String table) {
         String sql = "SELECT id FROM " + table + " t WHERE NOT EXISTS" +
                 "(SELECT id FROM " + table + " WHERE id = t.id + 1) LIMIT 1;";
@@ -244,26 +229,6 @@ public class DatabaseCommunication {
     }
 
     public static int getPendingRequests(int teacherID) {
-<<<<<<< HEAD
-        String sql = "SELECT count(*) FROM request WHERE status = 'pending' AND teacherid = ?;";
-        return getInt(sql, teacherID);
-    }
-
-    public static int getAcceptedRequests(int teacherID) {
-        String sql = "SELECT count(*) FROM request WHERE status = 'accepted' AND teacherid = ?;";
-        return getInt(sql, teacherID);
-    }
-
-    public static int getCancelledRequests(int teacherID) {
-        String sql = "SELECT count(*) FROM request WHERE status = 'cancelled' AND teacherid = ?;";
-        return getInt(sql, teacherID);
-    }
-
-    public static int getWeeklyHandledRequests(int userID) {
-        String sql = "SELECT count(*) FROM request_handling WHERE timetabler_id = ? " +
-                "AND CAST(current_date AS date) - CAST(date_handled AS date) <= 7";
-        return getInt(sql, userID);
-=======
         String sql = "SELECT count(*) FROM request WHERE status = 'pending' AND teacherid = '" + teacherID + "';";
         return getInt(sql);
     }
@@ -282,7 +247,6 @@ public class DatabaseCommunication {
         String sql = "SELECT count(*) FROM request_handling WHERE timetabler_id = '" + userID + "' " +
                 "AND CAST(current_date AS date) - CAST(date_handled AS date) <= 7";
         return getInt(sql);
->>>>>>> fc941e318d8298b7371b8b9e0578424e3a45bbfa
     }
 
     public static int getTotalRequests() {
