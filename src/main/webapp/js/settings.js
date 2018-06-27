@@ -1,5 +1,6 @@
 $('#settings-button').hide();
 
+<<<<<<< HEAD
 
 $('#settingsModal').on('hidden.bs.modal', function () {
     $('#settingsOptions').val('0');
@@ -8,6 +9,42 @@ $('#settingsModal').on('hidden.bs.modal', function () {
     $('#email-input').val('');
     $('#new-name-input').val('');
     $('#facultyOptions').val("99");
+=======
+$('#settingsModal').on('hidden.bs.modal', function () {
+        $('#settingsOptions').val('0');
+        $('#old-psw-input').val('');
+        $('#new-psw-input').val('');
+        $('#email-input').val('');
+        $('#new-name-input').val('');
+        $('#facultyOptions').val("99");
+
+        $('#settings-button').hide();
+        $('#psw-change-form').hide();
+        $('#email-input').hide();
+        $('#new-name-input').hide();
+        $("#facultyOptions").hide();
+     });
+
+ $('#old-psw-input').on('input',function() {
+   if ($('#old-psw-input').val().length > 5 && $('#new-psw-input').val().length > 5) {
+       $('#settings-button').show();
+     } else $('#settings-button').hide();
+ });
+ $('#new-psw-input').on('input',function() {
+   if ($('#old-psw-input').val().length > 5 && $('#new-psw-input').val().length > 5) {
+       $('#settings-button').show();
+     } else $('#settings-button').hide();
+ });
+ $('#email-input').on('input', function() {
+ 	if ($('#email-input').val().length >= 7  && $('#settingsOptions').val() == "2") $('#settings-button').show(); else $('#settings-button').hide();
+ });
+ $('#facultyOptions').change(function() {
+ 	if ($('#facultyOptions').val() != "99"  && $('#settingsOptions').val() == "3") $('#settings-button').show(); else $('#settings-button').hide();
+ });
+ $('#new-name-input').on('input', function() {
+ 	if ($('#new-name-input').val().length >= 5  && $('#settingsOptions').val() == "4") $('#settings-button').show(); else $('#settings-button').hide();
+ });
+>>>>>>> bed33f7dfe5e20a94052915a569e9d2ff5d5e1e2
 
     $('#settings-button').hide();
     $('#psw-change-form').hide();
@@ -17,6 +54,7 @@ $('#settingsModal').on('hidden.bs.modal', function () {
 });
 
 
+<<<<<<< HEAD
 $('#old-psw-input').on('input',function() {
     if ($('#old-psw-input').val().length > 5 && $('#new-psw-input').val().length > 5) {
         $('#settings-button').show();
@@ -35,6 +73,29 @@ $('#facultyOptions').change(function() {
 });
 $('#new-name-input').on('input', function() {
     if ($('#new-name-input').val().length >= 5  && $('#settingsOptions').val() == "4") $('#settings-button').show(); else $('#settings-button').hide();
+=======
+  } else if($('#settingsOptions option:selected').text() == 'Name'){
+    var name = $('#new-name-input').val();
+    $.ajax({
+      url: '/horus/requests/changeName',
+      type: 'PUT',
+      dataType: 'json',
+      headers :{
+        'newName' : name,
+        'user' : Cookies.getJSON('relevantData').name
+      },
+      complete: function(result) {
+        if(result.status == 200) {
+          console.log('changed name success!');
+          logout();
+        } else {
+          alert('Something wrong happened! Please contact tech support!');
+          location.reload();
+        }
+      }
+    });
+  }
+>>>>>>> bed33f7dfe5e20a94052915a569e9d2ff5d5e1e2
 });
 
 

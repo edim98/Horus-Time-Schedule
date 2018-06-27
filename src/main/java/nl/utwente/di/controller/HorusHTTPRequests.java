@@ -231,4 +231,11 @@ public class HorusHTTPRequests {
         DatabaseCommunication.setDefaultFaculty(faculty, name);
         return Response.status(Response.Status.OK).build();
     }
+
+    @DELETE
+    @Path("/logout")
+    public Response logOut(@HeaderParam("user") int userID) {
+        DatabaseCommunication.deletCookie(userID);
+        return Response.status(Response.Status.ACCEPTED).build();
+    }
 }

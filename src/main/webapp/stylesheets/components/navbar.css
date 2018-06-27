@@ -14701,9 +14701,12 @@ section {
     padding-left: 30px;
 }
 
+<<<<<<< HEAD
 /* Will write anything here. too many lines above */
 /* Will write anything here. too many lines above */
 /* Will write anything here. too many lines above */
+=======
+>>>>>>> bed33f7dfe5e20a94052915a569e9d2ff5d5e1e2
 
 #faculty,
 #current-room,
@@ -14735,3 +14738,11 @@ section {
   -ms-user-select: none;
   pointer-events: none;
 }
+<<<<<<< HEAD
+=======
+
+.modal-content {
+  border-radius: 1.5rem;
+  padding: 15px;
+}
+>>>>>>> bed33f7dfe5e20a94052915a569e9d2ff5d5e1e2

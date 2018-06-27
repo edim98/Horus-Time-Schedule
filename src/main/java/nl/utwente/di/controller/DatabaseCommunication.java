@@ -391,9 +391,20 @@ public class DatabaseCommunication {
     }
 
     private static void changeBuilding(){
-        String sql = "DELETE FROM request";
+        String sql = "UPDATE room SET trivial_name = 583 WHERE trivial_name LIKE '483?'";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deletCookie(int userID) {
+        String sql = "DELETE FROM cookies WHERE user_id = ?;";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
