@@ -31,7 +31,7 @@ function templateNew(teacherName, type, courseType, oldDate, newDate, id, teache
   return html;
 }
 
-function templateHistory(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes){
+function templateHistory(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes, newRoom, comments){
   var html = '<tr class="tr-shadow" request-entry>' +
   '<td>'+teacherName+'</td>'+
   '<td>'+type+'</td>'+
@@ -45,15 +45,16 @@ function templateHistory(teacherName, type, courseType, oldDate, newDate, id, te
   '<li>Request ID: '+id+'</li>'+
   '<li>Teacher ID: '+teacherID+'</li>'+
   '<li>Old Room: '+oldRoom+'</li>'+
+  '<li>New Room: '+newRoom+'</li>'+
   '<li>Number of students: '+numberOfStudents+'</li>'+
-  '<li>Status: '+status+'</li>'+
-  '<li>Other notes: '+notes+'</li></ul><br>'+
+  '<li class="thisStatus">Status: '+status+'</li>'+
+  '<li>Other notes: '+notes+'</li>'+
+  '<li>Comments: '+comments+'</li></ul><br>'+
   '</div></td></tr>';
   return html;
 }
 
 $(document).ready(function() {
-
 
   $.ajax({
     url: '/horus/requests',
@@ -74,6 +75,8 @@ $(document).ready(function() {
       var numberOfStudents = data[i].numberOfStudents;
       var notes = data[i].notes;
       var status = data[i].status;
+      var newRoom = data[i].newRoom;
+      var comments = data[i].comments;
 
       var requestTableBody = $('#request-table').find('tbody');
       var historyTableBody = $('#history-table').find('tbody');
@@ -82,13 +85,14 @@ $(document).ready(function() {
         var html = templateNew(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes);
         requestTableBody.append(html);
       } else {
-        var html = templateHistory(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes);
+        var html = templateHistory(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes, newRoom, comments);
         historyTableBody.append(html);
       }
 }
 
 
       var thisID;
+      var userID = Cookies.getJSON('relevantData').teacherID;
 
       $('.show-info').off().on('click', function(event){
         event.stopPropagation();
@@ -98,8 +102,19 @@ $(document).ready(function() {
       });
 
       $('.accept-button').on('click', function(event){
-        $('#accept-modal').modal('toggle');
-        thisID = $(this).closest('div').siblings('ul').find('li').first().text().substr(12, 2);
+        thisID = $(this).closest('div').siblings('ul').find('li').first().text().substr(12);
+        var thisType;
+        for(i = 0; i < data.length; i++){
+          if(data[i].id == thisID){
+            thisType = data[i].type;
+            break;
+          }
+        }
+        if(thisType == 'reschedule'){
+          $('#accept-modal').modal('toggle');
+        } else if(thisType == 'cancel'){
+          $('#accept2-modal').modal('toggle');
+        }
         //console.log(thisID);
       });
 
@@ -111,12 +126,14 @@ $(document).ready(function() {
 
       $('.accept-request').off().on('click', function(event){
         event.stopPropagation();
-        var newRoom = $(this).closest('.modal-content').find('.new-room').val();
+        var newRoom = $(this).closest('.modal-content').find('.new-room option:selected').val();
         var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
         console.log(newRoom);
         var changeStatus = JSON.stringify({
           'status' : 'accepted',
           'id' : thisID,
+          'comments' : otherDetails,
+          'newRoom' : newRoom
         });
             $.ajax({
               url: '/horus/requests/statusChange',
@@ -130,25 +147,39 @@ $(document).ready(function() {
               complete: function(result){
                 if(result.status == 200) {
                   console.log("Status changed!");
+                  location.reload();
                 } else {
                   console.log(result.status + " " + result.errorMessage);
                 }
               }
             });
 
+      });
+
+      $('.accept2-request').off().on('click', function(event){
+        event.stopPropagation();
+        var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
+        console.log(newRoom);
+        var changeStatus = JSON.stringify({
+          'status' : 'accepted',
+          'id' : thisID,
+          'comments' : otherDetails,
+          'newRoom' : 'Not specified!'
+        });
             $.ajax({
-              url: '/horus/requests/newRoom',
+              url: '/horus/requests/statusChange',
               type: 'PUT',
               dataType: 'json',
+              data: changeStatus,
               headers: {
-                'id' : thisID,
-                'newRoom' : newRoom
+                'Accept': 'application/json',
+                'Content-Type' : 'application/json'
               },
-              complete: function(result) {
-                if(result.status == 200){
-                  console.log("New room changed!");
+              complete: function(result){
+                if(result.status == 200) {
+                  console.log("Status changed!");
                   location.reload();
-                } else{
+                } else {
                   console.log(result.status + " " + result.errorMessage);
                 }
               }
@@ -158,9 +189,13 @@ $(document).ready(function() {
 
       $('.cancel-request').off().on('click', function(event){
         event.stopPropagation();
+        var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
         var changeStatus = JSON.stringify({
           'status' : 'cancelled',
-          'id' : thisID
+          'id' : thisID,
+          'comments' : otherDetails,
+          'newRoom' : 'Not specified!',
+          'userID' : userID
         });
 
             $.ajax({

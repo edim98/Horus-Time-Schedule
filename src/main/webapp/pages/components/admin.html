@@ -91,18 +91,13 @@
                           <a href="#" data-toggle="modal" data-target="#historyModal">
                               <i class="far fa-calendar-alt"></i>Full History</a>
 
-                        <a href="#" data-toggle="modal" data-target="#historyModal">
-                          <i class = "fas fa-history"></i>History
-                        </a>
                       </li>
                       <li>
-                          <a href="#" data-toggle="modal" data-target="#settingsModal">
+                          <a id ="settings-modal" href="#" data-toggle="modal" data-target="#settingsModal">
                               <i class="fas fa-cog"></i>Settings</a>
                       </li>
                       <li>
                           <a href="#" data-toggle="modal" data-target="#contactModal">
-
-                          <a href="#" data-toggle="modal" data-target="#contactPopup">
                               <i class="fas fa-address-book"></i>Contact Us</a>
                       </li>
                       <li>
@@ -173,75 +168,48 @@
             <!-- HEADER DESKTOP-->
 
             <div class="row m-t-25">
-                <div class="col-sm-6 col-lg-3">
+                <div class="col-xl-4 col-lg-3">
                     <div class="overview-item overview-item--c1">
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
-                                    <i class="fas fa-door-open"></i>
+                                    <i class="fas fa-clock"></i>
                                 </div>
                                 <div class="text">
-                                    <h2 id="pendingRequests">unknown</h2>
+                                    <h2 id="pendingRequests">Retrieving..</h2>
                                     <span>Requests pending</span>
                                 </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart1"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-sm-6 col-lg-3">
-                    <div class="overview-item overview-item--c3">
+                <div class="col-xl-4 col-lg-3">
+                    <div class="overview-item overview-item--c4">
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
                                     <i class="fas fa-calendar-check"></i>
                                 </div>
                                 <div class="text">
-                                    <h2>30</h2>
-                                    <span>Requests solved this week</span>
+                                    <h2 id="handledRequests">Retrieving..</h2>
+                                    <span>Requests you handled last week</span>
                                 </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart3"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-lg-3">
+                <div class="col-xl-4 col-lg-3">
                     <div class="overview-item overview-item--c2">
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
-                                    <i class="fas fa-comment"></i>
+                                    <i class="fas fa-folder-open"></i>
                                 </div>
                                 <div class="text">
-                                    <h2>5</h2>
-                                    <span>Unread messages</span>
+                                    <h2 id="totalRequests">Retrieving..</h2>
+                                    <span>Total requests received</span>
                                 </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart2"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-3">
-                    <div class="overview-item overview-item--c4">
-                        <div class="overview__inner">
-                            <div class="overview-box clearfix">
-                                <div class="icon">
-                                    <i class="fas fa-battery-quarter"></i>
-                                </div>
-                                <div class="text">
-                                    <h2>Gratz</h2>
-                                    <span>Total flow of the requests</span>
-                                </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart4"></canvas>
                             </div>
                         </div>
                     </div>
@@ -252,41 +220,7 @@
             <div class="row">
               <div class="col-lg-12">
                     <!-- DATA TABLE -->
-                    <h3 class="title-5 m-b-35">Request History</h3>
-                    <div class="table-data__tool">
-                        <div class="table-data__tool-left">
-                            <div class="rs-select2--light rs-select2--md">
-                                <select class="js-select2" name="property">
-                                    <option selected="selected">All Properties</option>
-                                    <option value="">Option 1</option>
-                                    <option value="">Option 2</option>
-                                </select>
-                                <div class="dropDownSelect2"></div>
-                            </div>
-                            <div class="rs-select2--light rs-select2--sm">
-                                <select class="js-select2" name="time">
-                                    <option selected="selected">Today</option>
-                                    <option value="">3 Days</option>
-                                    <option value="">1 Week</option>
-                                </select>
-                                <div class="dropDownSelect2"></div>
-                            </div>
-                            <button class="au-btn-filter">
-                                <i class="zmdi zmdi-filter-list"></i>filters</button>
-                        </div>
-                        <div class="table-data__tool-right">
-                            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                <i class="zmdi zmdi-plus"></i>add item</button>
-                            <div class="rs-select2--dark rs-select2--sm rs-select2--dark2">
-                                <select class="js-select2" name="type">
-                                    <option selected="selected">Export</option>
-                                    <option value="">Option 1</option>
-                                    <option value="">Option 2</option>
-                                </select>
-                                <div class="dropDownSelect2"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <h3 class="title-5 m-b-35">Pending Requests</h3>
                     <div class="table-responsive table-responsive-data2">
                         <table class="table table-data2" id ="request-table">
                             <thead>
@@ -306,7 +240,7 @@
                 </div>
             </div>
 
-<!-- Accept a request popup -->
+<!-- Accept a reschedule request popup -->
 <div class="modal fade" id="accept-modal" role="dialog">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
@@ -318,7 +252,100 @@
         <form>
           <div class="form-group">
             <label for="room">Input the new room: </label>
-            <input type="text" class="form-control new-room border-primary">
+            <div class="ui-select">
+              <select class="new-room" name="new-room" size="1">
+                <option value="99" disabled hidden selected></option>
+                        <option >2A HB 2001 (OND-05)</option>
+                        <option >2B HB 2003 (OND-06)</option>
+                        <option >2C HB 2005 (OND-07)</option>
+                        <option >2D HB 2007 (OND-08)</option>
+                        <option >2E HB 2009 (OND-09)</option>
+                        <option >2F HB 2011 (OND-10)</option>
+                        <option >2G CR 2173 (OND-16)</option>
+                        <option >2H CR 2175 (OND-15)</option>
+                        <option >2K CR 2183 (OND-14)</option>
+                        <option >2L CR 2178 (OND-11)</option>
+                        <option >2M CR 2182 (OND-12)</option>
+                        <option >2N CR 2186 (OND-13)</option>
+                        <option >3A CR 3173 (OND-24)</option>
+                        <option >3B CR 3175 (OND-23)</option>
+                        <option >3D CR 3178 (OND-21)</option>
+                        <option >3E CR 3182 (OND-20)</option>
+                        <option >3F CR 3186 (OND-19)</option>
+                        <option >3H CR 3194 (OND-17)</option>
+                        <option >4A CR 4142 (OND-25)</option>
+                        <option >CI T100</option>
+                        <option >CI T300</option>
+                        <option >CI T400</option>
+                        <option >CU B101</option>
+                        <option >CU B103</option>
+                        <option >CU B209</option>
+                        <option >CU C238</option>
+                        <option >HR C101</option>
+                        <option >HR N109</option>
+                        <option >RA 1501</option>
+                        <option >RA 2231</option>
+                        <option >RA 2237</option>
+                        <option >RA 2334</option>
+                        <option >RA 2336</option>
+                        <option >RA 2501</option>
+                        <option >RA 2502</option>
+                        <option >RA 2503</option>
+                        <option >RA 2504</option>
+                        <option >RA 3231</option>
+                        <option >RA 3334</option>
+                        <option >RA 3336</option>
+                        <option >RA 4231</option>
+                        <option >RA 4237</option>
+                        <option >RA 4334</option>
+                        <option >RA 4336</option>
+                        <option >SP 1</option>
+                        <option >SP 2</option>
+                        <option >SP 3</option>
+                        <option >SP 4</option>
+                        <option >SP 5</option>
+                        <option >SP 6</option>
+                        <option >SP 7</option>
+                        <option >WA 1</option>
+                        <option >WA 2</option>
+                        <option >WA 3</option>
+                        <option >WA 4</option>
+                        <option >OH 110</option>
+                        <option >OH 111</option>
+                        <option >OH 112</option>
+                        <option >OH 113</option>
+                        <option >OH 114</option>
+                        <option >OH 115</option>
+                        <option >OH 116</option>
+                        <option >OH 210</option>
+                        <option >OH 211</option>
+                        <option >OH 215</option>
+                        <option >OH 218</option>
+                        <option >NH 115</option>
+                        <option >NH 124</option>
+                        <option >NH 205</option>
+                        <option >NH 207</option>
+                        <option >NH 209</option>
+                        <option >HT 500a</option>
+                        <option >HT 500b</option>
+                        <option >HT 700a</option>
+                        <option >HT 700b</option>
+                        <option >HT 900</option>
+                        <option >HT 1100</option>
+                        <option >3C CR 3183 (OND-22)</option>
+                        <option >VR 501</option>
+                        <option >VR 583</option>
+                        <option >VR 559</option>
+                        <option >WH 215</option>
+                        <option >WH 217</option>
+                        <option >WH 221</option>
+                        <option >WH 223 </option>
+                        <option >HT 1300</option
+                        <option >NH 117</option>
+                        <option >NH 126</option>
+                        <option >Therm</option>
+              </select>
+            </div>
           </div>
           <div class="form-group">
             <label for="comment">Other details: </label>
@@ -363,6 +390,32 @@
 
     </div>
   </div>
+
+  <!-- Accept a cancel request popup -->
+  <div class="modal fade" id="accept2-modal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Accept this request?</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="comment">Details: </label>
+              <textarea class="other-details form-control border-primary" rows="8"></textarea>
+            </div>
+          </form>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default accept2-request">Submit</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
   <!-- history modal -->
   <div class="modal fade" id="historyModal" role="dialog">
@@ -441,40 +494,6 @@
             </div>
             </div>
           </div>
-
-
-      <!-- CONTACT US POP-UP -->
-<div class="modal fade" id="contactPopup" role="dialog">
-  <div class="modal-dialog modal-lg">
-
-  <!-- POP-UP CONTENT -->
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Contact us</h2>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <table style="margin: 0 auto; margin-bottom: 25px; margin-top: 25px">
-          <tr>
-            <td valign="top" style="padding-right: 75px">
-              <h4>Contact the timetabling team:</h4>
-              Street address here <br>
-              Enschede 7511AA <br>
-              E-mail: email@email.com <br>
-              Phone number: 0682222222
-            </td>
-            <td valign="top">
-              <h4>Report a bug or suggestion:</h4>
-              HORUS Project Team <br>
-              E-mail: email@email.com <br>
-              Phone number: 0682222222
-            </td>
-          </tr>
-      </table>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 <!-- Modal -->
@@ -570,6 +589,7 @@
 <!-- // Example starter JavaScript for disabling form submissions if there are invalid fields -->
         <script type="text/javascript" src="../../js/main.js"></script>
         <script type="text/javascript" src="../../js/popup-pages.js"></script>
+        <script type="text/javascript" src="../../js/dashboard.js"></script>
 
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

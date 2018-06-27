@@ -1,18 +1,28 @@
 package nl.utwente.di.controller;
 
+import nl.utwente.di.exceptions.AlreadyConnectedException;
 import nl.utwente.di.exceptions.InvalidInputException;
 import nl.utwente.di.model.Lecturer;
 import nl.utwente.di.model.Request;
 import nl.utwente.di.model.Room;
 import nl.utwente.di.model.Status;
+import nl.utwente.di.security.Encryption;
 import org.json.JSONObject;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.InvalidParameterSpecException;
 import java.util.List;
 import java.util.Map;
 
-@Path("/horus/requests")
+@Path("/requests")
 public class HorusHTTPRequests {
 
     @GET
@@ -34,10 +44,34 @@ public class HorusHTTPRequests {
     @Produces("application/json")
     public Response logIn(@HeaderParam("username") String username,
                           @HeaderParam("password") String password,
-                          @HeaderParam("timestamp") long timestamp) {
+                          @HeaderParam("timestamp") long timestamp) throws AlreadyConnectedException {
         //System.out.println(username + " " + password + " " + timestamp);
         Lecturer lecturer = DatabaseCommunication.getUSer(username, password);
         String sessionID = lecturer.getTeacherId() + String.valueOf(timestamp);
+        Encryption e = new Encryption();
+        try {
+            sessionID = e.encrypt(sessionID);
+        } catch (NoSuchPaddingException e1) {
+            e1.printStackTrace();
+        } catch (NoSuchAlgorithmException e1) {
+            e1.printStackTrace();
+        } catch (InvalidParameterSpecException e1) {
+            e1.printStackTrace();
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        } catch (BadPaddingException e1) {
+            e1.printStackTrace();
+        } catch (IllegalBlockSizeException e1) {
+            e1.printStackTrace();
+        } catch (InvalidKeySpecException e1) {
+            e1.printStackTrace();
+        } catch (InvalidKeyException e1) {
+            e1.printStackTrace();
+        }
+        if (DatabaseCommunication.checkAlreadyConnected(lecturer.getTeacherId())) {
+            throw new AlreadyConnectedException();
+        }
+        DatabaseCommunication.addCookie(lecturer.getTeacherId(), sessionID);
         if (lecturer != null) {
             JSONObject jsonObject = new JSONObject().put("teacherID", lecturer.getTeacherId())
                                                     .put("name", lecturer.getName())
@@ -72,7 +106,7 @@ public class HorusHTTPRequests {
         }
         String oldDate = jsonObject.getString("oldDate");
         String newDate = jsonObject.getString("newDate");
-        String teacherID = jsonObject.getString("teacherID");
+        String teacherID = "" + jsonObject.getInt("teacherID");
         int numberOfStudents = jsonObject.getInt("numberOfStudents");
         String requestType = jsonObject.getString("type");
         String name = jsonObject.getString("name");
@@ -88,9 +122,9 @@ public class HorusHTTPRequests {
     @POST
     @Path("/register")
     @Consumes("application/json")
-    public Response addUser(String lecturerString) {
+    public Response addUser(String lecturerString) throws NoSuchPaddingException, BadPaddingException, InvalidKeySpecException, NoSuchAlgorithmException, IllegalBlockSizeException, UnsupportedEncodingException, InvalidKeyException, InvalidParameterSpecException {
         JSONObject lecturerJson = new JSONObject(lecturerString);
-        String teacherid = lecturerJson.getString("teacherid");
+        int teacherid = lecturerJson.getInt("teacherid");
         String name = lecturerJson.getString("name");
         String password = lecturerJson.getString("password");
         String email = lecturerJson.getString("email");
@@ -104,11 +138,53 @@ public class HorusHTTPRequests {
     }
 
     @GET
-    @Path("/pending")
+    @Path("/pending/admin")
     @Produces("application/json")
-    public String getPendingRequests() {
-        JSONObject jsonObject = new JSONObject().put("requests", DatabaseCommunication.getPendingRequests());
-        return jsonObject.toString();
+    public int getPendingRequests() {
+        return DatabaseCommunication.getPendingRequests();
+    }
+
+    @POST
+    @Path("/pending/user")
+    @Consumes("application/json")
+    public int getPendingRequests(String jsonString) {
+        JSONObject idJson = new JSONObject(jsonString);
+        int teacherID = idJson.getInt("teacherID");
+        return DatabaseCommunication.getPendingRequests(teacherID);
+    }
+
+    @POST
+    @Path("/handled")
+    @Consumes("application/json")
+    public int getHandledRequests(String jsonString) {
+        JSONObject idJson = new JSONObject(jsonString);
+        int teacherID = idJson.getInt("teacherID");
+        return DatabaseCommunication.getWeeklyHandledRequests(teacherID);
+    }
+
+    @POST
+    @Path("/total")
+    @Consumes("application/json")
+    public int getTotalRequests() {
+        return DatabaseCommunication.getTotalRequests();
+    }
+
+    @POST
+    @Path("/accepted")
+    @Consumes("application/json")
+    public int getAcceptedRequests(String jsonString) {
+        JSONObject idJson = new JSONObject(jsonString);
+        int teacherID = idJson.getInt("teacherID");
+        return DatabaseCommunication.getAcceptedRequests(teacherID);
+    }
+
+    @POST
+    @Path("/cancelled")
+    @Consumes("application/json")
+    public int getCancelledRequests(String jsonString) {
+        JSONObject idJson = new JSONObject(jsonString);
+        int teacherID = idJson.getInt("teacherID");
+        return DatabaseCommunication.getCancelledRequests(teacherID);
     }
 
     @PUT
@@ -117,8 +193,14 @@ public class HorusHTTPRequests {
     public Response changeStatus(String jsonBody) {
         JSONObject jsonObject = new JSONObject(jsonBody);
         String status = jsonObject.getString("status");
-            int id = jsonObject.getInt("id");
+        int id = jsonObject.getInt("id");
+        String comments = jsonObject.getString("comments");
+        String newRoom = jsonObject.getString("newRoom");
+        int userID = jsonObject.getInt("userID");
         DatabaseCommunication.changeRequestStatus(Status.valueOf(status), id);
+        DatabaseCommunication.setComments(comments, id);
+        DatabaseCommunication.setNewRoom(newRoom, id);
+        DatabaseCommunication.addRequestHandling(id, userID);
         return Response.status(Response.Status.OK).build();
     }
 
@@ -126,8 +208,8 @@ public class HorusHTTPRequests {
     @Path("/changeEmail")
     @Consumes("application/json")
     public Response changeEmail(@HeaderParam("newEmail") String newEmail,
-                                @HeaderParam("user") int userID) {
-        DatabaseCommunication.changeEmail(newEmail, userID);
+                                @HeaderParam("user") String userName) {
+        DatabaseCommunication.changeEmail(newEmail, userName);
         return Response.status(Response.Status.OK).build();
     }
 
@@ -135,30 +217,25 @@ public class HorusHTTPRequests {
     @Path("/changePassword")
     @Consumes("application/json")
     public Response changePassword(@HeaderParam("newPass") String newPass,
-                                @HeaderParam("user") int userID) {
-        DatabaseCommunication.changePassword(newPass, userID);
+                                   @HeaderParam("user") String userName,
+                                   @HeaderParam("oldPass") String oldPass) {
+        DatabaseCommunication.changePassword(newPass, userName, oldPass);
         return Response.status(Response.Status.OK).build();
     }
 
     @PUT
     @Path("/changeName")
     @Consumes("application/json")
-    public Response changeName(@HeaderParam("newName") String newName,
-                                @HeaderParam("user") int userID) {
-        DatabaseCommunication.changeName(newName, userID);
+    public Response setDefaultFaculty(@HeaderParam("faculty") String faculty,
+                                      @HeaderParam("user") String name) {
+        DatabaseCommunication.setDefaultFaculty(faculty, name);
         return Response.status(Response.Status.OK).build();
     }
 
-    @PUT
-    @Path("/newRoom")
-    @Consumes("application/json")
-    public Response setNewRoom(@HeaderParam("newRoom") String newRoom,
-                           @HeaderParam("id") int requestID) throws InvalidInputException {
-        Map<String, Room> rooms = DatabaseCommunication.getRooms();
-        if (!rooms.containsKey(newRoom)) {
-            throw new InvalidInputException();
-        }
-        DatabaseCommunication.setNewRoom(newRoom, requestID);
-        return Response.status(Response.Status.OK).build();
+    @DELETE
+    @Path("/logout")
+    public Response logOut(@HeaderParam("user") int userID) {
+        DatabaseCommunication.deletCookie(userID);
+        return Response.status(Response.Status.ACCEPTED).build();
     }
 }

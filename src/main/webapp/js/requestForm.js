@@ -36,7 +36,7 @@ $('#cancel-button').click(function(event){
   event.preventDefault();
 
   var request = JSON.stringify({
-    'oldRoom' : $('#current-room').val(),
+    'oldRoom' : $('#current-room option:selected').val(),
     'oldDate' : $('#datetime-request').val(),
     'newDate' : 'Not specified',
     'teacherID' : Cookies.getJSON('relevantData').teacherID,
@@ -80,7 +80,7 @@ $('#reschedule-button').click(function(event) {
   event.preventDefault();
 
   var request = JSON.stringify({
-    'oldRoom' : $('#current-room').val(),
+    'oldRoom' : $('#current-room option:selected').val(),
     'oldDate' : $('#datetime-request').val(),
     'newDate' : $('#datetime-change').val(),
     'teacherID' : Cookies.getJSON('relevantData').teacherID,

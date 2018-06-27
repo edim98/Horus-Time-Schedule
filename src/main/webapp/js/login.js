@@ -43,7 +43,6 @@ $(document).ready(function() {
 
           if($('#remember-me').is(':checked')){
             Cookies.set('relevantData', {name: name, teacherID: teacherID, email: email, sessionID: sessionID, isAdmin: isAdmin}, {expires: 1});
-            alert('remember me!');
           } else {
             Cookies.set('relevantData', {name: name, teacherID: teacherID, email: email, sessionID: sessionID, isAdmin: isAdmin});
           }
@@ -58,7 +57,9 @@ $(document).ready(function() {
           }
 
 
-        } else {
+        } else if(result.status == 500) {
+          alert('Username or password incorrect!');
+        }else {
           alert('Failed!' + result.status + result.errorMessage);
           location.reload();
         }

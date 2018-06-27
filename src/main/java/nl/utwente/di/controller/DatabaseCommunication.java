@@ -6,18 +6,15 @@ import nl.utwente.di.model.Room;
 import nl.utwente.di.model.Status;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
+import java.util.*;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public class DatabaseCommunication {
 
     private static final String URL = "jdbc:postgresql://farm09.ewi.utwente.nl:7054/docker";
 
-    private static Connection connect() {
+    public static Connection connect() {
         try {
             Class.forName("org.postgresql.Driver");
             Connection conn = DriverManager.getConnection(URL, "docker", "YCPP2vGfS");
@@ -83,9 +80,13 @@ public class DatabaseCommunication {
             String courseType = resultSet.getString(10);
             String faculty = resultSet.getString(11);
             String status = resultSet.getString(12);
+            String newRoom = resultSet.getString(13);
+            String comments = resultSet.getString(14);
             Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name,
                     numberOfStrudents, type, notes, courseType, faculty);
             request.setStatus(status);
+            request.setNewRoom(newRoom);
+            request.setComments(comments);
             requests.add(request);
         }
         return requests;
@@ -104,8 +105,8 @@ public class DatabaseCommunication {
     }
 
     public static void addNewRequest(Request request) {
-        String sql = "INSERT INTO request(oldroom, olddate, newdate, teacherid, teachername, numberofstudents, requesttype, notes, coursetype, faculty, status)" +
-                " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO request(oldroom, olddate, newdate, teacherid, teachername, numberofstudents, requesttype, notes, coursetype, faculty, status, newroom, comms)" +
+                " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, request.getOldRoom().getRoomNumber());
@@ -119,6 +120,8 @@ public class DatabaseCommunication {
             pstmt.setString(9, request.getCourseType());
             pstmt.setString(10, request.getFaculty());
             pstmt.setString(11, request.getStatus().toString());
+            pstmt.setString(12, request.getNewRoom());
+            pstmt.setString(13, request.getComments());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -128,6 +131,21 @@ public class DatabaseCommunication {
     private static int getInt(String sql) {
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    private static int getInt(String sql, int id) {
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getInt(1);
@@ -154,7 +172,7 @@ public class DatabaseCommunication {
             pstmt.setString(2, password);
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
-                l = new Lecturer(resultSet.getString("user_id"), resultSet.getString("staff_name"), resultSet.getString("email"));
+                l = new Lecturer(resultSet.getInt("user_id"), resultSet.getString("staff_name"), resultSet.getString("email"));
                 l.setPassowrd(resultSet.getString("password"));
                 l.setTimetabler(resultSet.getBoolean("is_timetabler"));
                 return l;
@@ -186,11 +204,19 @@ public class DatabaseCommunication {
         String sql = "INSERT INTO users VALUES(?, ?, ?, ?, ?)";
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, lecturer.getTeacherId());
-            pstmt.setString(2, lecturer.getName());
-            pstmt.setString(3, lecturer.getEmail());
-            pstmt.setString(4, lecturer.getPassword());
+            pstmt.setInt(1, lecturer.getTeacherId());
+            pstmt.setString(2, lecturer.getEmail());
+            pstmt.setString(3, lecturer.getPassword());
+            pstmt.setString(4, lecturer.getName());
             pstmt.setBoolean(5, lecturer.isTimetabler());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        sql = "INSERT INTO favourites(id) VALUES (?);";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, lecturer.getTeacherId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -216,12 +242,54 @@ public class DatabaseCommunication {
         String sql = "SELECT count(*) FROM request WHERE status = 'pending';";
         return getInt(sql);
     }
+
+    public static int getPendingRequests(int teacherID) {
+        String sql = "SELECT count(*) FROM request WHERE status = 'pending' AND teacherid = ?;";
+        return getInt(sql, teacherID);
+    }
+
+    public static int getAcceptedRequests(int teacherID) {
+        String sql = "SELECT count(*) FROM request WHERE status = 'accepted' AND teacherid = ?;";
+        return getInt(sql, teacherID);
+    }
+
+    public static int getCancelledRequests(int teacherID) {
+        String sql = "SELECT count(*) FROM request WHERE status = 'cancelled' AND teacherid = ?;";
+        return getInt(sql, teacherID);
+    }
+
+    public static int getWeeklyHandledRequests(int userID) {
+        String sql = "SELECT count(*) FROM request_handling WHERE timetabler_id = ? " +
+                "AND CAST(current_date AS date) - CAST(date_handled AS date) <= 7";
+        return getInt(sql, userID);
+    }
+
+    public static int getTotalRequests() {
+        String sql = "SELECT count(*) FROM request";
+        return getInt(sql);
+    }
+
     public static void changeRequestStatus(Status status, int id) {
         String sql = "UPDATE request SET status = ? WHERE id = ? AND status = 'pending'";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, status.toString());
             pstmt.setInt(2, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addRequestHandling(int requestID, int userID) {
+        String sql = "INSERT INTO request_handling VALUES(?, ?, ?)";
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+        LocalDateTime now = LocalDateTime.now();
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, requestID);
+            pstmt.setString(2, dtf.format(now));
+            pstmt.setInt(3, userID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -252,19 +320,39 @@ public class DatabaseCommunication {
         }
     }
 
-    public static void changeEmail(String newEmail, int userid ) {
-        String sql = "UPDATE users SET email = ? WHERE user_id = ?;";
-        update(sql, newEmail, userid);
+    private static void sql(String sql, String string1, String string2) {
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, string1);
+            pstmt.setString(2, string2);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void changePassword(String password, int userID) {
-        String sql = "UPDATE users SET password = ? WHERE user_id = ?;";
-        update(sql, password, userID);
+    public static void changeEmail(String newEmail, String name) {
+        String sql = "UPDATE users SET email = ? WHERE staff_name = ?;";
+        sql(sql, newEmail, name);
     }
 
-    public static void changeName(String name, int userID) {
-        String sql = "UPDATE users SET faculty = ? WHERE user_id = ?;";
-        update(sql, name, userID);
+    public static void changePassword(String password, String name, String oldPassword) {
+        String sql = "UPDATE users SET password = ? WHERE staff_name = ? AND password = ?;";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, password);
+            pstmt.setString(2, name);
+            pstmt.setString(3, oldPassword);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void setDefaultFaculty(String faculty, String staffName) {
+        String sql = "UPDATE favourites SET default_faculty = ? WHERE id IN " +
+                "(SELECT user_id FROM users WHERE staff_name = ?);";
+        sql(sql, faculty, staffName);
     }
 
     public static void setNewRoom(String room, int id) {
@@ -272,15 +360,51 @@ public class DatabaseCommunication {
         update(sql, room, id);
     }
 
-    public static void ceva() {
-        String sql = "CREATE TABLE favourites(" +
-                "id serial PRIMARY KEY," +
-                "fav_id int," +
-                "fav_faculty varchar(10)," +
-                "FOREIGN KEY (fav_id) REFERENCES users(user_id)" +
-                ");";
+    public static void setComments(String comments, int id) {
+        String sql = "UPDATE request SET comms = ? WHERE id = ?;";
+        update(sql, comments, id);
+    }
+
+    public static void addCookie(int user_id, String cookie) {
+        String sql = "INSERT INTO cookies VALUES(?, ?);";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, user_id);
+            pstmt.setString(2, cookie);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean checkAlreadyConnected(int userID) {
+        String sql = "SELECT user_id FROM cookies WHERE user_id = ?;";
+        try (Connection connection = connect();
+            PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, userID);
+            ResultSet resultSet = pstmt.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private static void changeBuilding(){
+        String sql = "UPDATE room SET trivial_name = 583 WHERE trivial_name LIKE '483?'";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deletCookie(int userID) {
+        String sql = "DELETE FROM cookies WHERE user_id = ?;";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -290,7 +414,9 @@ public class DatabaseCommunication {
     public static void main(String[] args) {
 //        DatabaseCommunication.change();
 //        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
-        DatabaseCommunication.ceva();
+//        DatabaseCommunication.favourites();
+        DatabaseCommunication.changeBuilding();
+//        DatabaseCommunication.setNewRoom("SP 3", 1);
     }
 
 }
