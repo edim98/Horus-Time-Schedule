@@ -6,12 +6,9 @@ import nl.utwente.di.model.Room;
 import nl.utwente.di.model.Status;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
+import java.util.*;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public class DatabaseCommunication {
 
@@ -145,6 +142,21 @@ public class DatabaseCommunication {
         return -1;
     }
 
+    private static int getInt(String sql, int id) {
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     public static int getId(String table) {
         String sql = "SELECT id FROM " + table + " t WHERE NOT EXISTS" +
                 "(SELECT id FROM " + table + " WHERE id = t.id + 1) LIMIT 1;";
@@ -230,12 +242,75 @@ public class DatabaseCommunication {
         String sql = "SELECT count(*) FROM request WHERE status = 'pending';";
         return getInt(sql);
     }
+
+    public static int getPendingRequests(int teacherID) {
+<<<<<<< HEAD
+        String sql = "SELECT count(*) FROM request WHERE status = 'pending' AND teacherid = ?;";
+        return getInt(sql, teacherID);
+    }
+
+    public static int getAcceptedRequests(int teacherID) {
+        String sql = "SELECT count(*) FROM request WHERE status = 'accepted' AND teacherid = ?;";
+        return getInt(sql, teacherID);
+    }
+
+    public static int getCancelledRequests(int teacherID) {
+        String sql = "SELECT count(*) FROM request WHERE status = 'cancelled' AND teacherid = ?;";
+        return getInt(sql, teacherID);
+    }
+
+    public static int getWeeklyHandledRequests(int userID) {
+        String sql = "SELECT count(*) FROM request_handling WHERE timetabler_id = ? " +
+                "AND CAST(current_date AS date) - CAST(date_handled AS date) <= 7";
+        return getInt(sql, userID);
+=======
+        String sql = "SELECT count(*) FROM request WHERE status = 'pending' AND teacherid = '" + teacherID + "';";
+        return getInt(sql);
+    }
+
+    public static int getAcceptedRequests(int teacherID) {
+        String sql = "SELECT count(*) FROM request WHERE status = 'accepted' AND teacherid = '" + teacherID + "';";
+        return getInt(sql);
+    }
+
+    public static int getCancelledRequests(int teacherID) {
+        String sql = "SELECT count(*) FROM request WHERE status = 'cancelled' AND teacherid = '" + teacherID + "';";
+        return getInt(sql);
+    }
+
+    public static int getWeeklyHandledRequests(int userID) {
+        String sql = "SELECT count(*) FROM request_handling WHERE timetabler_id = '" + userID + "' " +
+                "AND CAST(current_date AS date) - CAST(date_handled AS date) <= 7";
+        return getInt(sql);
+>>>>>>> fc941e318d8298b7371b8b9e0578424e3a45bbfa
+    }
+
+    public static int getTotalRequests() {
+        String sql = "SELECT count(*) FROM request";
+        return getInt(sql);
+    }
+
     public static void changeRequestStatus(Status status, int id) {
         String sql = "UPDATE request SET status = ? WHERE id = ? AND status = 'pending'";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, status.toString());
             pstmt.setInt(2, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addRequestHandling(int requestID, int userID) {
+        String sql = "INSERT INTO request_handling VALUES(?, ?, ?)";
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+        LocalDateTime now = LocalDateTime.now();
+        try(Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, requestID);
+            pstmt.setString(2, dtf.format(now));
+            pstmt.setInt(3, userID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

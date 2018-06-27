@@ -106,7 +106,7 @@ public class HorusHTTPRequests {
         }
         String oldDate = jsonObject.getString("oldDate");
         String newDate = jsonObject.getString("newDate");
-        String teacherID = jsonObject.getString("teacherID");
+        String teacherID = "" + jsonObject.getInt("teacherID");
         int numberOfStudents = jsonObject.getInt("numberOfStudents");
         String requestType = jsonObject.getString("type");
         String name = jsonObject.getString("name");
@@ -138,11 +138,53 @@ public class HorusHTTPRequests {
     }
 
     @GET
-    @Path("/pending")
+    @Path("/pending/admin")
     @Produces("application/json")
-    public String getPendingRequests() {
-        JSONObject jsonObject = new JSONObject().put("requests", DatabaseCommunication.getPendingRequests());
-        return jsonObject.toString();
+    public int getPendingRequests() {
+        return DatabaseCommunication.getPendingRequests();
+    }
+
+    @POST
+    @Path("/pending/user")
+    @Consumes("application/json")
+    public int getPendingRequests(String jsonString) {
+        JSONObject idJson = new JSONObject(jsonString);
+        int teacherID = idJson.getInt("teacherID");
+        return DatabaseCommunication.getPendingRequests(teacherID);
+    }
+
+    @POST
+    @Path("/handled")
+    @Consumes("application/json")
+    public int getHandledRequests(String jsonString) {
+        JSONObject idJson = new JSONObject(jsonString);
+        int teacherID = idJson.getInt("teacherID");
+        return DatabaseCommunication.getWeeklyHandledRequests(teacherID);
+    }
+
+    @POST
+    @Path("/total")
+    @Consumes("application/json")
+    public int getTotalRequests() {
+        return DatabaseCommunication.getTotalRequests();
+    }
+
+    @POST
+    @Path("/accepted")
+    @Consumes("application/json")
+    public int getAcceptedRequests(String jsonString) {
+        JSONObject idJson = new JSONObject(jsonString);
+        int teacherID = idJson.getInt("teacherID");
+        return DatabaseCommunication.getAcceptedRequests(teacherID);
+    }
+
+    @POST
+    @Path("/cancelled")
+    @Consumes("application/json")
+    public int getCancelledRequests(String jsonString) {
+        JSONObject idJson = new JSONObject(jsonString);
+        int teacherID = idJson.getInt("teacherID");
+        return DatabaseCommunication.getCancelledRequests(teacherID);
     }
 
     @PUT
@@ -154,9 +196,11 @@ public class HorusHTTPRequests {
         int id = jsonObject.getInt("id");
         String comments = jsonObject.getString("comments");
         String newRoom = jsonObject.getString("newRoom");
+        int userID = jsonObject.getInt("userID");
         DatabaseCommunication.changeRequestStatus(Status.valueOf(status), id);
         DatabaseCommunication.setComments(comments, id);
         DatabaseCommunication.setNewRoom(newRoom, id);
+        DatabaseCommunication.addRequestHandling(id, userID);
         return Response.status(Response.Status.OK).build();
     }
 
