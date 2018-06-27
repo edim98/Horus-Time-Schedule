@@ -402,6 +402,22 @@
 			<input type="text" id="datetime-request" autocomplete="off">
 			<span>The date and time at which your class starts</span>
 		</li>
+
+    <li>
+      <label for="activity">Type of activity</label>
+      <div class="ui-select">
+      <select id="activity">
+      <option value="99" selected disabled hidden></option>
+      <option>Lecture</option>
+      <option>Tutorial</option>
+      <option>Colstruction</option>
+      <option>Project</option>
+      <option>Exam</option>
+      </select>
+      </div>
+      <span>Please select the type of activity</span>
+    </li>
+
 		<input type="radio" name="type-of-request" value="RESCHEDULE" id="change-radio"> Make a schedule change<br>
 		<input type="radio" name="type-of-request" value="CANCEL" id="cancel-radio"> Cancel the class<br>
 		</ul>
