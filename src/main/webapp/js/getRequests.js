@@ -56,7 +56,6 @@ function templateHistory(teacherName, type, courseType, oldDate, newDate, id, te
 
 $(document).ready(function() {
 
-
   $.ajax({
     url: '/horus/requests',
     type: 'GET',
@@ -93,6 +92,7 @@ $(document).ready(function() {
 
 
       var thisID;
+      var userID = Cookies.getJSON('relevantData').teacherID;
 
       $('.show-info').off().on('click', function(event){
         event.stopPropagation();
@@ -194,7 +194,8 @@ $(document).ready(function() {
           'status' : 'cancelled',
           'id' : thisID,
           'comments' : otherDetails,
-          'newRoom' : 'Not specified!'
+          'newRoom' : 'Not specified!',
+          'userID' : userID
         });
 
             $.ajax({

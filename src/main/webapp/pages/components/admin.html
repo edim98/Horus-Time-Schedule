@@ -173,75 +173,48 @@
             <!-- HEADER DESKTOP-->
 
             <div class="row m-t-25">
-                <div class="col-sm-6 col-lg-3">
+                <div class="col-xl-4 col-lg-3">
                     <div class="overview-item overview-item--c1">
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
-                                    <i class="fas fa-door-open"></i>
+                                    <i class="fas fa-clock"></i>
                                 </div>
                                 <div class="text">
-                                    <h2 id="pendingRequests">unknown</h2>
+                                    <h2 id="pendingRequests">Retrieving..</h2>
                                     <span>Requests pending</span>
                                 </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart1"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-sm-6 col-lg-3">
-                    <div class="overview-item overview-item--c3">
+                <div class="col-xl-4 col-lg-3">
+                    <div class="overview-item overview-item--c4">
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
                                     <i class="fas fa-calendar-check"></i>
                                 </div>
                                 <div class="text">
-                                    <h2>30</h2>
-                                    <span>Requests solved this week</span>
+                                    <h2 id="handledRequests">Retrieving..</h2>
+                                    <span>Requests you handled last week</span>
                                 </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart3"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-lg-3">
+                <div class="col-xl-4 col-lg-3">
                     <div class="overview-item overview-item--c2">
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
-                                    <i class="fas fa-comment"></i>
+                                    <i class="fas fa-folder-open"></i>
                                 </div>
                                 <div class="text">
-                                    <h2>5</h2>
-                                    <span>Unread messages</span>
+                                    <h2 id="totalRequests">Retrieving..</h2>
+                                    <span>Total requests received</span>
                                 </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart2"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-3">
-                    <div class="overview-item overview-item--c4">
-                        <div class="overview__inner">
-                            <div class="overview-box clearfix">
-                                <div class="icon">
-                                    <i class="fas fa-battery-quarter"></i>
-                                </div>
-                                <div class="text">
-                                    <h2>Gratz</h2>
-                                    <span>Total flow of the requests</span>
-                                </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart4"></canvas>
                             </div>
                         </div>
                     </div>
@@ -252,41 +225,7 @@
             <div class="row">
               <div class="col-lg-12">
                     <!-- DATA TABLE -->
-                    <h3 class="title-5 m-b-35">Request History</h3>
-                    <div class="table-data__tool">
-                        <div class="table-data__tool-left">
-                            <div class="rs-select2--light rs-select2--md">
-                                <select class="js-select2" name="property">
-                                    <option selected="selected">All Properties</option>
-                                    <option value="">Option 1</option>
-                                    <option value="">Option 2</option>
-                                </select>
-                                <div class="dropDownSelect2"></div>
-                            </div>
-                            <div class="rs-select2--light rs-select2--sm">
-                                <select class="js-select2" name="time">
-                                    <option selected="selected">Today</option>
-                                    <option value="">3 Days</option>
-                                    <option value="">1 Week</option>
-                                </select>
-                                <div class="dropDownSelect2"></div>
-                            </div>
-                            <button class="au-btn-filter">
-                                <i class="zmdi zmdi-filter-list"></i>filters</button>
-                        </div>
-                        <div class="table-data__tool-right">
-                            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                <i class="zmdi zmdi-plus"></i>add item</button>
-                            <div class="rs-select2--dark rs-select2--sm rs-select2--dark2">
-                                <select class="js-select2" name="type">
-                                    <option selected="selected">Export</option>
-                                    <option value="">Option 1</option>
-                                    <option value="">Option 2</option>
-                                </select>
-                                <div class="dropDownSelect2"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <h3 class="title-5 m-b-35">Pending Requests</h3>
                     <div class="table-responsive table-responsive-data2">
                         <table class="table table-data2" id ="request-table">
                             <thead>
@@ -686,6 +625,7 @@
 <!-- // Example starter JavaScript for disabling form submissions if there are invalid fields -->
         <script type="text/javascript" src="../../js/main.js"></script>
         <script type="text/javascript" src="../../js/popup-pages.js"></script>
+        <script type="text/javascript" src="../../js/dashboard.js"></script>
 
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
