@@ -1,12 +1,12 @@
-// if(!Cookies.get('relevantData')){
-//   url = '../login.html';
-//   $(location).attr('href', url);
-// } else{
-//   if(Cookies.getJSON('relevantData').isAdmin) {
-//     url = './admin.html';
-//     $(location).attr('href', url);
-//   }
-// }
+if(!Cookies.get('relevantData')){
+  url = '../login.html';
+  $(location).attr('href', url);
+} else{
+  if(Cookies.getJSON('relevantData').isAdmin) {
+    url = './admin.html';
+    $(location).attr('href', url);
+  }
+}
 
 function templatePending(oldRoom, oldDate, newDate, type, status, id, courseType, numberOfStudents, notes) {
   var html = '<tr class="tr-shadow" request-entry>' +
