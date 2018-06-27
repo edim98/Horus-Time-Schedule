@@ -23,7 +23,7 @@ $(document).ready(function() {
 
       var data = JSON.stringify({
           'teacherID' : Cookies.getJSON('relevantData').teacherID
-      })
+      });
       $.ajax({
           url: '/horus/requests/handled',
           type: 'POST',
@@ -67,7 +67,7 @@ $(document).ready(function() {
   } else {
       var data = JSON.stringify({
           'teacherID' : Cookies.getJSON('relevantData').teacherID
-      })
+      });
       $.ajax({
           url: '/horus/requests/pending/user',
           type: 'POST',
