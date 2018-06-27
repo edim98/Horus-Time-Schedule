@@ -142,6 +142,21 @@ public class DatabaseCommunication {
         return -1;
     }
 
+    private static int getInt(String sql, int id) {
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     public static int getId(String table) {
         String sql = "SELECT id FROM " + table + " t WHERE NOT EXISTS" +
                 "(SELECT id FROM " + table + " WHERE id = t.id + 1) LIMIT 1;";
@@ -229,24 +244,24 @@ public class DatabaseCommunication {
     }
 
     public static int getPendingRequests(int teacherID) {
-        String sql = "SELECT count(*) FROM request WHERE status = 'pending' AND teacherid = '" + teacherID + "';";
-        return getInt(sql);
+        String sql = "SELECT count(*) FROM request WHERE status = 'pending' AND teacherid = ?;";
+        return getInt(sql, teacherID);
     }
 
     public static int getAcceptedRequests(int teacherID) {
-        String sql = "SELECT count(*) FROM request WHERE status = 'accepted' AND teacherid = '" + teacherID + "';";
-        return getInt(sql);
+        String sql = "SELECT count(*) FROM request WHERE status = 'accepted' AND teacherid = ?;";
+        return getInt(sql, teacherID);
     }
 
     public static int getCancelledRequests(int teacherID) {
-        String sql = "SELECT count(*) FROM request WHERE status = 'cancelled' AND teacherid = '" + teacherID + "';";
-        return getInt(sql);
+        String sql = "SELECT count(*) FROM request WHERE status = 'cancelled' AND teacherid = ?;";
+        return getInt(sql, teacherID);
     }
 
     public static int getWeeklyHandledRequests(int userID) {
-        String sql = "SELECT count(*) FROM request_handling WHERE timetabler_id = '" + userID + "' " +
+        String sql = "SELECT count(*) FROM request_handling WHERE timetabler_id = ? " +
                 "AND CAST(current_date AS date) - CAST(date_handled AS date) <= 7";
-        return getInt(sql);
+        return getInt(sql, userID);
     }
 
     public static int getTotalRequests() {
