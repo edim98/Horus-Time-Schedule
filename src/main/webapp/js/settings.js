@@ -42,7 +42,6 @@ $('#settingsModal').on('hidden.bs.modal', function () {
     $("#facultyOptions").hide();
 });
 
-
   } else if($('#settingsOptions option:selected').text() == 'Name'){
     var name = $('#new-name-input').val();
     $.ajax({
@@ -64,6 +63,7 @@ $('#settingsModal').on('hidden.bs.modal', function () {
       }
     });
   }
+
 });
 
 
