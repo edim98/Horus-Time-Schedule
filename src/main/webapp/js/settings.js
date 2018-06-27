@@ -1,6 +1,5 @@
 $('#settings-button').hide();
 
-<<<<<<< HEAD
 $('#settingsModal').on('hidden.bs.modal', function () {
         $('#settingsOptions').val('0');
         $('#old-psw-input').val('');
@@ -35,16 +34,6 @@ $('#settingsModal').on('hidden.bs.modal', function () {
  $('#new-name-input').on('input', function() {
  	if ($('#new-name-input').val().length >= 5  && $('#settingsOptions').val() == "4") $('#settings-button').show(); else $('#settings-button').hide();
  });
-=======
-
-$('#settingsModal').on('hidden.bs.modal', function () {
-    $('#settingsOptions').val('0');
-    $('#old-psw-input').val('');
-    $('#new-psw-input').val('');
-    $('#email-input').val('');
-    $('#new-name-input').val('');
-    $('#facultyOptions').val("99");
->>>>>>> e9dae9cb451b30b30cec6def121c5952837b1572
 
     $('#settings-button').hide();
     $('#psw-change-form').hide();
@@ -54,7 +43,6 @@ $('#settingsModal').on('hidden.bs.modal', function () {
 });
 
 
-<<<<<<< HEAD
   } else if($('#settingsOptions option:selected').text() == 'Name'){
     var name = $('#new-name-input').val();
     $.ajax({
@@ -76,26 +64,6 @@ $('#settingsModal').on('hidden.bs.modal', function () {
       }
     });
   }
-=======
-$('#old-psw-input').on('input',function() {
-    if ($('#old-psw-input').val().length > 5 && $('#new-psw-input').val().length > 5) {
-        $('#settings-button').show();
-    } else $('#settings-button').hide();
-});
-$('#new-psw-input').on('input',function() {
-    if ($('#old-psw-input').val().length > 5 && $('#new-psw-input').val().length > 5) {
-        $('#settings-button').show();
-    } else $('#settings-button').hide();
-});
-$('#email-input').on('input', function() {
-    if ($('#email-input').val().length >= 7  && $('#settingsOptions').val() == "2") $('#settings-button').show(); else $('#settings-button').hide();
-});
-$('#facultyOptions').change(function() {
-    if ($('#facultyOptions').val() != "99"  && $('#settingsOptions').val() == "3") $('#settings-button').show(); else $('#settings-button').hide();
-});
-$('#new-name-input').on('input', function() {
-    if ($('#new-name-input').val().length >= 5  && $('#settingsOptions').val() == "4") $('#settings-button').show(); else $('#settings-button').hide();
->>>>>>> e9dae9cb451b30b30cec6def121c5952837b1572
 });
 
 
