@@ -22,7 +22,7 @@ import java.security.spec.InvalidParameterSpecException;
 import java.util.List;
 import java.util.Map;
 
-@Path("/horus/requests")
+@Path("/requests")
 public class HorusHTTPRequests {
 
     @GET
