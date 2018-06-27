@@ -45,7 +45,6 @@ public class HorusHTTPRequests {
     public Response logIn(@HeaderParam("username") String username,
                           @HeaderParam("password") String password,
                           @HeaderParam("timestamp") long timestamp) throws AlreadyConnectedException {
-        //System.out.println(username + " " + password + " " + timestamp);
         Lecturer lecturer = DatabaseCommunication.getUSer(username, password);
         String sessionID = lecturer.getTeacherId() + String.valueOf(timestamp);
         Encryption e = new Encryption();

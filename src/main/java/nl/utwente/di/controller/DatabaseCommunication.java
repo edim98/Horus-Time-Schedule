@@ -391,7 +391,7 @@ public class DatabaseCommunication {
     }
 
     private static void changeBuilding(){
-        String sql = "UPDATE room SET trivial_name = 583 WHERE trivial_name LIKE '483?'";
+        String sql = "DELETE FROM cookies";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.executeUpdate();
@@ -415,7 +415,8 @@ public class DatabaseCommunication {
 //        DatabaseCommunication.change();
 //        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
 //        DatabaseCommunication.favourites();
-        DatabaseCommunication.changeBuilding();
+//        DatabaseCommunication.changeBuilding();
+        DatabaseCommunication.deletCookie(996);
 //        DatabaseCommunication.setNewRoom("SP 3", 1);
     }
 
