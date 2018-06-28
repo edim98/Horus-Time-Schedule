@@ -2,11 +2,13 @@ package nl.utwente.di.controller;
 
 import nl.utwente.di.exceptions.AlreadyConnectedException;
 import nl.utwente.di.exceptions.InvalidInputException;
+import nl.utwente.di.exceptions.InvalidPasswordException;
 import nl.utwente.di.model.Lecturer;
 import nl.utwente.di.model.Request;
 import nl.utwente.di.model.Room;
 import nl.utwente.di.model.Status;
 import nl.utwente.di.security.Encryption;
+import nl.utwente.di.security.PasswordStorage;
 import org.json.JSONObject;
 
 import javax.crypto.BadPaddingException;
@@ -22,8 +24,12 @@ import java.security.spec.InvalidParameterSpecException;
 import java.util.List;
 import java.util.Map;
 
+import static nl.utwente.di.security.PasswordStorage.createHash;
+
 @Path("/requests")
 public class HorusHTTPRequests {
+
+    PasswordStorage hashMaster = new PasswordStorage();
 
     @GET
     @Produces("application/json")
@@ -44,9 +50,22 @@ public class HorusHTTPRequests {
     @Produces("application/json")
     public Response logIn(@HeaderParam("username") String username,
                           @HeaderParam("password") String password,
-                          @HeaderParam("timestamp") long timestamp) throws AlreadyConnectedException {
+                          @HeaderParam("timestamp") long timestamp) throws AlreadyConnectedException, InvalidPasswordException {
         //System.out.println(username + " " + password + " " + timestamp);
         Lecturer lecturer = DatabaseCommunication.getUSer(username, password);
+        boolean isPasswordOk = false;
+        try {
+            isPasswordOk = hashMaster.verifyPassword(password, lecturer.getPassword());
+        } catch (PasswordStorage.CannotPerformOperationException e) {
+            e.printStackTrace();
+        } catch (PasswordStorage.InvalidHashException e) {
+            e.printStackTrace();
+        }
+
+        if (!isPasswordOk){
+            throw new InvalidPasswordException();
+        }
+
         String sessionID = lecturer.getTeacherId() + String.valueOf(timestamp);
         Encryption e = new Encryption();
         try {
@@ -129,7 +148,12 @@ public class HorusHTTPRequests {
         String password = lecturerJson.getString("password");
         String email = lecturerJson.getString("email");
         Lecturer lecturer = new Lecturer(teacherid, name, email);
-        lecturer.setPassowrd(password);
+        try {
+            lecturer.setPassowrd(hashMaster.createHash(password));
+        } catch (PasswordStorage.CannotPerformOperationException e) {
+            e.printStackTrace();
+            System.out.println("ERROR in password hashing");
+        }
         if (DatabaseCommunication.checkExistingUser(lecturer.getEmail())) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
