@@ -14,3 +14,10 @@ $('#contact-message').on('input',function() {
       $('#contact-button').show();
     } else $('#contact-button').hide();
 });
+
+$('#contact-button').on('click', function(event){
+  event.preventDefault();
+  var subject = $('#contact-subject').val();
+  var body = $('#contact-message').val();
+  window.open('mailto:a.popa@student.utwente.nl?subject=subject&body=body');
+});
