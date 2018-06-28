@@ -391,10 +391,13 @@ public class DatabaseCommunication {
     }
 
     private static void changeBuilding(){
-        String sql = "UPDATE request SET notes = 'building Carre and beamer' WHERE id = 40";
+        String sql = "SELECT room_number FROM room WHERE features LIKE '%Chalkboard%'";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.executeUpdate();
+            ResultSet resultSet = pstmt.executeQuery();
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString(1));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -433,6 +436,7 @@ public class DatabaseCommunication {
         DatabaseCommunication.changeBuilding();
 //        DatabaseCommunication.deletCookie(996);
 //        DatabaseCommunication.setNewRoom("SP 3", 1);
+//        DatabaseCommunication.changeFeatures();
     }
 
 }
