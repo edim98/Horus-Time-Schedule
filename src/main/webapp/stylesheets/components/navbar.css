@@ -365,7 +365,9 @@ section {
 
 .page-content--bge5 {
     background: #e5e5e5;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
+    padding-bottom: 30px;
 }
 
 .login-wrap {
