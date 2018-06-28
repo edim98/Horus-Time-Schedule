@@ -129,13 +129,15 @@ $(document).ready(function() {
         var newRoom = $(this).closest('.modal-content').find('.new-room option:selected').val();
         var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
         var userID = Cookies.getJSON('relevantData').teacherID;
+        var email = Cookies.getJSON('relevantData').email;
         console.log(newRoom);
         var changeStatus = JSON.stringify({
           'status' : 'accepted',
           'id' : thisID,
           'comments' : otherDetails,
           'newRoom' : newRoom,
-          'userID' : userID
+          'userID' : userID,
+          'email' : email
         });
             $.ajax({
               url: '/horus/requests/statusChange',
@@ -161,12 +163,14 @@ $(document).ready(function() {
       $('.accept2-request').off().on('click', function(event){
         event.stopPropagation();
         var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
+        var email = Cookies.getJSON('relevantData').email;
         console.log(newRoom);
         var changeStatus = JSON.stringify({
           'status' : 'accepted',
           'id' : thisID,
           'comments' : otherDetails,
-          'newRoom' : 'Not specified!'
+          'newRoom' : 'Not specified!',
+          'email' : email
         });
             $.ajax({
               url: '/horus/requests/statusChange',
