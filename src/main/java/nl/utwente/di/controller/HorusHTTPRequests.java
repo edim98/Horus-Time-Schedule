@@ -137,6 +137,7 @@ public class HorusHTTPRequests {
         Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name, numberOfStudents, requestType,
                 notes, courseType, faculty);
         DatabaseCommunication.addNewRequest(request);
+        DatabaseCommunication.addNewRequest(id, jsonObject.getString("email"));
     }
 
     @POST
