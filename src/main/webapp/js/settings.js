@@ -1,9 +1,37 @@
+
+function logout() {
+  event.stopPropagation();
+  url = '../login.html';
+
+
+  $.ajax({
+    url: '/horus/requests/logout',
+    type: 'DELETE',
+    dataType: 'json',
+    headers: {
+      'Accept' : 'application/json',
+      'Content-Type' : 'application/json',
+      'user' : Cookies.getJSON('relevantData').teacherID
+    },
+    complete: function(result){
+      if(result.status == 202) {
+        console.log("success");
+        Cookies.remove('relevantData');
+        $(location).attr('href', url);
+      } else {
+        console.log("error: " + result.status + ". " + result.errorMessage);
+      }
+    }
+  });
+}
+
 $('#settingsOptions').val('0');
 $('#old-psw-input').val('');
 $('#new-psw-input').val('');
 $('#email-input').val('');
 $('#new-name-input').val('');
 $('#facultyOptions').val("99");
+
 
 $('#settings-button').hide();
 $('#psw-change-form').hide();
