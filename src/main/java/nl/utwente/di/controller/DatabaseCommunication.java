@@ -163,13 +163,12 @@ public class DatabaseCommunication {
         return getInt(sql);
     }
 
-    public static Lecturer getUSer(String id, String password) {
-        String sql = "SELECT * FROM users  WHERE email = ? AND password = ?;";
+    public static Lecturer getUSer(String id) {
+        String sql = "SELECT * FROM users  WHERE email = ?;";
         Lecturer l;
         try(Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
-            pstmt.setString(2, password);
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
                 l = new Lecturer(resultSet.getInt("user_id"), resultSet.getString("staff_name"), resultSet.getString("email"));
