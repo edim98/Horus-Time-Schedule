@@ -280,4 +280,17 @@ public class HorusHTTPRequests {
         DatabaseCommunication.addSupport(id, email, head, body);
         return Response.status(Response.Status.OK).build();
     }
+
+    @GET
+    @Path("/newRequests")
+    public List<Integer> getNewAddedRequests(@HeaderParam("email") String email) {
+        return DatabaseCommunication.getNewRequests(email);
+    }
+
+    @DELETE
+    @Path("/deleteRequests")
+    public Response deleteNewAddedRequests(@HeaderParam("email") String email) {
+        DatabaseCommunication.deleteNewRequests(email);
+        return Response.status(Response.Status.ACCEPTED).build();
+    }
 }
