@@ -14709,6 +14709,7 @@ section {
 
 #faculty,
 #current-room,
+#activity,
 #change-radio,
 #cancel-radio,
 #change-form,
@@ -14741,4 +14742,8 @@ section {
 .modal-content {
   border-radius: 1.5rem;
   padding: 15px;
+}
+
+.overview-box {
+  padding-bottom: 20px;
 }
