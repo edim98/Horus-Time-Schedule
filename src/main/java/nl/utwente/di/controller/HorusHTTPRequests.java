@@ -45,7 +45,6 @@ public class HorusHTTPRequests {
     public Response logIn(@HeaderParam("username") String username,
                           @HeaderParam("password") String password,
                           @HeaderParam("timestamp") long timestamp) throws AlreadyConnectedException {
-        //System.out.println(username + " " + password + " " + timestamp);
         Lecturer lecturer = DatabaseCommunication.getUSer(username, password);
         String sessionID = lecturer.getTeacherId() + String.valueOf(timestamp);
         Encryption e = new Encryption();
@@ -122,9 +121,9 @@ public class HorusHTTPRequests {
     @POST
     @Path("/register")
     @Consumes("application/json")
-    public Response addUser(String lecturerString) throws NoSuchPaddingException, BadPaddingException, InvalidKeySpecException, NoSuchAlgorithmException, IllegalBlockSizeException, UnsupportedEncodingException, InvalidKeyException, InvalidParameterSpecException {
+    public Response addUser(String lecturerString) {
         JSONObject lecturerJson = new JSONObject(lecturerString);
-        int teacherid = lecturerJson.getInt("teacherid");
+        int teacherid = DatabaseCommunication.getLasTeacherID() + 1;
         String name = lecturerJson.getString("name");
         String password = lecturerJson.getString("password");
         String email = lecturerJson.getString("email");
