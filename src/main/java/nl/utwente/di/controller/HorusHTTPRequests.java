@@ -263,4 +263,21 @@ public class HorusHTTPRequests {
         DatabaseCommunication.deletCookie(userID);
         return Response.status(Response.Status.ACCEPTED).build();
     }
+
+    @GET
+    @Path("/gazeIntoTheAbyss")
+    public List<String> startGazeOfHorus(@HeaderParam("requestID") int requestID) {
+        return Gaze.lookUpForRooms(requestID);
+    }
+
+    @POST
+    @Path("/support")
+    @Consumes("application/json")
+    public Response addSupport(@HeaderParam("email") String email,
+                               @HeaderParam("head") String head,
+                               @HeaderParam("body") String body) {
+        int id = DatabaseCommunication.getLastSupportID() + 1;
+        DatabaseCommunication.addSupport(id, email, head, body);
+        return Response.status(Response.Status.OK).build();
+    }
 }
