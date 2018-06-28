@@ -129,7 +129,13 @@ $(document).ready(function() {
         var newRoom = $(this).closest('.modal-content').find('.new-room option:selected').val();
         var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
         var userID = Cookies.getJSON('relevantData').teacherID;
-        var email = Cookies.getJSON('relevantData').email;
+        var teacherID;
+        for(i = 0; i < data.length; i++) {
+          if(data[i].id == thisID){
+            teacherID = data[i].teacherID;
+          }
+        }
+
         console.log(newRoom);
         var changeStatus = JSON.stringify({
           'status' : 'accepted',
@@ -137,7 +143,7 @@ $(document).ready(function() {
           'comments' : otherDetails,
           'newRoom' : newRoom,
           'userID' : userID,
-          'email' : email
+          'teacherID' : teacherID
         });
             $.ajax({
               url: '/horus/requests/statusChange',
@@ -163,14 +169,18 @@ $(document).ready(function() {
       $('.accept2-request').off().on('click', function(event){
         event.stopPropagation();
         var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
-        var email = Cookies.getJSON('relevantData').email;
-        console.log(newRoom);
+        var teacherID;
+        for(i = 0; i < data.length; i++) {
+          if(data[i].id == thisID){
+            teacherID = data[i].teacherID;
+          }
+        }
         var changeStatus = JSON.stringify({
           'status' : 'accepted',
           'id' : thisID,
           'comments' : otherDetails,
           'newRoom' : 'Not specified!',
-          'email' : email
+          'teacherID' : teacherID
         });
             $.ajax({
               url: '/horus/requests/statusChange',
