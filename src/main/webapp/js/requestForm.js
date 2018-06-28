@@ -90,7 +90,8 @@ $('#reschedule-button').click(function(event) {
     'name' : Cookies.getJSON('relevantData').name,
     'courseType' : 'lecture',
     'faculty' : $('#faculty option:selected').val(),
-    'notes' : $('#notes-input').val()
+    'notes' : $('#notes-input').val(),
+    'email' : Cookies.getJSON('relevantData').email
   });
 
   $.ajax({
