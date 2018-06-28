@@ -129,12 +129,12 @@ public class DatabaseCommunication {
         }
     }
 
-    public static void addNewRequest(int requestID, String email) {
+    public static void addNewRequest(int requestID, String teacherID) {
         String sql = "INSERT INTO new_req VALUES(?, ?);";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, requestID);
-            pstmt.setString(2, email);
+            pstmt.setString(2, teacherID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -402,19 +402,6 @@ public class DatabaseCommunication {
         return false;
     }
 
-    private static void changeBuilding(){
-        String sql = "SELECT room_number FROM room WHERE features LIKE '%Chalkboard%'";
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            ResultSet resultSet = pstmt.executeQuery();
-            while (resultSet.next()) {
-                System.out.println(resultSet.getString(1));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void deletCookie(int userID) {
         String sql = "DELETE FROM cookies WHERE user_id = ?";
         try (Connection conn = connect();
@@ -465,12 +452,12 @@ public class DatabaseCommunication {
         return getLastID(sql);
     }
 
-    public static List<Integer> getNewRequests(String email) {
+    public static List<Integer> getNewRequests(String teacherID) {
         String sql = "SELECT rid FROM new_req WHERE email = ?;";
         List<Integer> ids = new ArrayList<>();
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, email);
+            pstmt.setString(1, teacherID);
             ResultSet resultSet = pstmt.executeQuery();
             while (resultSet.next()) {
                 ids.add(resultSet.getInt(1));
@@ -482,12 +469,25 @@ public class DatabaseCommunication {
         return ids;
     }
 
-    public static void deleteNewRequests(String email) {
+    public static void deleteNewRequests(String teacherID) {
         String sql = "DELETE FROM new_req WHERE email = ?";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, email);
+            pstmt.setString(1, teacherID);
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void changeBuilding(){
+        String sql = "DELETE FROM new_req";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet resultSet = pstmt.executeQuery();
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString(1));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -497,8 +497,8 @@ public class DatabaseCommunication {
 //        DatabaseCommunication.change();
 //        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
 //        DatabaseCommunication.favourites();
-//        DatabaseCommunication.changeBuilding();
-        DatabaseCommunication.deletCookie(996);
+        DatabaseCommunication.changeBuilding();
+//        DatabaseCommunication.deletCookie(996);
 //        DatabaseCommunication.setNewRoom("SP 3", 1);
 //        DatabaseCommunication.changeFeatures();
     }
