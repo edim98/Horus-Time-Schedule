@@ -5,6 +5,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Base64;
 import javax.xml.bind.DatatypeConverter;
 
 public class PasswordStorage
@@ -91,7 +92,7 @@ public class PasswordStorage
                 toBase64(salt) +
                 ":" +
                 toBase64(hash);
-        return parts;
+        return Base64.getEncoder().encodeToString(parts.getBytes());
     }
 
     public static boolean verifyPassword(String password, String correctHash)

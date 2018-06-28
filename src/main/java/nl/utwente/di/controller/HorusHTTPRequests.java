@@ -21,6 +21,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +56,7 @@ public class HorusHTTPRequests {
         Lecturer lecturer = DatabaseCommunication.getUSer(username);
         boolean isPasswordOk = false;
         try {
-            isPasswordOk = hashMaster.verifyPassword(password, lecturer.getPassword());
+            isPasswordOk = hashMaster.verifyPassword(password, new String(Base64.getDecoder().decode(lecturer.getPassword())));
         } catch (PasswordStorage.CannotPerformOperationException e) {
             e.printStackTrace();
         } catch (PasswordStorage.InvalidHashException e) {
