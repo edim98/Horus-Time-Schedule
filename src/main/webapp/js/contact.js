@@ -15,9 +15,29 @@ $('#contact-message').on('input',function() {
     } else $('#contact-button').hide();
 });
 
-$('#contact-button').on('click', function(event){
+$('#contact-button').off().on('click', function(event){
   event.preventDefault();
   var subject = $('#contact-subject').val();
   var body = $('#contact-message').val();
-  var author = Cookies.getJSON('relevantData').name;
+  var author = Cookies.getJSON('relevantData').email;
+  $.ajax({
+    url: '/horus/requests/support',
+    type: 'POST',
+    dataType: 'json',
+    headers: {
+      'Accept' : 'application/json',
+      'Content-Type' : 'application/json',
+      'email' : author,
+      'head' : subject,
+      'body' : body
+    },
+    complete: function(result){
+      if(result.status == 200) {
+        alert('Thank you for contacting us!');
+        location.reload();
+      } else {
+        console.log("error: " + result.status + ". " + result.errorMessage);
+      }
+    }
+  })
 });
