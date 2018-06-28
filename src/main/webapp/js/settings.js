@@ -1,19 +1,59 @@
+
+function logout() {
+  event.stopPropagation();
+  url = '../login.html';
+
+
+  $.ajax({
+    url: '/horus/requests/logout',
+    type: 'DELETE',
+    dataType: 'json',
+    headers: {
+      'Accept' : 'application/json',
+      'Content-Type' : 'application/json',
+      'user' : Cookies.getJSON('relevantData').teacherID
+    },
+    complete: function(result){
+      if(result.status == 202) {
+        console.log("success");
+        Cookies.remove('relevantData');
+        $(location).attr('href', url);
+      } else {
+        console.log("error: " + result.status + ". " + result.errorMessage);
+      }
+    }
+  });
+}
+
+$('#settingsOptions').val('0');
+$('#old-psw-input').val('');
+$('#new-psw-input').val('');
+$('#email-input').val('');
+$('#new-name-input').val('');
+$('#facultyOptions').val("99");
+
+
 $('#settings-button').hide();
+$('#psw-change-form').hide();
+$('#email-input').hide();
+$('#new-name-input').hide();
+$("#facultyOptions").hide();
 
-$('#settings-modal').on('click', function () {
-        $('#settingsOptions').val('0');
-        $('#old-psw-input').val('');
-        $('#new-psw-input').val('');
-        $('#email-input').val('');
-        $('#new-name-input').val('');
-        $('#facultyOptions').val("99");
 
-        $('#settings-button').hide();
-        $('#psw-change-form').hide();
-        $('#email-input').hide();
-        $('#new-name-input').hide();
-        $("#facultyOptions").hide();
-     });
+$('#settingsModal').on('hidden.bs.modal', function () {
+  $('#settingsOptions').val('0');
+  $('#old-psw-input').val('');
+  $('#new-psw-input').val('');
+  $('#email-input').val('');
+  $('#new-name-input').val('');
+  $('#facultyOptions').val("99");
+
+  $('#settings-button').hide();
+  $('#psw-change-form').hide();
+  $('#email-input').hide();
+  $('#new-name-input').hide();
+  $("#facultyOptions").hide();
+});
 
  $('#old-psw-input').on('input',function() {
    if ($('#old-psw-input').val().length > 5 && $('#new-psw-input').val().length > 5) {
@@ -106,21 +146,37 @@ $('#settings-button').on('click', function(event){
   }
 });
 
+
+
 $(document).ready(function() {
   $('#settingsOptions').change(function() {
     var selectedOption = $('#settingsOptions').val();
     if (selectedOption == "1"){
-      $('#settings-button').show();
+      $('#settings-button').hide();
+      $('#old-psw-input').val('');
+      $('#new-psw-input').val('');
+      $("#facultyOptions").hide();
       $('#psw-change-form').show();
       $('#email-input').hide();
       $('#new-name-input').hide();
     } else if (selectedOption == "2"){
-      $('#settings-button').show();
+      $('#settings-button').hide();
+      $('#email-input').val('');
+      $("#facultyOptions").hide();
       $('#psw-change-form').hide();
       $('#email-input').show();
       $('#new-name-input').hide();
+    } else if (selectedOption == "3"){
+      $('#settings-button').hide();
+      $('#facultyOptions').val("99");
+      $("#facultyOptions").show();
+      $('#psw-change-form').hide();
+      $('#email-input').hide();
+      $('#new-name-input').hide();
     } else if (selectedOption == "4"){
-      $('#settings-button').show();
+      $('#settings-button').hide();
+      $('#new-name-input').val('');
+      $("#facultyOptions").hide();
       $('#psw-change-form').hide();
       $('#email-input').hide();
       $('#new-name-input').show();
