@@ -414,11 +414,9 @@ public class DatabaseCommunication {
         }
     }
 
-    public static int getLasTeacherID() {
-        String sql = "SELECT u.user_id FROM users u WHERE NOT EXISTS " +
-                "(SELECT user_id FROM users WHERE user_id = u.user_id + 1);";
+    private static int getLastID(String sql) {
         try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getInt(1);
@@ -427,6 +425,12 @@ public class DatabaseCommunication {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public static int getLasTeacherID() {
+        String sql = "SELECT u.user_id FROM users u WHERE NOT EXISTS " +
+                "(SELECT user_id FROM users WHERE user_id = u.user_id + 1);";
+        return getLastID(sql);
     }
 
     public static void addSupport(int id, String email, String head, String body) {
@@ -446,16 +450,35 @@ public class DatabaseCommunication {
     public static int getLastSupportID() {
         String sql = "SELECT s.ticket_id FROM support s WHERE NOT EXISTS " +
                 "(SELECT ticket_id FROM support WHERE ticket_id = s.ticket_id + 1);";
+        return getLastID(sql);
+    }
+
+    public static List<Integer> getNewRequests(String email) {
+        String sql = "SELECT rid FROM new_req WHERE email = ?;";
+        List<Integer> ids = new ArrayList<>();
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
             ResultSet resultSet = pstmt.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
+            while (resultSet.next()) {
+                ids.add(resultSet.getInt(1));
             }
+            return ids;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;
+        return ids;
+    }
+
+    public static void deleteNewRequests(String email) {
+        String sql = "DELETE FROM new_req WHERE email = ?";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
