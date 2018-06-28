@@ -222,12 +222,12 @@ public class HorusHTTPRequests {
         String comments = jsonObject.getString("comments");
         String newRoom = jsonObject.getString("newRoom");
         int userID = jsonObject.getInt("userID");
-        String email = jsonObject.getString("email");
+        String teacherID = jsonObject.getString("teacherID");
         DatabaseCommunication.changeRequestStatus(Status.valueOf(status), id);
         DatabaseCommunication.setComments(comments, id);
         DatabaseCommunication.setNewRoom(newRoom, id);
         DatabaseCommunication.addRequestHandling(id, userID);
-        DatabaseCommunication.addNewRequest(id, email);
+        DatabaseCommunication.addNewRequest(id, teacherID);
         return Response.status(Response.Status.OK).build();
     }
 
@@ -286,14 +286,14 @@ public class HorusHTTPRequests {
     @GET
     @Path("/newRequests")
     @Produces("application/json")
-    public List<Integer> getNewAddedRequests(@HeaderParam("email") String email) {
-        return DatabaseCommunication.getNewRequests(email);
+    public List<Integer> getNewAddedRequests(@HeaderParam("teacherID") String teacherID) {
+        return DatabaseCommunication.getNewRequests(teacherID);
     }
 
     @DELETE
     @Path("/deleteRequests")
-    public Response deleteNewAddedRequests(@HeaderParam("email") String email) {
-        DatabaseCommunication.deleteNewRequests(email);
+    public Response deleteNewAddedRequests(@HeaderParam("teacherID") String teacherID) {
+        DatabaseCommunication.deleteNewRequests(teacherID);
         return Response.status(Response.Status.ACCEPTED).build();
     }
 }
