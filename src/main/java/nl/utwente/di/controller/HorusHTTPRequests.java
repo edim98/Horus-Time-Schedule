@@ -121,9 +121,9 @@ public class HorusHTTPRequests {
     @POST
     @Path("/register")
     @Consumes("application/json")
-    public Response addUser(String lecturerString) throws NoSuchPaddingException, BadPaddingException, InvalidKeySpecException, NoSuchAlgorithmException, IllegalBlockSizeException, UnsupportedEncodingException, InvalidKeyException, InvalidParameterSpecException {
+    public Response addUser(String lecturerString) {
         JSONObject lecturerJson = new JSONObject(lecturerString);
-        int teacherid = lecturerJson.getInt("teacherid");
+        int teacherid = DatabaseCommunication.getLasTeacherID() + 1;
         String name = lecturerJson.getString("name");
         String password = lecturerJson.getString("password");
         String email = lecturerJson.getString("email");

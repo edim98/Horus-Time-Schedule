@@ -391,7 +391,7 @@ public class DatabaseCommunication {
     }
 
     private static void changeBuilding(){
-        String sql = "DELETE FROM cookies";
+        String sql = "UPDATE request SET notes = 'building Carre and beamer' WHERE id = 40";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.executeUpdate();
@@ -411,12 +411,27 @@ public class DatabaseCommunication {
         }
     }
 
+    public static int getLasTeacherID() {
+        String sql = "SELECT u.user_id FROM users u WHERE NOT EXISTS " +
+                "(SELECT user_id FROM users WHERE user_id = u.user_id + 1);";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public static void main(String[] args) {
 //        DatabaseCommunication.change();
 //        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
 //        DatabaseCommunication.favourites();
-//        DatabaseCommunication.changeBuilding();
-        DatabaseCommunication.deletCookie(996);
+        DatabaseCommunication.changeBuilding();
+//        DatabaseCommunication.deletCookie(996);
 //        DatabaseCommunication.setNewRoom("SP 3", 1);
     }
 
