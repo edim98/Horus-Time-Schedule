@@ -404,10 +404,10 @@ public class DatabaseCommunication {
     }
 
     public static void deletCookie(int userID) {
-        String sql = "UPDATE users SET is_timetabler = true WHERE user_id = 996";
+        String sql = "DELETE FROM cookies WHERE user_id = ?";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-//            pstmt.setInt(1, userID);
+            pstmt.setInt(1, userID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
