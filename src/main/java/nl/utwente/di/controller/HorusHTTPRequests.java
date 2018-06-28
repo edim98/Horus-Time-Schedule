@@ -52,7 +52,7 @@ public class HorusHTTPRequests {
                           @HeaderParam("password") String password,
                           @HeaderParam("timestamp") long timestamp) throws AlreadyConnectedException, InvalidPasswordException {
         //System.out.println(username + " " + password + " " + timestamp);
-        Lecturer lecturer = DatabaseCommunication.getUSer(username, password);
+        Lecturer lecturer = DatabaseCommunication.getUSer(username);
         boolean isPasswordOk = false;
         try {
             isPasswordOk = hashMaster.verifyPassword(password, lecturer.getPassword());
