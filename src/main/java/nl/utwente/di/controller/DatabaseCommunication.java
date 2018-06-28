@@ -129,6 +129,18 @@ public class DatabaseCommunication {
         }
     }
 
+    public static void addNewRequest(int requestID, String email) {
+        String sql = "INSERT INTO new_req VALUES(?, ?);";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, requestID);
+            pstmt.setString(2, email);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static int getInt(String sql) {
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
