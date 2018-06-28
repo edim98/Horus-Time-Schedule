@@ -2189,7 +2189,6 @@ var datetimepickerFactory = function ($) {
 								        if (currentMinutesOfDay >= maxTimeMinutesOfDay) continue;
 
 									if (i < 39) {h = 8;} else if (i%4 == 0) {h += 1;}
-                  console.log("  i: " + i + "   h: " + h);
 									m =  (m + 15) % 60;
                   if (j == 0 && i == 36) {m = 0;}
 
