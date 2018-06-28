@@ -31,7 +31,7 @@ $('#new-psw-input').val('');
 $('#email-input').val('');
 $('#new-name-input').val('');
 $('#facultyOptions').val("99");
-
+$("#facultyOptions").hide();
 
 $('#settings-button').hide();
 $('#psw-change-form').hide();

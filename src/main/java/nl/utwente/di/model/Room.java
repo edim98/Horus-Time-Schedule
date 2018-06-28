@@ -33,7 +33,7 @@ public class Room {
         this.firstRowHandicapped = firstRowHandicapped;
         this.handicapped = handicapped;
         this.furniture = furniture;
-        String[] splitted = coordinates.split(", ");
+        String[] splitted = coordinates.split(",");
         this.coordinates = new Gps(Float.parseFloat(splitted[0]), Float.parseFloat(splitted[1]));
         this.floorNumber = floorNumber;
     }

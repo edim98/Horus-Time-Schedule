@@ -45,7 +45,8 @@ $('#cancel-button').click(function(event){
     'name' : Cookies.getJSON('relevantData').name,
     'courseType' : 'lecture',
     'faculty' : $('#faculty option:selected').val(),
-    'notes' : 'Not specified'
+    'notes' : 'Not specified',
+    'activity' : $('#activity option:selcted').val()
   });
 
   console.log(request);
