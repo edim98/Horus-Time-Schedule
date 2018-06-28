@@ -92,7 +92,7 @@ public class PasswordStorage
                 toBase64(salt) +
                 ":" +
                 toBase64(hash);
-        return Base64.getEncoder().encodeToString(parts.getBytes());
+        return parts;
     }
 
     public static boolean verifyPassword(String password, String correctHash)
