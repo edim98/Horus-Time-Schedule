@@ -5,6 +5,7 @@ import nl.utwente.di.model.Request;
 import nl.utwente.di.model.Room;
 import nl.utwente.di.model.Status;
 
+import javax.xml.ws.Response;
 import java.sql.*;
 import java.util.*;
 import java.time.format.DateTimeFormatter;
@@ -403,10 +404,10 @@ public class DatabaseCommunication {
     }
 
     public static void deletCookie(int userID) {
-        String sql = "UPDATE users SET is_timetabler = true WHERE user_id = 996";
+        String sql = "DELETE FROM cookies WHERE user_id = ?";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-//            pstmt.setInt(1, userID);
+            pstmt.setInt(1, userID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -416,6 +417,35 @@ public class DatabaseCommunication {
     public static int getLasTeacherID() {
         String sql = "SELECT u.user_id FROM users u WHERE NOT EXISTS " +
                 "(SELECT user_id FROM users WHERE user_id = u.user_id + 1);";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static void addSupport(int id, String email, String head, String body) {
+        String sql = "INSERT INTO support VALUES(?, ?, ?, ?);";
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.setString(2, email);
+            pstmt.setString(3, head);
+            pstmt.setString(4, body);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static int getLastSupportID() {
+        String sql = "SELECT s.ticket_id FROM support s WHERE NOT EXISTS " +
+                "(SELECT ticket_id FROM support WHERE ticket_id = s.ticket_id + 1);";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             ResultSet resultSet = pstmt.executeQuery();
