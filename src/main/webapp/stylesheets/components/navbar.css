@@ -247,7 +247,7 @@ a:hover {
 }
 
 #top-bar {
-  float: left;
+  float: right;
 }
 
 #background-gif1 {
@@ -1278,7 +1278,7 @@ section {
 }
 
 .header-desktop .notifi-dropdown {
-    top: 51px;
+    top: 52px;
 }
 
 @media (max-width: 991px) {
@@ -1935,7 +1935,7 @@ section {
     -moz-transform-origin: left top;
     -ms-transform-origin: left top;
     -o-transform-origin: left top;
-    transform-origin: left top;
+    transform-origin: right top;
     top: 100%;
     left: 0;
 }
@@ -2086,7 +2086,7 @@ section {
 }
 
 .notifi-dropdown {
-    left: -1em;
+    left: -15em;
     top: 49px;
 }
 
@@ -2401,7 +2401,7 @@ section {
 }
 
 .header-button .notifi-dropdown::before {
-    left: 117px;
+    left: 243px;
 }
 
 .header-button2 {

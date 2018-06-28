@@ -65,7 +65,7 @@ $(document).ready(function() {
   })
   .done(function(data) {
     console.log("success");
-    for(i = data.length - 1; i >= 0; i--){
+    for(i = 0; i < data.length; i++){
       var courseType = data[i].courseType;
       var faculty = data[i].faculty;
       var id = data[i].id;
