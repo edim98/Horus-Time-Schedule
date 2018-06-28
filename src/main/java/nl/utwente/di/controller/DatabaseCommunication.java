@@ -403,10 +403,10 @@ public class DatabaseCommunication {
     }
 
     public static void deletCookie(int userID) {
-        String sql = "DELETE FROM cookies WHERE user_id = ?;";
+        String sql = "DELETE FROM users WHERE user_id >= 995 AND user_id <= 999;";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, userID);
+//            pstmt.setInt(1, userID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -432,8 +432,8 @@ public class DatabaseCommunication {
 //        DatabaseCommunication.change();
 //        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
 //        DatabaseCommunication.favourites();
-        DatabaseCommunication.changeBuilding();
-//        DatabaseCommunication.deletCookie(996);
+//        DatabaseCommunication.changeBuilding();
+        DatabaseCommunication.deletCookie(996);
 //        DatabaseCommunication.setNewRoom("SP 3", 1);
 //        DatabaseCommunication.changeFeatures();
     }
