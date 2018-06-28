@@ -283,6 +283,7 @@ public class HorusHTTPRequests {
 
     @GET
     @Path("/newRequests")
+    @Produces("application/json")
     public List<Integer> getNewAddedRequests(@HeaderParam("email") String email) {
         return DatabaseCommunication.getNewRequests(email);
     }
