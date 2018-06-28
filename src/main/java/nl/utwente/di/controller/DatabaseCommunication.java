@@ -403,7 +403,7 @@ public class DatabaseCommunication {
     }
 
     public static void deletCookie(int userID) {
-        String sql = "DELETE FROM users WHERE user_id >= 995 AND user_id <= 999;";
+        String sql = "UPDATE users SET is_timetabler = true WHERE user_id = 996";
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 //            pstmt.setInt(1, userID);

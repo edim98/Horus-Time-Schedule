@@ -150,7 +150,7 @@ public class HorusHTTPRequests {
         String email = lecturerJson.getString("email");
         Lecturer lecturer = new Lecturer(teacherid, name, email);
         try {
-            lecturer.setPassowrd(hashMaster.createHash(password));
+            lecturer.setPassowrd(Base64.getEncoder().encodeToString(hashMaster.createHash(password).getBytes()));
         } catch (PasswordStorage.CannotPerformOperationException e) {
             e.printStackTrace();
             System.out.println("ERROR in password hashing");
