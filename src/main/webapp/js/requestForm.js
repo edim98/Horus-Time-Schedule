@@ -46,7 +46,7 @@ $('#cancel-button').click(function(event){
     'courseType' : 'lecture',
     'faculty' : $('#faculty option:selected').val(),
     'notes' : 'Not specified',
-    'activity' : $('#activity option:selcted').val()
+    'activity' : $('#activity option:selected').val()
   });
 
   console.log(request);

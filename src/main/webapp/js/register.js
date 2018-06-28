@@ -1,41 +1,52 @@
+function checkPassword(password, confirmedPassword) {
+  return password == confirmedPassword;
+}
+
+function termsAccepted() {
+  return $('#terms').is(':checked');
+}
+
 $(document).ready(function() {
-  $('#register-form').on("submit", function(event) {
+  $('#login').click(function() {
+    url = './login.html';
+    $(location).attr('href', url);
+  });
+
+  $('.register-form').on('submit', function(event){
     event.preventDefault();
 
-    if($('#check').is(':checked')) {
-      var formData = JSON.stringify({
-        'teacherid' : $('#username').val(), // this can be the teacherID for now
-        'name' : 'Harry Arts',
-        'email' : $('#email').val(),
-        'password' : $('#password').val()
+    if(!checkPassword($('#password').val(), $('#confirm-password').val())){
+      alert('Passwords do not match!');
+    } else if(!termsAccepted()) {
+      alert('Please accept the terms and conditions!');
+    } else {
+      dataToSend = JSON.stringify({
+        'name' : $('#fullname').val(),
+        'password' : $('#password').val(),
+        'email' : $('#email').val()
       });
-
+      console.log(dataToSend);
       $.ajax({
         url: '/horus/requests/register',
         type: 'POST',
         dataType: 'json',
-        data: formData,
-          headers:{
-            "Accept":"application/json",
-              "Content-Type":"application/json"
-          },
-        complete: function(result){
-          if(result.status == 200){
-            url = "./components/admin.html";
-            $(location).attr("href", url);
-          } else{
-            alert("Failed! " + result.status + result.errorMessage);///
+        data : dataToSend,
+        headers: {
+          'Accept' : 'application/json',
+          'Content-Type' : 'application/json'
+        },
+
+        complete: function(result) {
+          if(result.status == 200) {
+            alert('Account created!');
+            url = './login.html';
+            $(location).attr('href', url);
+          } else {
+            alert('Error!');
             location.reload();
           }
         }
-      })
-    } else {
-      alert('Please agree with the terms and conditions!');
+      });
     }
-  });
-
-  $('#sign-in').click(function(){
-    url = './login.html';
-    $(location).attr('href', url);
-  });
+  })
 });
