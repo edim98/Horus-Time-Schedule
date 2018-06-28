@@ -19,5 +19,5 @@ $('#contact-button').on('click', function(event){
   event.preventDefault();
   var subject = $('#contact-subject').val();
   var body = $('#contact-message').val();
-  window.open('mailto:a.popa@student.utwente.nl?subject=subject&body=body');
+  var author = Cookies.getJSON('relevantData').name;
 });
