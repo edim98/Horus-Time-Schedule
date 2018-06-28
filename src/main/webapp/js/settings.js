@@ -152,6 +152,7 @@ $(document).ready(function() {
   $('#settingsOptions').change(function() {
     var selectedOption = $('#settingsOptions').val();
     if (selectedOption == "1"){
+      $('#settings-button').hide();
       $('#old-psw-input').val('');
       $('#new-psw-input').val('');
       $("#facultyOptions").hide();
@@ -159,18 +160,21 @@ $(document).ready(function() {
       $('#email-input').hide();
       $('#new-name-input').hide();
     } else if (selectedOption == "2"){
+      $('#settings-button').hide();
       $('#email-input').val('');
       $("#facultyOptions").hide();
       $('#psw-change-form').hide();
       $('#email-input').show();
       $('#new-name-input').hide();
     } else if (selectedOption == "3"){
+      $('#settings-button').hide();
       $('#facultyOptions').val("99");
       $("#facultyOptions").show();
       $('#psw-change-form').hide();
       $('#email-input').hide();
       $('#new-name-input').hide();
     } else if (selectedOption == "4"){
+      $('#settings-button').hide();
       $('#new-name-input').val('');
       $("#facultyOptions").hide();
       $('#psw-change-form').hide();

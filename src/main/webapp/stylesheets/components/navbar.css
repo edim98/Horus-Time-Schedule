@@ -365,7 +365,9 @@ section {
 
 .page-content--bge5 {
     background: #e5e5e5;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
+    padding-bottom: 30px;
 }
 
 .login-wrap {
@@ -14707,6 +14709,7 @@ section {
 
 #faculty,
 #current-room,
+#activity,
 #change-radio,
 #cancel-radio,
 #change-form,
@@ -14739,4 +14742,8 @@ section {
 .modal-content {
   border-radius: 1.5rem;
   padding: 15px;
+}
+
+.overview-box {
+  padding-bottom: 20px;
 }
