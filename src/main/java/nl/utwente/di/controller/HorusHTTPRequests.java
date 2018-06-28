@@ -139,7 +139,6 @@ public class HorusHTTPRequests {
         Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name, numberOfStudents, requestType,
                 notes, courseType, faculty);
         DatabaseCommunication.addNewRequest(request);
-        DatabaseCommunication.addNewRequest(id, jsonObject.getString("email"));
     }
 
     @POST
@@ -225,10 +224,12 @@ public class HorusHTTPRequests {
         String comments = jsonObject.getString("comments");
         String newRoom = jsonObject.getString("newRoom");
         int userID = jsonObject.getInt("userID");
+        String email = jsonObject.getString("email");
         DatabaseCommunication.changeRequestStatus(Status.valueOf(status), id);
         DatabaseCommunication.setComments(comments, id);
         DatabaseCommunication.setNewRoom(newRoom, id);
         DatabaseCommunication.addRequestHandling(id, userID);
+        DatabaseCommunication.addNewRequest(id, email);
         return Response.status(Response.Status.OK).build();
     }
 
