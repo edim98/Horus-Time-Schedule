@@ -128,12 +128,14 @@ $(document).ready(function() {
         event.stopPropagation();
         var newRoom = $(this).closest('.modal-content').find('.new-room option:selected').val();
         var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
+        var userID = Cookies.getJSON('relevantData').teacherID;
         console.log(newRoom);
         var changeStatus = JSON.stringify({
           'status' : 'accepted',
           'id' : thisID,
           'comments' : otherDetails,
-          'newRoom' : newRoom
+          'newRoom' : newRoom,
+          'userID' : userID
         });
             $.ajax({
               url: '/horus/requests/statusChange',
