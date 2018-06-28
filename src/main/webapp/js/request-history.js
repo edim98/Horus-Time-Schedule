@@ -64,7 +64,7 @@ $(document).ready(function() {
     },
   })
   .done(function(data) {
-    console.log("success");
+    //console.log("success");
     for(i = 0; i < data.length; i++){
       var courseType = data[i].courseType;
       var faculty = data[i].faculty;
@@ -82,10 +82,10 @@ $(document).ready(function() {
       var comments = data[i].comments;
       if(data[i].newRoom == null){
         newRoom = 'Not specified';
-        console.log(newRoom);
+      //  console.log(newRoom);
       } else{
         newRoom = data[i].newRoom;
-        console.log(newRoom);
+      //console.log(newRoom);
       }
 
       var requestTableBody = $('#request-table').find('tbody');
@@ -112,13 +112,13 @@ $(document).ready(function() {
     });
 
     var receivedJson = data;
-    console.log(data);
+  //  console.log(data);
   })
   .fail(function(data) {
     console.log(data.status + ' ' + data.errorMessage);
   })
   .always(function() {
-    console.log("complete");
+  //  console.log("complete");
   });
 
 });
