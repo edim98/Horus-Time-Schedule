@@ -9,7 +9,7 @@ if(!Cookies.get('relevantData')){
 }
 
 function templatePending(oldRoom, oldDate, newDate, type, status, id, courseType, numberOfStudents, notes) {
-  var html = '<tr class="tr-shadow" request-entry>' +
+  var html = '<tr class="tr-shadow request-entry">' +
   '<td>'+oldRoom+'</td>'+
   '<td>'+oldDate+'</td>'+
   '<td>'+newDate+'</td>'+
@@ -28,10 +28,10 @@ function templatePending(oldRoom, oldDate, newDate, type, status, id, courseType
 }
 
 function templateHistory(oldRoom, oldDate, newDate, type, status, id, courseType, numberOfStudents, notes, newRoom, comments) {
-  var html = '<tr class="tr-shadow" request-entry>' +
-  '<td>'+oldRoom+'</td>'+
-  '<td>'+newRoom+'</td>'+
-  '<td>'+status+'</td>'+
+  var html = '<tr class="tr-shadow request-entry">' +
+  '<td class="h-old-room">'+oldRoom+'</td>'+
+  '<td class="h-new-room">'+newRoom+'</td>'+
+  '<td class="h-status">'+status+'</td>'+
   '<td><button type="button" class="btn btn-secondary show-info">+</button></td></tr>'+
   '<tr class="tr-shadow hidden-info" style="display: none">'+
   '<td colspan="4">'+
@@ -64,8 +64,8 @@ $(document).ready(function() {
     },
   })
   .done(function(data) {
-    console.log("success");
-    for(i = data.length - 1; i >= 0; i--){
+    console.log(data);
+    for(i = 0; i < data.length; i++){
       var courseType = data[i].courseType;
       var faculty = data[i].faculty;
       var id = data[i].id;
@@ -82,10 +82,10 @@ $(document).ready(function() {
       var comments = data[i].comments;
       if(data[i].newRoom == null){
         newRoom = 'Not specified';
-        console.log(newRoom);
+      //  console.log(newRoom);
       } else{
         newRoom = data[i].newRoom;
-        console.log(newRoom);
+      //console.log(newRoom);
       }
 
       var requestTableBody = $('#request-table').find('tbody');
@@ -112,13 +112,27 @@ $(document).ready(function() {
     });
 
     var receivedJson = data;
-    console.log(data);
+  //  console.log(data);
   })
   .fail(function(data) {
     console.log(data.status + ' ' + data.errorMessage);
   })
   .always(function() {
-    console.log("complete");
+  //  console.log("complete");
   });
+
+  $('#historyModal').on('hidden.bs.modal', function(){
+    $(this).find('.request-entry').each(function(index){
+      $(this).css('border', '0px');
+    });
+    $(this).find('.hidden-info').each(function(index){
+      $(this).hide();
+    });
+    $(this).find('.show-info').each(function(index){
+      $(this).text('+');
+    });
+  });
+
+
 
 });

@@ -1,3 +1,16 @@
+// The next 8 lines
+$("#change-form").hide();
+$("#cancel-button").hide();
+$('#reschedule-button').hide();
+$('#incomplete-fields').hide();
+$('#psw-change-form').hide();
+$('#email-input').hide();
+$('#new-name-input').hide();
+$('#faculty').val("99");
+$('#current-room').val("99");
+$('#activity').val("99");
+
+// The next 20 lines are handling the visibility of the input elements depending on the choice made (change or cancel request)
 $('#change-radio').on('click', function(){
   $('#cancel-button').hide();
   if($(this).prop(':checked')){
@@ -19,19 +32,7 @@ $('#cancel-radio').on('click', function(){
   }
 });
 
-
-
-$("#change-form").hide();
-$("#cancel-button").hide();
-$('#reschedule-button').hide();
-$('#incomplete-fields').hide();
-$('#psw-change-form').hide();
-$('#email-input').hide();
-$('#new-name-input').hide();
-
-
-  $('#faculty').val("99");
-
+// Creates a JSON object with the required inputs and sends it when pressing the cancel-button
 $('#cancel-button').click(function(event){
   event.preventDefault();
 
@@ -45,7 +46,8 @@ $('#cancel-button').click(function(event){
     'name' : Cookies.getJSON('relevantData').name,
     'courseType' : 'lecture',
     'faculty' : $('#faculty option:selected').val(),
-    'notes' : 'Not specified'
+    'notes' : 'Not specified',
+    'activity' : $('#activity option:selected').val()
   });
 
   console.log(request);
@@ -76,6 +78,7 @@ $('#cancel-button').click(function(event){
 
 });
 
+// Creates a JSON object with the required inputs and sends it when pressing the reschedule-button
 $('#reschedule-button').click(function(event) {
   event.preventDefault();
 
@@ -89,7 +92,8 @@ $('#reschedule-button').click(function(event) {
     'name' : Cookies.getJSON('relevantData').name,
     'courseType' : 'lecture',
     'faculty' : $('#faculty option:selected').val(),
-    'notes' : $('#notes-input').val()
+    'notes' : $('#notes-input').val(),
+    'email' : Cookies.getJSON('relevantData').email
   });
 
   $.ajax({

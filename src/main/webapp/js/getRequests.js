@@ -129,13 +129,21 @@ $(document).ready(function() {
         var newRoom = $(this).closest('.modal-content').find('.new-room option:selected').val();
         var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
         var userID = Cookies.getJSON('relevantData').teacherID;
+        var teacherID;
+        for(i = 0; i < data.length; i++) {
+          if(data[i].id == thisID){
+            teacherID = data[i].teacherID;
+          }
+        }
+
         console.log(newRoom);
         var changeStatus = JSON.stringify({
           'status' : 'accepted',
           'id' : thisID,
           'comments' : otherDetails,
           'newRoom' : newRoom,
-          'userID' : userID
+          'userID' : userID,
+          'teacherID' : teacherID
         });
             $.ajax({
               url: '/horus/requests/statusChange',
@@ -161,12 +169,21 @@ $(document).ready(function() {
       $('.accept2-request').off().on('click', function(event){
         event.stopPropagation();
         var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
-        console.log(newRoom);
+        var userID = Cookies.getJSON('relevantData').teacherID;
+        var teacherID;
+        for(i = 0; i < data.length; i++) {
+          if(data[i].id == thisID){
+            teacherID = data[i].teacherID;
+          }
+        }
+        console.log(teacherID);
         var changeStatus = JSON.stringify({
           'status' : 'accepted',
           'id' : thisID,
           'comments' : otherDetails,
-          'newRoom' : 'Not specified!'
+          'newRoom' : 'Not specified!',
+          'teacherID' : teacherID,
+          'userID' : userID
         });
             $.ajax({
               url: '/horus/requests/statusChange',
@@ -192,12 +209,19 @@ $(document).ready(function() {
       $('.cancel-request').off().on('click', function(event){
         event.stopPropagation();
         var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
+        var teacherID;
+        for(i = 0; i < data.length; i++) {
+          if(data[i].id == thisID){
+            teacherID = data[i].teacherID;
+          }
+        }
         var changeStatus = JSON.stringify({
           'status' : 'cancelled',
           'id' : thisID,
           'comments' : otherDetails,
           'newRoom' : 'Not specified!',
-          'userID' : userID
+          'userID' : userID,
+          'teacherID' : teacherID
         });
 
             $.ajax({

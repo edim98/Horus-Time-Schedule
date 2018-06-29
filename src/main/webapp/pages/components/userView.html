@@ -139,43 +139,11 @@
                     <div class="container-fluid">
                         <div class="header-wrap" id="top-bar">
                             <div class="header-button">
-                                <div class="noti-wrap">
+                                <div class="noti-wrap" id = "bell">
                                     <div class="noti__item js-item-menu">
                                         <i class="fas fa-bell"></i>
-                                        <span class="quantity">3</span>
-                                        <div class="notifi-dropdown js-dropdown">
-                                            <div class="notifi__title">
-                                                <p>You have 3 Notifications</p>
-                                            </div>
-                                            <div class="notifi__item">
-                                                <div class="bg-c1 img-cir img-40">
-                                                    <i class="zmdi zmdi-email-open"></i>
-                                                </div>
-                                                <div class="content">
-                                                    <p>You got a email notification</p>
-                                                    <span class="date">April 12, 2018 06:50</span>
-                                                </div>
-                                            </div>
-                                            <div class="notifi__item">
-                                                <div class="bg-c2 img-cir img-40">
-                                                    <i class="zmdi zmdi-account-box"></i>
-                                                </div>
-                                                <div class="content">
-                                                    <p>Your account has been blocked</p>
-                                                    <span class="date">April 12, 2018 06:50</span>
-                                                </div>
-                                            </div>
-                                            <div class="notifi__item">
-                                                <div class="bg-c3 img-cir img-40">
-                                                    <i class="zmdi zmdi-file-text"></i>
-                                                </div>
-                                                <div class="content">
-                                                    <p>You got a new file</p>
-                                                    <span class="date">April 12, 2018 06:50</span>
-                                                </div>
-                                            </div>
+                                        <div class="notifi-dropdown js-dropdown" id ="bell-dropdown">
                                             <div class="notifi__footer">
-                                                <a href="#">All notifications</a>
                                             </div>
                                         </div>
                                     </div>
@@ -194,15 +162,12 @@
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
-                                    <i class="fas fa-door-open"></i>
+                                    <i class="fas fa-clock"></i>
                                 </div>
                                 <div class="text">
-                                    <h2>2</h2>
-                                    <span>Pending requests</span>
+                                    <h2 id="pendingRequests">Retrieving..</h2>
+                                    <span>Requests pending</span>
                                 </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart1"></canvas>
                             </div>
                         </div>
                     </div>
@@ -216,12 +181,9 @@
                                     <i class="fas fa-calendar-check"></i>
                                 </div>
                                 <div class="text">
-                                    <h2>30</h2>
-                                    <span>Requests made this week</span>
+                                    <h2 id="acceptedRequests">Retrieving..</h2>
+                                    <span>Accepted requests</span>
                                 </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart3"></canvas>
                             </div>
                         </div>
                     </div>
@@ -231,15 +193,12 @@
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
-                                    <i class="fas fa-comment"></i>
+                                    <i class="fas fa-calendar-times"></i>
                                 </div>
                                 <div class="text">
-                                    <h2>5</h2>
-                                    <span>Unread messages</span>
+                                    <h2 id="cancelledRequests">Retrieving..</h2>
+                                    <span>Rejected requests</span>
                                 </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart2"></canvas>
                             </div>
                         </div>
                     </div>
@@ -271,7 +230,7 @@
                 </div>
             </div>
 
-  <!-- Modal -->
+  <!-- request modal -->
   <div class="modal fade" id="requestModal" role="dialog">
     <div class="modal-dialog modal-lg">
 
@@ -303,95 +262,103 @@
       <div class="ui-select">
 			<select id="current-room" name="current-room" size="1">
         <option value="99" disabled hidden selected></option>
-        <option >2A HB 2001 (OND-05)</option>
-        <option >2B HB 2003 (OND-06)</option>
-        <option >2C HB 2005 (OND-07)</option>
-        <option >2D HB 2007 (OND-08)</option>
-        <option >2E HB 2009 (OND-09)</option>
-        <option >2F HB 2011 (OND-10)</option>
-        <option >2G CR 2173 (OND-16)</option>
-        <option >2H CR 2175 (OND-15)</option>
-        <option >2K CR 2183 (OND-14)</option>
-        <option >2L CR 2178 (OND-11)</option>
-        <option >2M CR 2182 (OND-12)</option>
-        <option >2N CR 2186 (OND-13)</option>
-        <option >3A CR 3173 (OND-24)</option>
-        <option >3B CR 3175 (OND-23)</option>
-        <option >3D CR 3178 (OND-21)</option>
-        <option >3E CR 3182 (OND-20)</option>
-        <option >3F CR 3186 (OND-19)</option>
-        <option >3H CR 3194 (OND-17)</option>
-        <option >4A CR 4142 (OND-25)</option>
-        <option >CI T100</option>
-        <option >CI T300</option>
-        <option >CI T400</option>
-        <option >CU B101</option>
-        <option >CU B103</option>
-        <option >CU B209</option>
-        <option >CU C238</option>
-        <option >HR C101</option>
-        <option >HR N109</option>
-        <option >RA 1501</option>
-        <option >RA 2231</option>
-        <option >RA 2237</option>
-        <option >RA 2334</option>
-        <option >RA 2336</option>
-        <option >RA 2501</option>
-        <option >RA 2502</option>
-        <option >RA 2503</option>
-        <option >RA 2504</option>
-        <option >RA 3231</option>
-        <option >RA 3334</option>
-        <option >RA 3336</option>
-        <option >RA 4231</option>
-        <option >RA 4237</option>
-        <option >RA 4334</option>
-        <option >RA 4336</option>
-        <option >SP 1</option>
-        <option >SP 2</option>
-        <option >SP 3</option>
-        <option >SP 4</option>
-        <option >SP 5</option>
-        <option >SP 6</option>
-        <option >SP 7</option>
-        <option >WA 1</option>
-        <option >WA 2</option>
-        <option >WA 3</option>
-        <option >WA 4</option>
-        <option >OH 110</option>
-        <option >OH 111</option>
-        <option >OH 112</option>
-        <option >OH 113</option>
-        <option >OH 114</option>
-        <option >OH 115</option>
-        <option >OH 116</option>
-        <option >OH 210</option>
-        <option >OH 211</option>
-        <option >OH 215</option>
-        <option >OH 218</option>
-        <option >NH 115</option>
-        <option >NH 124</option>
-        <option >NH 205</option>
-        <option >NH 207</option>
-        <option >NH 209</option>
-        <option >HT 500a</option>
-        <option >HT 500b</option>
-        <option >HT 700a</option>
-        <option >HT 700b</option>
-        <option >HT 900</option>
-        <option >HT 1100</option>
-        <option >3C CR 3183 (OND-22)</option>
-        <option >VR 501</option>
-        <option >VR 583</option>
-        <option >VR 559</option>
-        <option >WH 215</option>
-        <option >WH 217</option>
-        <option >WH 221</option>
-        <option >WH 223 </option>
-        <option >HT 1300</option>
-        <option >NH 117</option>
-        <option >NH 126</option>
-        <option >Therm</option>
+          <option>DL GY</option>
+          <option>RA 2231</option>
+          <option>WA 1</option>
+          <option>SP 1</option>
+          <option>CU B209</option>
+          <option>SP 2</option>
+          <option>RA 3336</option>
+          <option>SP 7</option>
+          <option>SP 5</option>
+          <option>SP 6</option>
+          <option>RA 3334</option>
+          <option>SP 3</option>
+          <option>SP 4</option>
+          <option>OH 113</option>
+          <option>OH 114</option>
+          <option>OH 115</option>
+          <option>OH 110</option>
+          <option>OH 111</option>
+          <option>OH 112</option>
+          <option>CI T300</option>
+          <option>RA 4231</option>
+          <option>CI T100</option>
+          <option>RA 2336</option>
+          <option>RA 2334</option>
+          <option>RA 3231</option>
+          <option>CU C238</option>
+          <option>CU B103</option>
+          <option>RA 2501</option>
+          <option>RA 2502</option>
+          <option>RA 2503</option>
+          <option>HR N109</option>
+          <option>RA 2504</option>
+          <option>CI T400</option>
+          <option>RA 2237</option>
+          <option>CU B101</option>
+          <option>WA 2</option>
+          <option>RA 1501</option>
+          <option>VR 559</option>
+          <option>WH 217</option>
+          <option>WA 3</option>
+          <option>WA 4</option>
+          <option>WH 215</option>
+          <option>WH 223</option>
+          <option>Therm</option>
+          <option>HB 2B</option>
+          <option>HB 2C</option>
+          <option>HB 2D</option>
+          <option>CR 2G</option>
+          <option>CR 2H</option>
+          <option>CR 2K</option>
+          <option>CR 3B</option>
+          <option>CR 3D</option>
+          <option>CR 3E</option>
+          <option>NH 117</option>
+          <option>VR 501</option>
+          <option>HT 1300</option>
+          <option>NH 126</option>
+          <option>WH 221</option>
+          <option>VR 583</option>
+          <option>OH 211</option>
+          <option>HT 900</option>
+          <option>RA 4334</option>
+          <option>RA 4336</option>
+          <option>WA 1+2</option>
+          <option>OH 116</option>
+          <option>HT 700a</option>
+          <option>HT 700b</option>
+          <option>NH 115</option>
+          <option>HR C101</option>
+          <option>RA 4237</option>
+          <option>HT 1100</option>
+          <option>OH 218</option>
+          <option>NH 209</option>
+          <option>NH 207</option>
+          <option>NH 205</option>
+          <option>NH 124</option>
+          <option>HT 500b</option>
+          <option>HT 500a</option>
+          <option>OH 215</option>
+          <option>OH 210</option>
+          <option>VR SL1</option>
+          <option>VR SL2</option>
+          <option>VR SL3</option>
+          <option>Sportcentrum Hal 1</option>
+          <option>Sportcentrum Hal 2</option>
+          <option>VR Audiozaal</option>
+          <option>HB 2A</option>
+          <option>HB 2E</option>
+          <option>HB 2F</option>
+          <option>CR 2L</option>
+          <option>CR 2M</option>
+          <option>CR 2N</option>
+          <option>CR 3A</option>
+          <option>CR 3C</option>
+          <option>CR 3F</option>
+          <option>CR 3H</option>
+          <option>CR 4A</option>
       </select>
     </div>
 			<span>Please specify for which room your current class is scheduled</span>
@@ -571,7 +538,7 @@
         $("#datetime-change").datetimepicker();
         </script>
 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
@@ -594,8 +561,9 @@
         </script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
-
-
+        <script src="../../js/dashboard.js"></script>
+        <script src ="../../js/notifications.js"></script>
+        <script src="../../js/contact.js"></script>
         <script src="../../js/logout.js"></script>
         <!-- Request form -->
         <script src="../../js/requestForm.js"></script>

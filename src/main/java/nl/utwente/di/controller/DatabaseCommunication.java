@@ -87,7 +87,7 @@ public class DatabaseCommunication {
             Room oldRoom = rooms.get(resultSet.getString(2));
             String oldDate = resultSet.getString(3);
             String newDate = resultSet.getString(4);
-            String teacherID = resultSet.getString(5);
+            int teacherID = resultSet.getInt(5);
             String name = resultSet.getString(6);
             int numberOfStrudents = resultSet.getInt(7);
             String type = resultSet.getString(8);
@@ -135,7 +135,7 @@ public class DatabaseCommunication {
             pstmt.setString(1, request.getOldRoom().getRoomNumber());
             pstmt.setString(2, request.getOldDate());
             pstmt.setString(3, request.getNewDate());
-            pstmt.setString(4, request.getTeacherID());
+            pstmt.setInt(4, request.getTeacherID());
             pstmt.setString(5, request.getTeacherName());
             pstmt.setInt(6, request.getNumberOfStudents());
             pstmt.setString(7, request.getType());
