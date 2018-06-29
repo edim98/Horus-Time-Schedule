@@ -11,6 +11,11 @@ import java.util.*;
 
 public class Gaze {
 
+    /**
+     * Looks up for a room depending on what is written in the notes and if the room is available on the respective date.
+     * @param requestID of the request.
+     * @return list of strings which are the room number.
+     */
     public static List<String> lookUpForRooms(int requestID) {
         Map<String, Double> map = new HashMap<>();
         String date = null;

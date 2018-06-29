@@ -479,9 +479,9 @@ public class DatabaseCommunication {
 
     /**
      * Changes the password of the user.
-     * @param password 
-     * @param name
-     * @param oldPassword
+     * @param password new password of the user.
+     * @param name name of the user.
+     * @param oldPassword old password of the user.
      */
     public static void changePassword(String password, String name, String oldPassword) {
         String sql = "UPDATE users SET password = ? WHERE staff_name = ? AND password = ?;";
@@ -496,22 +496,42 @@ public class DatabaseCommunication {
         }
     }
 
+    /**
+     * Sets a default faculty for the teacher.
+     * @param faculty desired faculty.
+     * @param staffName name of the user.
+     */
     public static void setDefaultFaculty(String faculty, String staffName) {
         String sql = "UPDATE favourites SET default_faculty = ? WHERE id IN " +
                 "(SELECT user_id FROM users WHERE staff_name = ?);";
         sql(sql, faculty, staffName);
     }
 
+    /**
+     * Sets a new room for the reschedule requests.
+     * @param room room number.
+     * @param id id of the request.
+     */
     public static void setNewRoom(String room, int id) {
         String sql = "UPDATE request SET newroom = ? WHERE id = ? AND requesttype = 'reschedule';";
         update(sql, room, id);
     }
 
+    /**
+     * Adds comments to the request with a given id.
+     * @param comments String of comments.
+     * @param id of the request
+     */
     public static void setComments(String comments, int id) {
         String sql = "UPDATE request SET comms = ? WHERE id = ?;";
         update(sql, comments, id);
     }
 
+    /**
+     * Adds a cookie in the database.
+     * @param user_id of the user who logs in.
+     * @param cookie the hashed cookie.
+     */
     public static void addCookie(int user_id, String cookie) {
         String sql = "INSERT INTO cookies VALUES(?, ?);";
         try (Connection conn = connect();
@@ -524,6 +544,11 @@ public class DatabaseCommunication {
         }
     }
 
+    /**
+     * Checks if a user is already connected by checking if his id is in the cookie table.
+     * @param userID of the user.
+     * @return true if the user is connected, false otherwise.
+     */
     public static boolean checkAlreadyConnected(int userID) {
         String sql = "SELECT user_id FROM cookies WHERE user_id = ?;";
         try (Connection connection = connect();
@@ -537,6 +562,10 @@ public class DatabaseCommunication {
         return false;
     }
 
+    /**
+     * Deletes the cookie of the user from the table cookie.
+     * @param userID of the user.
+     */
     public static void deletCookie(int userID) {
         String sql = "DELETE FROM cookies WHERE user_id = ?";
         try (Connection conn = connect();
@@ -548,6 +577,11 @@ public class DatabaseCommunication {
         }
     }
 
+    /**
+     * Returns the last id of a table.
+     * @param sql which is going to be executed.
+     * @return the id.
+     */
     private static int getLastID(String sql) {
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -561,12 +595,23 @@ public class DatabaseCommunication {
         return 0;
     }
 
+    /**
+     * Returns the last id from teacher table or the next id if there exists a discontinuation.
+     * @return the id.
+     */
     public static int getLasTeacherID() {
         String sql = "SELECT u.user_id FROM users u WHERE NOT EXISTS " +
                 "(SELECT user_id FROM users WHERE user_id = u.user_id + 1);";
         return getLastID(sql);
     }
 
+    /**
+     * Adds a support ticket in the database.
+     * @param id of the support ticket.
+     * @param email email of the user.
+     * @param head message title.
+     * @param body content of the message.
+     */
     public static void addSupport(int id, String email, String head, String body) {
         String sql = "INSERT INTO support VALUES(?, ?, ?, ?);";
         try (Connection conn = connect();
@@ -581,12 +626,21 @@ public class DatabaseCommunication {
         }
     }
 
+    /**
+     * Returns the last id from support table or the next id if there exists a discontinuation.
+     * @return the id.
+     */
     public static int getLastSupportID() {
         String sql = "SELECT s.ticket_id FROM support s WHERE NOT EXISTS " +
                 "(SELECT ticket_id FROM support WHERE ticket_id = s.ticket_id + 1);";
         return getLastID(sql);
     }
 
+    /**
+     * Returns a list of integers from the table new_req.
+     * @param teacherID email of the teacher who made the requests.
+     * @return integer list.
+     */
     public static List<Integer> getNewRequests(String teacherID) {
         String sql = "SELECT rid FROM new_req WHERE email = ?;";
         List<Integer> ids = new ArrayList<>();
@@ -604,6 +658,10 @@ public class DatabaseCommunication {
         return ids;
     }
 
+    /**
+     * Deletes an entry in the table new_req
+     * @param teacherID of the user
+     */
     public static void deleteNewRequests(String teacherID) {
         String sql = "DELETE FROM new_req WHERE email = ?";
         try (Connection conn = connect();
@@ -613,29 +671,6 @@ public class DatabaseCommunication {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    private static void changeBuilding(){
-        String sql = "SELECT capacity_real FROM room WHERE building LIKE 'Carre';";
-        try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            ResultSet resultSet = pstmt.executeQuery();
-            while (resultSet.next()) {
-                System.out.println(resultSet.getString(1));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-//        DatabaseCommunication.change();
-//        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
-//        DatabaseCommunication.favourites();
-//        DatabaseCommunication.changeBuilding();
-//        DatabaseCommunication.deletCookie(996);
-//        DatabaseCommunication.setNewRoom("SP 3", 1);
-//        DatabaseCommunication.changeFeatures();
     }
 
 }
