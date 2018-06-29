@@ -21,10 +21,9 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
-
-import static nl.utwente.di.security.PasswordStorage.createHash;
 
 @Path("/requests")
 public class HorusHTTPRequests {
@@ -52,10 +51,10 @@ public class HorusHTTPRequests {
                           @HeaderParam("password") String password,
                           @HeaderParam("timestamp") long timestamp) throws AlreadyConnectedException, InvalidPasswordException {
         //System.out.println(username + " " + password + " " + timestamp);
-        Lecturer lecturer = DatabaseCommunication.getUSer(username, password);
+        Lecturer lecturer = DatabaseCommunication.getUSer(username);
         boolean isPasswordOk = false;
         try {
-            isPasswordOk = hashMaster.verifyPassword(password, lecturer.getPassword());
+            isPasswordOk = hashMaster.verifyPassword(password, new String(Base64.getDecoder().decode(lecturer.getPassword())));
         } catch (PasswordStorage.CannotPerformOperationException e) {
             e.printStackTrace();
         } catch (PasswordStorage.InvalidHashException e) {
@@ -118,7 +117,7 @@ public class HorusHTTPRequests {
             throw new InvalidInputException();
         }
         Map<String, Room> rooms = DatabaseCommunication.getRooms();
-        int id = DatabaseCommunication.getId("request") + 1;
+        int id = DatabaseCommunication.getId() + 1;
         Room oldRoom = rooms.get(jsonObject.getString("oldRoom"));
         if (!DatabaseCommunication.checkValidRoom(oldRoom.getRoomNumber())) {
             throw new InvalidInputException();
@@ -141,15 +140,15 @@ public class HorusHTTPRequests {
     @POST
     @Path("/register")
     @Consumes("application/json")
-    public Response addUser(String lecturerString) throws NoSuchPaddingException, BadPaddingException, InvalidKeySpecException, NoSuchAlgorithmException, IllegalBlockSizeException, UnsupportedEncodingException, InvalidKeyException, InvalidParameterSpecException {
+    public Response addUser(String lecturerString) {
         JSONObject lecturerJson = new JSONObject(lecturerString);
-        int teacherid = lecturerJson.getInt("teacherid");
+        int teacherid = DatabaseCommunication.getLasTeacherID() + 1;
         String name = lecturerJson.getString("name");
         String password = lecturerJson.getString("password");
         String email = lecturerJson.getString("email");
         Lecturer lecturer = new Lecturer(teacherid, name, email);
         try {
-            lecturer.setPassowrd(hashMaster.createHash(password));
+            lecturer.setPassowrd(Base64.getEncoder().encodeToString(hashMaster.createHash(password).getBytes()));
         } catch (PasswordStorage.CannotPerformOperationException e) {
             e.printStackTrace();
             System.out.println("ERROR in password hashing");
@@ -221,10 +220,12 @@ public class HorusHTTPRequests {
         String comments = jsonObject.getString("comments");
         String newRoom = jsonObject.getString("newRoom");
         int userID = jsonObject.getInt("userID");
+        String teacherID = jsonObject.getString("teacherID");
         DatabaseCommunication.changeRequestStatus(Status.valueOf(status), id);
         DatabaseCommunication.setComments(comments, id);
         DatabaseCommunication.setNewRoom(newRoom, id);
         DatabaseCommunication.addRequestHandling(id, userID);
+        DatabaseCommunication.addNewRequest(id, teacherID);
         return Response.status(Response.Status.OK).build();
     }
 
@@ -260,6 +261,37 @@ public class HorusHTTPRequests {
     @Path("/logout")
     public Response logOut(@HeaderParam("user") int userID) {
         DatabaseCommunication.deletCookie(userID);
+        return Response.status(Response.Status.ACCEPTED).build();
+    }
+
+    @GET
+    @Path("/gazeIntoTheAbyss")
+    public List<String> startGazeOfHorus(@HeaderParam("requestID") int requestID) {
+        return Gaze.lookUpForRooms(requestID);
+    }
+
+    @POST
+    @Path("/support")
+    @Consumes("application/json")
+    public Response addSupport(@HeaderParam("email") String email,
+                               @HeaderParam("head") String head,
+                               @HeaderParam("body") String body) {
+        int id = DatabaseCommunication.getLastSupportID() + 1;
+        DatabaseCommunication.addSupport(id, email, head, body);
+        return Response.status(Response.Status.OK).build();
+    }
+
+    @GET
+    @Path("/newRequests")
+    @Produces("application/json")
+    public List<Integer> getNewAddedRequests(@HeaderParam("teacherID") String teacherID) {
+        return DatabaseCommunication.getNewRequests(teacherID);
+    }
+
+    @DELETE
+    @Path("/deleteRequests")
+    public Response deleteNewAddedRequests(@HeaderParam("teacherID") String teacherID) {
+        DatabaseCommunication.deleteNewRequests(teacherID);
         return Response.status(Response.Status.ACCEPTED).build();
     }
 }
