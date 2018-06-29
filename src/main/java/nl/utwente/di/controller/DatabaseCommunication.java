@@ -481,7 +481,7 @@ public class DatabaseCommunication {
     }
 
     private static void changeBuilding(){
-        String sql = "DELETE FROM new_req";
+        String sql = "SELECT capacity_real FROM room WHERE building LIKE 'Carre';";
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             ResultSet resultSet = pstmt.executeQuery();
