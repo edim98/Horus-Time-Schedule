@@ -15,6 +15,10 @@ public class DatabaseCommunication {
 
     private static final String URL = "jdbc:postgresql://farm09.ewi.utwente.nl:7054/docker";
 
+    /**
+     * Establishes the connection to the database.
+     * @return the connection.
+     */
     public static Connection connect() {
         try {
             Class.forName("org.postgresql.Driver");
@@ -29,6 +33,10 @@ public class DatabaseCommunication {
         return null;
     }
 
+    /**
+     * Returns a map with all the rooms from the database.
+     * @return room map.
+     */
     public static Map<String, Room> getRooms() {
         Map<String, Room> rooms = new HashMap<>();
         String sql = "SELECT * FROM room";
@@ -65,6 +73,12 @@ public class DatabaseCommunication {
         return rooms;
     }
 
+    /**
+     * This method takes a resultSet and from it constructs a list with all the requests from the database.
+     * @param resultSet resulted from the query.
+     * @return list of requests.
+     * @throws SQLException
+     */
     private static List<Request> createRequestList(ResultSet resultSet) throws SQLException {
         List<Request> requests = new ArrayList<>();
         Map<String, Room> rooms = getRooms();
@@ -93,6 +107,10 @@ public class DatabaseCommunication {
         return requests;
     }
 
+    /**
+     * Returns a list with all the requests ordered descending.
+     * @return the request list.
+     */
     public static List<Request> getRequests() {
         String sql = "SELECT * FROM request ORDER BY id DESC;";
         try (Connection conn = connect();
@@ -105,6 +123,10 @@ public class DatabaseCommunication {
         return null;
     }
 
+    /**
+     * Adds a new request to the database.
+     * @param request object with the datas from the request.
+     */
     public static void addNewRequest(Request request) {
         String sql = "INSERT INTO request(oldroom, olddate, newdate, teacherid, teachername, numberofstudents, requesttype, notes, coursetype, faculty, status, newroom, comms)" +
                 " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -129,6 +151,11 @@ public class DatabaseCommunication {
         }
     }
 
+    /**
+     * Adds to the table the id of the request and id of the user who issued the request if the status of the request changes.
+     * @param requestID of the request.
+     * @param teacherID of the teacher.
+     */
     public static void addNewRequest(int requestID, String teacherID) {
         String sql = "INSERT INTO new_req VALUES(?, ?);";
         try (Connection conn = connect();
@@ -141,6 +168,12 @@ public class DatabaseCommunication {
         }
     }
 
+    /**
+     * Method used to return an int value, mostly used for when returning a count.
+     * @param sql which is going to be executed.
+     * @return 0 if there was a problem with the connection or the querry returned nothing,
+     * otherwise it returns the value.
+     */
     private static int getInt(String sql) {
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -155,6 +188,13 @@ public class DatabaseCommunication {
         return -1;
     }
 
+    /**
+     * Same thing aa above but now it return an integer value of an entry in a table.
+     * @param sql which is going to be executed.
+     * @param id of the entry.
+     * @return 0 if there was a problem with the connection or the querry returned nothing,
+     * otherwise it returns the value.
+     */
     private static int getInt(String sql, int id) {
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -170,12 +210,21 @@ public class DatabaseCommunication {
         return -1;
     }
 
-    public static int getId(String table) {
-        String sql = "SELECT id FROM " + table + " t WHERE NOT EXISTS" +
-                "(SELECT id FROM " + table + " WHERE id = t.id + 1) LIMIT 1;";
+    /**
+     * Returns the last id of table request or the id that is next if there is a discontinuation between ids.
+     * @return the id.
+     */
+    public static int getId() {
+        String sql = "SELECT id FROM request t WHERE NOT EXISTS" +
+                "(SELECT id FROM request WHERE id = t.id + 1) LIMIT 1;";
         return getInt(sql);
     }
 
+    /**
+     * Returns a user from the database based on the email
+     * @param id, email of the user
+     * @return lecturer object
+     */
     public static Lecturer getUSer(String id) {
         String sql = "SELECT * FROM users  WHERE email = ?;";
         Lecturer l;
@@ -195,6 +244,12 @@ public class DatabaseCommunication {
         return null;
     }
 
+    /**
+     * Checks if there exists an entry in a table in the database.
+     * @param sql which is going to be executed.
+     * @param check the value we check for.
+     * @return true if the value exists, false otherwise.
+     */
     public static boolean check(String sql, String check) {
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -207,11 +262,20 @@ public class DatabaseCommunication {
         return false;
     }
 
+    /**
+     * Checks if a user exists in the database
+     * @param lecturerid, email of the user
+     * @return true if the user exists, false otherwise.
+     */
     public static boolean checkExistingUser(String lecturerid) {
         String sql = "SELECT * FROM users WHERE email = ?;";
         return check(sql, lecturerid);
     }
 
+    /**
+     * Adds a new user to the database.
+     * @param lecturer object which contains all the data of the user.
+     */
     public static void addNewUser(Lecturer lecturer) {
         String sql = "INSERT INTO users VALUES(?, ?, ?, ?, ?)";
         try(Connection conn = connect();
@@ -235,52 +299,90 @@ public class DatabaseCommunication {
         }
     }
 
+    /**
+     * Checks if the room is valid.
+     * @param roomNr, number of the room.
+     * @return true if the room is valid, false otherwise.
+     */
     public static boolean checkValidRoom(String roomNr) {
         String sql = "SELECT FROM room WHERE room_number = ?;";
         return check(sql, roomNr);
     }
 
-    public static void change() {
-        String sql = "UPDATE request SET status = 'pending'";
-        try(Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void change() {
+//        String sql = "UPDATE request SET status = 'pending'";
+//        try(Connection conn = connect();
+//            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+//                pstmt.executeUpdate();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
+    /**
+     * Returns all the request that have pending as status.
+     * @return request list.
+     */
     public static int getPendingRequests() {
         String sql = "SELECT count(*) FROM request WHERE status = 'pending';";
         return getInt(sql);
     }
 
+    /**
+     * Returns the requests that have pending as status of a certain teacher.
+     * @param teacherID of the teacher.
+     * @return requests list.
+     */
     public static int getPendingRequests(int teacherID) {
         String sql = "SELECT count(*) FROM request WHERE status = 'pending' AND teacherid = ?;";
         return getInt(sql, teacherID);
     }
 
+    /**
+     * Returns all the accpeted requests of the teacher.
+     * @param teacherID of the teacher.
+     * @return requests list.
+     */
     public static int getAcceptedRequests(int teacherID) {
         String sql = "SELECT count(*) FROM request WHERE status = 'accepted' AND teacherid = ?;";
         return getInt(sql, teacherID);
     }
 
+    /**
+     * Returns all the cancelled requests of the teacher.
+     * @param teacherID of the teacher.
+     * @return requests list.
+     */
     public static int getCancelledRequests(int teacherID) {
         String sql = "SELECT count(*) FROM request WHERE status = 'cancelled' AND teacherid = ?;";
         return getInt(sql, teacherID);
     }
 
+    /**
+     * Returns all the requests that were handled this week of a teacher.
+     * @param userID of the teacher.
+     * @return requests list.
+     */
     public static int getWeeklyHandledRequests(int userID) {
         String sql = "SELECT count(*) FROM request_handling WHERE timetabler_id = ? " +
                 "AND CAST(current_date AS date) - CAST(date_handled AS date) <= 7";
         return getInt(sql, userID);
     }
 
+    /**
+     * Returns all the requests.
+     * @return requests list.
+     */
     public static int getTotalRequests() {
         String sql = "SELECT count(*) FROM request";
         return getInt(sql);
     }
 
+    /**
+     * Changes the status of the request into cancelled or accepted only if the request is pending.
+     * @param status new status.
+     * @param id of the request.
+     */
     public static void changeRequestStatus(Status status, int id) {
         String sql = "UPDATE request SET status = ? WHERE id = ? AND status = 'pending'";
         try (Connection conn = connect();
@@ -293,6 +395,11 @@ public class DatabaseCommunication {
         }
     }
 
+    /**
+     * Adds into the database a new request handling which show when a new request was made by a teacher.
+     * @param requestID of the request
+     * @param userID of the teacher
+     */
     public static void addRequestHandling(int requestID, int userID) {
         String sql = "INSERT INTO request_handling VALUES(?, ?, ?)";
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
@@ -308,6 +415,11 @@ public class DatabaseCommunication {
         }
     }
 
+    /**
+     * Returns all the requests of a teacher.
+     * @param user name of the teacher.
+     * @return requests list.
+     */
     public static List<Request> getRequests(String user) {
         String sql = "SELECT * FROM request WHERE teachername = ?;";
         try (Connection connection = connect();
@@ -321,6 +433,12 @@ public class DatabaseCommunication {
         return null;
     }
 
+    /**
+     * Used to execute update operations on a table given a certain id.
+     * @param sql which is going to be executed.
+     * @param change the new value.
+     * @param userID id of the entry.
+     */
     private static void update(String sql, String change, int userID) {
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -332,6 +450,12 @@ public class DatabaseCommunication {
         }
     }
 
+    /**
+     * Used to update an entry given a certain string value.
+     * @param sql which is going to be executed.
+     * @param string1 new value.
+     * @param string2 value of the entry.
+     */
     private static void sql(String sql, String string1, String string2) {
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -343,11 +467,22 @@ public class DatabaseCommunication {
         }
     }
 
+    /**
+     * Changes the email of a user.
+     * @param newEmail new email address.
+     * @param name of the user.
+     */
     public static void changeEmail(String newEmail, String name) {
         String sql = "UPDATE users SET email = ? WHERE staff_name = ?;";
         sql(sql, newEmail, name);
     }
 
+    /**
+     * Changes the password of the user.
+     * @param password 
+     * @param name
+     * @param oldPassword
+     */
     public static void changePassword(String password, String name, String oldPassword) {
         String sql = "UPDATE users SET password = ? WHERE staff_name = ? AND password = ?;";
         try (Connection conn = connect();
@@ -497,7 +632,7 @@ public class DatabaseCommunication {
 //        DatabaseCommunication.change();
 //        DatabaseCommunication.changeRequestStatus(Status.accepted, 1);
 //        DatabaseCommunication.favourites();
-        DatabaseCommunication.changeBuilding();
+//        DatabaseCommunication.changeBuilding();
 //        DatabaseCommunication.deletCookie(996);
 //        DatabaseCommunication.setNewRoom("SP 3", 1);
 //        DatabaseCommunication.changeFeatures();

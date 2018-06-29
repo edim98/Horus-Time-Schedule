@@ -7,10 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Gaze {
@@ -18,7 +14,7 @@ public class Gaze {
     public static List<String> lookUpForRooms(int requestID) {
         Map<String, Double> map = new HashMap<>();
         String date = null;
-        String sql = "SELECT olddate FROM request WHERE id = ?;";
+        String sql = "SELECT newdate FROM request WHERE id = ?;";
         try (Connection conn = DatabaseCommunication.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, requestID);
