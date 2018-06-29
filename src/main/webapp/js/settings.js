@@ -24,7 +24,7 @@ function logout() {
     }
   });
 }
-
+// Initializing the settingsModal whenever the script loads
 $('#settingsOptions').val('0');
 $('#old-psw-input').val('');
 $('#new-psw-input').val('');
@@ -39,7 +39,7 @@ $('#email-input').hide();
 $('#new-name-input').hide();
 $("#facultyOptions").hide();
 
-
+// Reset every input receiver to its default state once settingsModal is closed
 $('#settingsModal').on('hidden.bs.modal', function () {
   $('#settingsOptions').val('0');
   $('#old-psw-input').val('');
@@ -55,6 +55,8 @@ $('#settingsModal').on('hidden.bs.modal', function () {
   $("#facultyOptions").hide();
 });
 
+
+//The next 18 lines allow settings-button to appear when the inputs are minimaly acceptable
  $('#old-psw-input').on('input',function() {
    if ($('#old-psw-input').val().length > 5 && $('#new-psw-input').val().length > 5) {
        $('#settings-button').show();
@@ -74,6 +76,8 @@ $('#settingsModal').on('hidden.bs.modal', function () {
  $('#new-name-input').on('input', function() {
  	if ($('#new-name-input').val().length >= 5  && $('#settingsOptions').val() == "4") $('#settings-button').show(); else $('#settings-button').hide();
  });
+
+
 
 $('#settings-button').on('click', function(event){
   event.preventDefault();
@@ -147,7 +151,7 @@ $('#settings-button').on('click', function(event){
 });
 
 
-
+// Handling the visual aspect of the inputs in settingModal
 $(document).ready(function() {
   $('#settingsOptions').change(function() {
     var selectedOption = $('#settingsOptions').val();
