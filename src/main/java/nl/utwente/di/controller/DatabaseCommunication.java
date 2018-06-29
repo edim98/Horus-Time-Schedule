@@ -679,7 +679,7 @@ public class DatabaseCommunication {
      * @param name of the user.
      */
     public static void changeName(String newName, String name) {
-        String sql = "UPDATE users SET staff_name = ? WHERE name = ?";
+        String sql = "UPDATE users SET staff_name = ? WHERE staff_name = ?";
         sql(sql, newName, name);
     }
 
