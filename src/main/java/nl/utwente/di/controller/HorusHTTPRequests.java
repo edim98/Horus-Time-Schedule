@@ -30,12 +30,21 @@ public class HorusHTTPRequests {
 
     PasswordStorage hashMaster = new PasswordStorage();
 
+    /**
+     * Sends a get request that returns a list with all the requests as json.
+     * @return requests list as json.
+     */
     @GET
     @Produces("application/json")
     public List<Request> getRequests() {
         return DatabaseCommunication.getRequests();
     }
 
+    /**
+     * Sends a get requests that returns all the requests of a teacher.
+     * @param user name of the teacher.
+     * @return requests list as json
+     */
     @GET
     @Path("/user")
     @Produces("application/json")
@@ -43,7 +52,16 @@ public class HorusHTTPRequests {
         return DatabaseCommunication.getRequests(user);
     }
 
-    @POST
+    /**
+     * Sends a get requests which returns a user and checks the credentials in order to log in.
+     * @param username, the email of the user.
+     * @param password, password of the user.
+     * @param timestamp, timestamp when log in was done in order to create a cookie
+     * @return response 200 if the log in was successful and a json with the session id or BAD_REQUEST otherwise.
+     * @throws AlreadyConnectedException
+     * @throws InvalidPasswordException
+     */
+    @GET
     @Path("/login")
     @Consumes("application/json")
     @Produces("application/json")
@@ -102,6 +120,11 @@ public class HorusHTTPRequests {
         }
     }
 
+    /**
+     * Checks if the json for adding a request is valid.
+     * @param jsonObject containing all the data of the request
+     * @return true if the json is correct, false otherwise.
+     */
     private boolean checkValidRequestJSON(JSONObject jsonObject) {
         System.out.println(jsonObject);
         return jsonObject.has("oldRoom") && jsonObject.has("oldDate") && jsonObject.has("newDate") &&
@@ -130,7 +153,6 @@ public class HorusHTTPRequests {
         String name = jsonObject.getString("name");
         String notes = jsonObject.getString("notes");
         String courseType = jsonObject.getString("courseType");
-        //TODO: courseType must be derived from old date, old room and faculty
         String faculty = jsonObject.getString("faculty");
         Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name, numberOfStudents, requestType,
                 notes, courseType, faculty);
@@ -249,7 +271,7 @@ public class HorusHTTPRequests {
     }
 
     @PUT
-    @Path("/changeName")
+    @Path("/defaultFaculty")
     @Consumes("application/json")
     public Response setDefaultFaculty(@HeaderParam("faculty") String faculty,
                                       @HeaderParam("user") String name) {
@@ -293,5 +315,13 @@ public class HorusHTTPRequests {
     public Response deleteNewAddedRequests(@HeaderParam("teacherID") String teacherID) {
         DatabaseCommunication.deleteNewRequests(teacherID);
         return Response.status(Response.Status.ACCEPTED).build();
+    }
+
+    @PUT
+    @Path("/changeName")
+    public Response changeName(@HeaderParam("newName") String newName,
+                                @HeaderParam("user") String userName) {
+        DatabaseCommunication.changeName(newName, userName);
+        return Response.status(Response.Status.OK).build();
     }
 }

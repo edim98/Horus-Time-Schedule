@@ -673,4 +673,14 @@ public class DatabaseCommunication {
         }
     }
 
+    /**
+     * Changes the name of a user.
+     * @param newName of the user.
+     * @param name of the user.
+     */
+    public static void changeName(String newName, String name) {
+        String sql = "UPDATE users SET staff_name = ? WHERE name = ?";
+        sql(sql, newName, name);
+    }
+
 }
