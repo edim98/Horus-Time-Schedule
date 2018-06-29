@@ -162,15 +162,12 @@
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
-                                    <i class="fas fa-door-open"></i>
+                                    <i class="fas fa-clock"></i>
                                 </div>
                                 <div class="text">
-                                    <h2>2</h2>
-                                    <span>Pending requests</span>
+                                    <h2 id="pendingRequests">Retrieving..</h2>
+                                    <span>Requests pending</span>
                                 </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart1"></canvas>
                             </div>
                         </div>
                     </div>
@@ -184,12 +181,9 @@
                                     <i class="fas fa-calendar-check"></i>
                                 </div>
                                 <div class="text">
-                                    <h2>30</h2>
-                                    <span>Requests made this week</span>
+                                    <h2 id="acceptedRequests">Retrieving..</h2>
+                                    <span>Accepted requests</span>
                                 </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart3"></canvas>
                             </div>
                         </div>
                     </div>
@@ -199,15 +193,12 @@
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
-                                    <i class="fas fa-comment"></i>
+                                    <i class="fas fa-calendar-times"></i>
                                 </div>
                                 <div class="text">
-                                    <h2>5</h2>
-                                    <span>Unread messages</span>
+                                    <h2 id="cancelledRequests">Retrieving..</h2>
+                                    <span>Rejected requests</span>
                                 </div>
-                            </div>
-                            <div class="overview-chart">
-                                <canvas id="widgetChart2"></canvas>
                             </div>
                         </div>
                     </div>
@@ -562,6 +553,7 @@
         </script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
+        <script src="../../js/dashboard.js"></script>
         <script src ="../../js/notifications.js"></script>
         <script src="../../js/contact.js"></script>
         <script src="../../js/logout.js"></script>
