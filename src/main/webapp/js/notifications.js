@@ -12,12 +12,19 @@ function createNotification(x, allReq) {
   var html = '<div class="notifi__item">'+
              '<div class="bg-c3 img-cir img-40">'+
              '<i class="zmdi zmdi-file-text"></i></div>'+
-             '<div class="content item-in-bell">'+
-             '<p>Your '+allReq[found].courseType+' in '+allReq[found].oldRoom.roomNumber+ ' on '+allReq[found].oldDate+
+             '<div class="content">'+
+             '<p class="item-in-bell">Your '+allReq[found].courseType+' in '+allReq[found].oldRoom.roomNumber+ ' on '+allReq[found].oldDate+
              ' was '+ allReq[found].status+'!</p>'+
              '</div></div>';
   $('#bell-dropdown').append(html);
 }
+
+$('.item-in-bell').off().on('click', function(event){
+  // event.stopPropagation();
+  // event.preventDefault();
+  console.log("eu incerc");
+  $('#historyModal').modal('toggle');
+});
 
 $(document).ready(function() {
   $('#bell').hide();
@@ -45,7 +52,7 @@ $(document).ready(function() {
       //  console.log(result);
         for(j = 0; j < data.length; j++) {
           createNotification(data[j], result);
-          console.log(j);
+          // console.log(j);
 
         }
         //console.log('all req received ok!');
@@ -87,9 +94,5 @@ $(document).ready(function() {
     //   //console.log("complete");
     // });
 
-  });
-
-  $('.item-in-bell').click(function(event){
-    $('#historyModal').modal('toggle');
-  });
+  })
 });
