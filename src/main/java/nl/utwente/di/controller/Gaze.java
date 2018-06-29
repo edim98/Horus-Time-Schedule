@@ -67,8 +67,4 @@ public class Gaze {
             }
         return null;
     }
-
-    public static void main(String[] args) {
-        lookUpForRooms(63);
-    }
 }

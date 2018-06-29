@@ -15,6 +15,9 @@ public class Encryption {
     private String sessionPassword;
     private SecretKeySpec key;
 
+    /**
+     * Creates a new encryption object by creating a salt, which is then used to create the cookies.
+     */
     public Encryption() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890;";
         StringBuilder salt = new StringBuilder();
@@ -26,6 +29,19 @@ public class Encryption {
         this.sessionPassword = salt.toString();
     }
 
+    /**
+     * Encripts the message using AES encryption and iterates how many times the encryption should be done.
+     * @param message the user wants to encrypt.
+     * @return the encrypted message.
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidParameterSpecException
+     * @throws UnsupportedEncodingException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws InvalidKeySpecException
+     * @throws InvalidKeyException
+     */
     public String encrypt(String message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidParameterSpecException, UnsupportedEncodingException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException, InvalidKeyException {
         this.key = createSeceretKey(this.sessionPassword);
         Cipher pbeCipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -39,6 +55,18 @@ public class Encryption {
         return new String(Base64.getEncoder().encode((encodedIV + ":" + encodedCryptoText).getBytes()));
     }
 
+    /**
+     * Decrypts the message.
+     * @param string the message the user wants to decrypt.
+     * @return the decrypted message.
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidAlgorithmParameterException
+     * @throws InvalidKeyException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws UnsupportedEncodingException
+     */
     public String decrypt(String string) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
         string = new String (Base64.getDecoder().decode(string));
         String iv = string.split(":")[0].concat("==");
@@ -48,6 +76,13 @@ public class Encryption {
         return new String(pbeCipher.doFinal(Base64.getDecoder().decode(message)), "UTF-8");
     }
 
+    /**
+     * Creates a secret key from the salt which is used to encrypt the message.
+     * @param sessionPassword which is the salt.
+     * @return the secret key generated.
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeySpecException
+     */
     private SecretKeySpec createSeceretKey(String sessionPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
         char[] password = sessionPassword.toCharArray();
         if (password == null) {
@@ -62,6 +97,19 @@ public class Encryption {
         return new SecretKeySpec(keyTmp.getEncoded(), "AES");
     }
 
+    /**
+     * This one is just used for testing.
+     * @param args
+     * @throws NoSuchPaddingException
+     * @throws BadPaddingException
+     * @throws InvalidKeySpecException
+     * @throws NoSuchAlgorithmException
+     * @throws IllegalBlockSizeException
+     * @throws UnsupportedEncodingException
+     * @throws InvalidKeyException
+     * @throws InvalidParameterSpecException
+     * @throws InvalidAlgorithmParameterException
+     */
     public static void main(String[] args) throws NoSuchPaddingException, BadPaddingException, InvalidKeySpecException, NoSuchAlgorithmException, IllegalBlockSizeException, UnsupportedEncodingException, InvalidKeyException, InvalidParameterSpecException, InvalidAlgorithmParameterException {
         Encryption e = new Encryption();
         String mesaj = "Un text anume";
