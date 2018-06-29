@@ -25,8 +25,6 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
-import static nl.utwente.di.security.PasswordStorage.createHash;
-
 @Path("/requests")
 public class HorusHTTPRequests {
 
@@ -121,7 +119,7 @@ public class HorusHTTPRequests {
             throw new InvalidInputException();
         }
         Map<String, Room> rooms = DatabaseCommunication.getRooms();
-        int id = DatabaseCommunication.getId("request") + 1;
+        int id = DatabaseCommunication.getId() + 1;
         Room oldRoom = rooms.get(jsonObject.getString("oldRoom"));
         if (!DatabaseCommunication.checkValidRoom(oldRoom.getRoomNumber())) {
             throw new InvalidInputException();
