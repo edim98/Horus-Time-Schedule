@@ -18,7 +18,7 @@ $(document).ready(function() {
               console.log(result);
           })
           .always(function () {
-              console.log("complete");
+              //console.log("complete");
           });
 
       var data = JSON.stringify({
@@ -42,7 +42,7 @@ $(document).ready(function() {
               console.log(result);
           })
           .always(function () {
-              console.log("complete");
+              //console.log("complete");
           });
       $.ajax({
           url: '/horus/requests/total',
@@ -62,7 +62,7 @@ $(document).ready(function() {
               console.log(result);
           })
           .always(function () {
-              console.log("complete");
+              //console.log("complete");
           });
   } else {
       var data = JSON.stringify({
@@ -86,7 +86,7 @@ $(document).ready(function() {
               console.log(result);
           })
           .always(function () {
-              console.log("complete");
+              //console.log("complete");
           });
 
       $.ajax({
@@ -107,7 +107,7 @@ $(document).ready(function() {
               console.log(result);
           })
           .always(function () {
-              console.log("complete");
+              //console.log("complete");
           });
 
       $.ajax({
@@ -128,7 +128,7 @@ $(document).ready(function() {
               console.log(result);
           })
           .always(function () {
-              console.log("complete");
+              //console.log("complete");
           });
   }
 });

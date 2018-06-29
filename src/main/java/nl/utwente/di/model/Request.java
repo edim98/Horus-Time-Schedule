@@ -6,7 +6,7 @@ public class Request {
     private Room oldRoom;
     private String oldDate;
     private String newDate;
-    private String teacherID;
+    private int teacherID;
     private String teacherName;
     private int numberOfStudents;
     private RequestType type;
@@ -17,7 +17,7 @@ public class Request {
     private String newRoom;
     private String comments;
 
-    public Request(int id, Room oldRoom, String oldDate, String newDate, String teacherID, String name,
+    public Request(int id, Room oldRoom, String oldDate, String newDate, int teacherID, String name,
                    int studentsNumber, String type, String notes, String courseType, String faculty) {
         this.oldDate = oldDate;
         this.newDate = newDate;
@@ -58,7 +58,7 @@ public class Request {
         this.newDate = newDate;
     }
 
-    public void setTeacherID(String teacherID) {
+    public void setTeacherID(int teacherID) {
         this.teacherID = teacherID;
     }
 
@@ -110,7 +110,7 @@ public class Request {
         return numberOfStudents;
     }
 
-    public String getTeacherID() {
+    public int getTeacherID() {
         return teacherID;
     }
 

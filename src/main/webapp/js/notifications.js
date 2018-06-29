@@ -69,25 +69,25 @@ $(document).ready(function() {
 
   $('.fa-bell').click(function(event) {
     $('.quantity').remove();
-    // $.ajax({
-    //   url: '/horus/requests/deleteRequests',
-    //   type: 'DELETE',
-    //   dataType: 'json',
-    //   headers: {
-    //     'teacherID' : Cookies.getJSON('relevantData').teacherID,
-    //     'Accept' : 'application/json',
-    //     'Content-Type' : 'application/json'
-    //   }
-    // })
-    // .done(function() {
-    //   //console.log("success");
-    // })
-    // .fail(function(result) {
-    //   console.log("error: " + result.status + " " + result.errorMessage);
-    // })
-    // .always(function() {
-    //   //console.log("complete");
-    // });
+    $.ajax({
+      url: '/horus/requests/deleteRequests',
+      type: 'DELETE',
+      dataType: 'json',
+      headers: {
+        'teacherID' : Cookies.getJSON('relevantData').teacherID,
+        'Accept' : 'application/json',
+        'Content-Type' : 'application/json'
+      }
+    })
+    .done(function() {
+      //console.log("success");
+    })
+    .fail(function(result) {
+      console.log("error: " + result.status + " " + result.errorMessage);
+    })
+    .always(function() {
+      //console.log("complete");
+    });
 
   });
 

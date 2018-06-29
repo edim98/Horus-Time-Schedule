@@ -33,7 +33,7 @@ $('#contact-button').off().on('click', function(event){
     },
     complete: function(result){
       if(result.status == 200) {
-        alert('Thank you for contacting us!');
+        //alert('Thank you for contacting us!');
         location.reload();
       } else {
         console.log("error: " + result.status + ". " + result.errorMessage);

@@ -1,12 +1,12 @@
-// if(!Cookies.get('relevantData')){
-//   url = '../login.html';
-//   $(location).attr('href', url);
-// } else {
-//   if(!Cookies.getJSON('relevantData').isAdmin){
-//     url = './userView.html';
-//     $(location).attr('href', url);
-//   }
-// }
+if(!Cookies.get('relevantData')){
+  url = '../login.html';
+  $(location).attr('href', url);
+} else {
+  if(!Cookies.getJSON('relevantData').isAdmin){
+    url = './userView.html';
+    $(location).attr('href', url);
+  }
+}
 
 function templateNew(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes) {
   var html = '<tr class="tr-shadow" request-entry>' +

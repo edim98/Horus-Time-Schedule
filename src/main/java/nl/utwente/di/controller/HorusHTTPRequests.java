@@ -126,7 +126,7 @@ public class HorusHTTPRequests {
         }
         String oldDate = jsonObject.getString("oldDate");
         String newDate = jsonObject.getString("newDate");
-        String teacherID = "" + jsonObject.getInt("teacherID");
+        int teacherID = jsonObject.getInt("teacherID");
         int numberOfStudents = jsonObject.getInt("numberOfStudents");
         String requestType = jsonObject.getString("type");
         String name = jsonObject.getString("name");
@@ -222,12 +222,12 @@ public class HorusHTTPRequests {
         String comments = jsonObject.getString("comments");
         String newRoom = jsonObject.getString("newRoom");
         int userID = jsonObject.getInt("userID");
-        String teacherID = jsonObject.getString("teacherID");
+        int teacherID = jsonObject.getInt("teacherID");
         DatabaseCommunication.changeRequestStatus(Status.valueOf(status), id);
         DatabaseCommunication.setComments(comments, id);
         DatabaseCommunication.setNewRoom(newRoom, id);
         DatabaseCommunication.addRequestHandling(id, userID);
-        DatabaseCommunication.addNewRequest(id, teacherID);
+        DatabaseCommunication.addNewRequest(id, ""+teacherID);
         return Response.status(Response.Status.OK).build();
     }
 
