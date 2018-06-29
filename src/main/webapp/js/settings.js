@@ -3,7 +3,6 @@ function logout() {
   event.stopPropagation();
   url = '../login.html';
 
-
   $.ajax({
     url: '/horus/requests/logout',
     type: 'DELETE',
@@ -105,7 +104,6 @@ $('#settings-button').on('click', function(event){
       }
     });
 
-    //TODO: in horus requests it requires a "user_id" as a parameter. I don't see where that is :(
   } else if($('#settingsOptions option:selected').text() == 'E-mail'){
     var email = $('#email-input').val();
     $.ajax({

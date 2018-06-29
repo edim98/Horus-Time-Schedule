@@ -1,17 +1,17 @@
-$( document ).ready(function() {
-  // events that happen at page refresh
-  $("#settingsOptions").val("0").change();
-        var isChange = !$('#change-radio').prop('checked');
-        var isCancel = !$('#cancel-radio').prop('checked');
+$(document).ready(function() {
+    // events that happen at page refresh
+    $("#settingsOptions").val("0").change();
+    var isChange = !$('#change-radio').prop('checked');
+    var isCancel = !$('#cancel-radio').prop('checked');
 
-        if(!isChange){
-          $('#cancel-button').hide();
-            $('#change-form').show();
-            $('#reschedule-button').show();
-        }
-         if(!isCancel){
-          $('#change-form').hide();
-          $('#reschedule-button').hide();
-            $('#cancel-button').show();
-        }
-    });
+    if (!isChange) {
+        $('#cancel-button').hide();
+        $('#change-form').show();
+        $('#reschedule-button').show();
+    }
+    if (!isCancel) {
+        $('#change-form').hide();
+        $('#reschedule-button').hide();
+        $('#cancel-button').show();
+    }
+});
