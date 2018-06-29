@@ -1,6 +1,6 @@
 function createNotification(x, allReq) {
-  console.log(x);
-  console.log(allReq);
+  // console.log(x);
+  // console.log(allReq);
   var found;
   for(i = 0; i < allReq.length; i++) {
     if(allReq[i].id == x){
@@ -9,22 +9,17 @@ function createNotification(x, allReq) {
       break;
     }
   }
-  var html = '<div class="notifi__item">'+
+  var html = '<div class="notifi__item item-in-bell">'+
              '<div class="bg-c3 img-cir img-40">'+
              '<i class="zmdi zmdi-file-text"></i></div>'+
              '<div class="content">'+
-             '<p class="item-in-bell">Your '+allReq[found].courseType+' in '+allReq[found].oldRoom.roomNumber+ ' on '+allReq[found].oldDate+
+             '<p class="">Your '+allReq[found].courseType+' in '+allReq[found].oldRoom.roomNumber+ ' on '+allReq[found].oldDate+
              ' was '+ allReq[found].status+'!</p>'+
              '</div></div>';
   $('#bell-dropdown').append(html);
 }
 
-$('.item-in-bell').off().on('click', function(event){
-  // event.stopPropagation();
-  // event.preventDefault();
-  console.log("eu incerc");
-  $('#historyModal').modal('toggle');
-});
+
 
 $(document).ready(function() {
   $('#bell').hide();
@@ -94,5 +89,25 @@ $(document).ready(function() {
     //   //console.log("complete");
     // });
 
-  })
+  });
+
+  $('#bell-dropdown').on('click', '.item-in-bell', function(){
+    $('#historyModal').modal('toggle');
+    var p = $(this).find('p').text();
+    var room = p.slice(p.indexOf('in')+3, p.indexOf('on')-1);
+    var date = p.slice(p.indexOf('on')+3, p.indexOf('was')-1);
+    var status = p.slice(p.indexOf('was')+4, p.indexOf('!'));
+    var historyTableBody = $('#history-table').find('tbody');
+    $('.request-entry').each(function(index){
+      var indexRoom = $(this).find('.h-old-room').text();
+      var indexStatus = $(this).find('.h-status').text();
+      if(room == indexRoom && status == indexStatus) {
+        $(this).css('border', "2px solid gray");
+        $(this).find('.show-info').trigger('click');
+      }
+    });
+
+    $('.notifi-dropdown').dropdown('toggle');
+
+  });
 });
