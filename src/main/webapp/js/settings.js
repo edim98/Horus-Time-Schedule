@@ -1,8 +1,12 @@
+// This file handles the settings popup.
 
+
+// This functions handles the logout.
 function logout() {
   event.stopPropagation();
   url = '../login.html';
 
+  // Sends a DELETE request to the server that removes this user's session cookie.
   $.ajax({
     url: '/horus/requests/logout',
     type: 'DELETE',
@@ -14,7 +18,6 @@ function logout() {
     },
     complete: function(result){
       if(result.status == 202) {
-        console.log("success");
         Cookies.remove('relevantData');
         $(location).attr('href', url);
       } else {
@@ -30,7 +33,7 @@ $('#new-psw-input').val('');
 $('#email-input').val('');
 $('#new-name-input').val('');
 $('#facultyOptions').val("99");
-
+$("#facultyOptions").hide();
 
 $('#settings-button').hide();
 $('#psw-change-form').hide();
@@ -77,9 +80,12 @@ $('#settingsModal').on('hidden.bs.modal', function () {
  });
 
 
-
+// Trigger on different events in the settings popup.
 $('#settings-button').on('click', function(event){
   event.preventDefault();
+
+  // Event 1: User wants to change the password.
+  // Sends a PUT request to the server replacing the old password.
   if($('#settingsOptions option:selected').text() == 'Password'){
     var oldPassword = $('#old-psw-input').val();
     var newPassword = $('#new-psw-input').val();
@@ -95,7 +101,6 @@ $('#settings-button').on('click', function(event){
       },
       complete: function(result){
         if(result.status == 200) {
-          console.log('changed password succesfully!');
           logout();
       } else{
         alert('Something wrong happened! Please contact tech support!');
@@ -105,6 +110,9 @@ $('#settings-button').on('click', function(event){
     });
 
   } else if($('#settingsOptions option:selected').text() == 'E-mail'){
+    // Event 2: User wants to change the email.
+    // Sends a PUT request that replaces the old email.
+
     var email = $('#email-input').val();
     $.ajax({
       url: '/horus/requests/changeEmail',
@@ -116,7 +124,7 @@ $('#settings-button').on('click', function(event){
       },
       complete: function(result) {
         if(result.status == 200) {
-          console.log('changed email success!');
+        //  console.log('changed email success!');
           logout();
         } else {
           alert('Something wrong happened! Please contact tech support!');
@@ -126,6 +134,10 @@ $('#settings-button').on('click', function(event){
     });
 
   } else if($('#settingsOptions option:selected').text() == 'Name'){
+
+    // Event 3: User wants to change the name.
+    // Sends a PUT request to the server that replaces the old name.
+
     var name = $('#new-name-input').val();
     $.ajax({
       url: '/horus/requests/changeName',
@@ -137,7 +149,6 @@ $('#settings-button').on('click', function(event){
       },
       complete: function(result) {
         if(result.status == 200) {
-          console.log('changed name success!');
           logout();
         } else {
           alert('Something wrong happened! Please contact tech support!');

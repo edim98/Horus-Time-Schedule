@@ -30,12 +30,21 @@ public class HorusHTTPRequests {
 
     PasswordStorage hashMaster = new PasswordStorage();
 
+    /**
+     * Sends a get request that returns a list with all the requests as json.
+     * @return requests list as json.
+     */
     @GET
     @Produces("application/json")
     public List<Request> getRequests() {
         return DatabaseCommunication.getRequests();
     }
 
+    /**
+     * Sends a get requests that returns all the requests of a teacher.
+     * @param user name of the teacher.
+     * @return requests list as json
+     */
     @GET
     @Path("/user")
     @Produces("application/json")
@@ -43,15 +52,24 @@ public class HorusHTTPRequests {
         return DatabaseCommunication.getRequests(user);
     }
 
-    @POST
+    /**
+     * Sends a get requests which returns a user and checks the credentials in order to log in.
+     * @param username, the email of the user.
+     * @param password, password of the user.
+     * @param timestamp, timestamp when log in was done in order to create a cookie
+     * @return response 200 if the log in was successful and a json with the session id or BAD_REQUEST otherwise.
+     * @throws AlreadyConnectedException
+     * @throws InvalidPasswordException
+     */
+    @GET
     @Path("/login")
     @Consumes("application/json")
     @Produces("application/json")
     public Response logIn(@HeaderParam("username") String username,
                           @HeaderParam("password") String password,
                           @HeaderParam("timestamp") long timestamp) throws AlreadyConnectedException, InvalidPasswordException {
-        //System.out.println(username + " " + password + " " + timestamp);
         Lecturer lecturer = DatabaseCommunication.getUSer(username);
+
         boolean isPasswordOk = false;
         try {
             isPasswordOk = hashMaster.verifyPassword(password, new String(Base64.getDecoder().decode(lecturer.getPassword())));
@@ -102,6 +120,11 @@ public class HorusHTTPRequests {
         }
     }
 
+    /**
+     * Checks if the json for adding a request is valid.
+     * @param jsonObject containing all the data of the request
+     * @return true if the json is correct, false otherwise.
+     */
     private boolean checkValidRequestJSON(JSONObject jsonObject) {
         System.out.println(jsonObject);
         return jsonObject.has("oldRoom") && jsonObject.has("oldDate") && jsonObject.has("newDate") &&
@@ -109,6 +132,11 @@ public class HorusHTTPRequests {
                 jsonObject.has("name") && jsonObject.has("notes") && jsonObject.has("courseType") && jsonObject.has("faculty");
     }
 
+    /**
+     * Sends a post request which adds a new request in the database.
+     * @param requestString, json object representing the request.
+     * @throws InvalidInputException
+     */
     @POST
     @Consumes("application/json")
     public void addRequest(String requestString) throws InvalidInputException {
@@ -124,19 +152,23 @@ public class HorusHTTPRequests {
         }
         String oldDate = jsonObject.getString("oldDate");
         String newDate = jsonObject.getString("newDate");
-        String teacherID = "" + jsonObject.getInt("teacherID");
+        int teacherID = jsonObject.getInt("teacherID");
         int numberOfStudents = jsonObject.getInt("numberOfStudents");
         String requestType = jsonObject.getString("type");
         String name = jsonObject.getString("name");
         String notes = jsonObject.getString("notes");
         String courseType = jsonObject.getString("courseType");
-        //TODO: courseType must be derived from old date, old room and faculty
         String faculty = jsonObject.getString("faculty");
         Request request = new Request(id, oldRoom, oldDate, newDate, teacherID, name, numberOfStudents, requestType,
                 notes, courseType, faculty);
         DatabaseCommunication.addNewRequest(request);
     }
 
+    /**
+     * Sends a post request which registers a new user.
+     * @param lecturerString, json object representing the user.
+     * @return a response if the operations was successful or not.
+     */
     @POST
     @Path("/register")
     @Consumes("application/json")
@@ -160,6 +192,10 @@ public class HorusHTTPRequests {
         return Response.status(Response.Status.OK).build();
     }
 
+    /**
+     * Returns the number of pending requests.
+     * @return the number of pending requests.
+     */
     @GET
     @Path("/pending/admin")
     @Produces("application/json")
@@ -167,49 +203,66 @@ public class HorusHTTPRequests {
         return DatabaseCommunication.getPendingRequests();
     }
 
-    @POST
+    /**
+     * Returns the number of pending requests of a teacher.
+     * @return the number of pending requests of a teacher.
+     */
+    @GET
     @Path("/pending/user")
     @Consumes("application/json")
-    public int getPendingRequests(String jsonString) {
-        JSONObject idJson = new JSONObject(jsonString);
-        int teacherID = idJson.getInt("teacherID");
+    public int getPendingRequests(@HeaderParam("teacherID") int teacherID) {
         return DatabaseCommunication.getPendingRequests(teacherID);
     }
 
-    @POST
+    /**
+     * Returns the number of pending and handled requests of a teacher.
+     * @return the number of pending and handled requests of a teacher.
+     */
+    @GET
     @Path("/handled")
     @Consumes("application/json")
-    public int getHandledRequests(String jsonString) {
-        JSONObject idJson = new JSONObject(jsonString);
-        int teacherID = idJson.getInt("teacherID");
+    public int getHandledRequests(@HeaderParam("teacherID") int teacherID) {
         return DatabaseCommunication.getWeeklyHandledRequests(teacherID);
     }
 
-    @POST
+    /**
+     * Returns the total number of requests.
+     * @return the total number of requests.
+     */
+    @GET
     @Path("/total")
     @Consumes("application/json")
     public int getTotalRequests() {
         return DatabaseCommunication.getTotalRequests();
     }
 
-    @POST
+    /**
+     * Returns the number of pending and accepted requests of a teacher.
+     * @return the number of pending and accepted requests of a teacher.
+     */
+    @GET
     @Path("/accepted")
     @Consumes("application/json")
-    public int getAcceptedRequests(String jsonString) {
-        JSONObject idJson = new JSONObject(jsonString);
-        int teacherID = idJson.getInt("teacherID");
+    public int getAcceptedRequests(@HeaderParam("teacherID") int teacherID) {
         return DatabaseCommunication.getAcceptedRequests(teacherID);
     }
 
-    @POST
+    /**
+     * Returns the number of pending and cancelled requests of a teacher.
+     * @return the number of pending and cancelled requests of a teacher.
+     */
+    @GET
     @Path("/cancelled")
     @Consumes("application/json")
-    public int getCancelledRequests(String jsonString) {
-        JSONObject idJson = new JSONObject(jsonString);
-        int teacherID = idJson.getInt("teacherID");
+    public int getCancelledRequests(@HeaderParam("teacherID") int teacherID) {
         return DatabaseCommunication.getCancelledRequests(teacherID);
     }
 
+    /**
+     * Updates the status of a requests
+     * @param jsonBody containing the values to update
+     * @return a response if the actions was successful or not.
+     */
     @PUT
     @Path("/statusChange")
     @Consumes("application/json")
@@ -220,15 +273,21 @@ public class HorusHTTPRequests {
         String comments = jsonObject.getString("comments");
         String newRoom = jsonObject.getString("newRoom");
         int userID = jsonObject.getInt("userID");
-        String teacherID = jsonObject.getString("teacherID");
+        int teacherID = jsonObject.getInt("teacherID");
         DatabaseCommunication.changeRequestStatus(Status.valueOf(status), id);
         DatabaseCommunication.setComments(comments, id);
         DatabaseCommunication.setNewRoom(newRoom, id);
         DatabaseCommunication.addRequestHandling(id, userID);
-        DatabaseCommunication.addNewRequest(id, teacherID);
+        DatabaseCommunication.addNewRequest(id, ""+teacherID);
         return Response.status(Response.Status.OK).build();
     }
 
+    /**
+     * Changes the email of a user.
+     * @param newEmail the user wants to have.
+     * @param userName of the user.
+     * @return a response if the actions was successful or not.
+     */
     @PUT
     @Path("/changeEmail")
     @Consumes("application/json")
@@ -238,6 +297,13 @@ public class HorusHTTPRequests {
         return Response.status(Response.Status.OK).build();
     }
 
+    /**
+     * Changes the password of user.
+     * @param newPass the user wants.
+     * @param userName of the user.
+     * @param oldPass of the user.
+     * @return a response if the actions was successful or not.
+     */
     @PUT
     @Path("/changePassword")
     @Consumes("application/json")
@@ -248,8 +314,14 @@ public class HorusHTTPRequests {
         return Response.status(Response.Status.OK).build();
     }
 
+    /**
+     * Sets the default faculty of a teacher.
+     * @param faculty which is going to be default.
+     * @param name of the teacher.
+     * @return a response if the actions was successful or not.
+     */
     @PUT
-    @Path("/changeName")
+    @Path("/defaultFaculty")
     @Consumes("application/json")
     public Response setDefaultFaculty(@HeaderParam("faculty") String faculty,
                                       @HeaderParam("user") String name) {
@@ -257,6 +329,11 @@ public class HorusHTTPRequests {
         return Response.status(Response.Status.OK).build();
     }
 
+    /**
+     * Removes from the database the cookies of the connected user.
+     * @param userID of the user who logs out.
+     * @return a response if the actions was successful or not.
+     */
     @DELETE
     @Path("/logout")
     public Response logOut(@HeaderParam("user") int userID) {
@@ -264,12 +341,24 @@ public class HorusHTTPRequests {
         return Response.status(Response.Status.ACCEPTED).build();
     }
 
+    /**
+     * Returns a list of the rooms found by the gaze.
+     * @param requestID of the request.
+     * @return the list with all the rooms found.
+     */
     @GET
     @Path("/gazeIntoTheAbyss")
     public List<String> startGazeOfHorus(@HeaderParam("requestID") int requestID) {
         return Gaze.lookUpForRooms(requestID);
     }
 
+    /**
+     * Adds a bew support ticket into the database.
+     * @param email of the sender.
+     * @param head of the message.
+     * @param body contents of the message.
+     * @return a response if the actions was successful or not.
+     */
     @POST
     @Path("/support")
     @Consumes("application/json")
@@ -281,6 +370,11 @@ public class HorusHTTPRequests {
         return Response.status(Response.Status.OK).build();
     }
 
+    /**
+     * Returns a list with all the requests handled of a teacher.
+     * @param teacherID of the teacher.
+     * @return a list with the id of the requests handled.
+     */
     @GET
     @Path("/newRequests")
     @Produces("application/json")
@@ -288,10 +382,29 @@ public class HorusHTTPRequests {
         return DatabaseCommunication.getNewRequests(teacherID);
     }
 
+    /**
+     * Deletes the requests which were handled, it is used for the notifications.
+     * @param teacherID of the teacher.
+     * @return a response if the actions was successful or not.
+     */
     @DELETE
     @Path("/deleteRequests")
     public Response deleteNewAddedRequests(@HeaderParam("teacherID") String teacherID) {
         DatabaseCommunication.deleteNewRequests(teacherID);
         return Response.status(Response.Status.ACCEPTED).build();
+    }
+
+    /**
+     * Changes the name of a user.
+     * @param newName which the user wants.
+     * @param userName old name of the user.
+     * @return a response if the actions was successful or not.
+     */
+    @PUT
+    @Path("/changeName")
+    public Response changeName(@HeaderParam("newName") String newName,
+                                @HeaderParam("user") String userName) {
+        DatabaseCommunication.changeName(newName, userName);
+        return Response.status(Response.Status.OK).build();
     }
 }
