@@ -1,9 +1,20 @@
+<<<<<<< HEAD
 
+=======
+// This file handles the settings popup.
+
+
+// This functions handles the logout.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
 function logout() {
   event.stopPropagation();
   url = '../login.html';
 
+<<<<<<< HEAD
 
+=======
+  // Sends a DELETE request to the server that removes this user's session cookie.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
   $.ajax({
     url: '/horus/requests/logout',
     type: 'DELETE',
@@ -15,7 +26,10 @@ function logout() {
     },
     complete: function(result){
       if(result.status == 202) {
+<<<<<<< HEAD
         console.log("success");
+=======
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
         Cookies.remove('relevantData');
         $(location).attr('href', url);
       } else {
@@ -78,9 +92,18 @@ $('#settingsModal').on('hidden.bs.modal', function () {
  });
 
 
+<<<<<<< HEAD
 
 $('#settings-button').on('click', function(event){
   event.preventDefault();
+=======
+// Trigger on different events in the settings popup.
+$('#settings-button').on('click', function(event){
+  event.preventDefault();
+
+  // Event 1: User wants to change the password.
+  // Sends a PUT request to the server replacing the old password.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
   if($('#settingsOptions option:selected').text() == 'Password'){
     var oldPassword = $('#old-psw-input').val();
     var newPassword = $('#new-psw-input').val();
@@ -96,7 +119,10 @@ $('#settings-button').on('click', function(event){
       },
       complete: function(result){
         if(result.status == 200) {
+<<<<<<< HEAD
           console.log('changed password succesfully!');
+=======
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
           logout();
       } else{
         alert('Something wrong happened! Please contact tech support!');
@@ -105,8 +131,15 @@ $('#settings-button').on('click', function(event){
       }
     });
 
+<<<<<<< HEAD
     //TODO: in horus requests it requires a "user_id" as a parameter. I don't see where that is :(
   } else if($('#settingsOptions option:selected').text() == 'E-mail'){
+=======
+  } else if($('#settingsOptions option:selected').text() == 'E-mail'){
+    // Event 2: User wants to change the email.
+    // Sends a PUT request that replaces the old email.
+
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
     var email = $('#email-input').val();
     $.ajax({
       url: '/horus/requests/changeEmail',
@@ -118,7 +151,11 @@ $('#settings-button').on('click', function(event){
       },
       complete: function(result) {
         if(result.status == 200) {
+<<<<<<< HEAD
           console.log('changed email success!');
+=======
+        //  console.log('changed email success!');
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
           logout();
         } else {
           alert('Something wrong happened! Please contact tech support!');
@@ -128,6 +165,13 @@ $('#settings-button').on('click', function(event){
     });
 
   } else if($('#settingsOptions option:selected').text() == 'Name'){
+<<<<<<< HEAD
+=======
+
+    // Event 3: User wants to change the name.
+    // Sends a PUT request to the server that replaces the old name.
+
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
     var name = $('#new-name-input').val();
     $.ajax({
       url: '/horus/requests/changeName',
@@ -139,7 +183,10 @@ $('#settings-button').on('click', function(event){
       },
       complete: function(result) {
         if(result.status == 200) {
+<<<<<<< HEAD
           console.log('changed name success!');
+=======
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
           logout();
         } else {
           alert('Something wrong happened! Please contact tech support!');

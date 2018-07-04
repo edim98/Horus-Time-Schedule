@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+// This file handles the notification behaviour.
+
+// The function creates a notification item.
+// x is the id of the new request
+// allReq are all the reqeusts
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
 function createNotification(x, allReq) {
   // console.log(x);
   // console.log(allReq);
@@ -22,7 +30,14 @@ function createNotification(x, allReq) {
 
 
 $(document).ready(function() {
+<<<<<<< HEAD
   $('#bell').hide();
+=======
+  // Hide the bell icon.
+  $('#bell').hide();
+
+  // Send a GET request to the server that returns all new requests.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
   $.ajax({
     url: '/horus/requests/newRequests',
     type: 'GET',
@@ -34,7 +49,11 @@ $(document).ready(function() {
     }
   })
   .done(function(data) {
+<<<<<<< HEAD
     console.log(data);
+=======
+    // If there are any new requests, build them and add them to the dropdown.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
     if(data.length > 0) {
       $('#bell').show();
       $('.fa-bell').after('<span class="quantity">' + data.length+'</span>');
@@ -44,6 +63,7 @@ $(document).ready(function() {
         dataType: 'json',
       })
       .done(function(result) {
+<<<<<<< HEAD
       //  console.log(result);
         for(j = 0; j < data.length; j++) {
           createNotification(data[j], result);
@@ -51,6 +71,11 @@ $(document).ready(function() {
 
         }
         //console.log('all req received ok!');
+=======
+        for(j = 0; j < data.length; j++) {
+          createNotification(data[j], result);
+        }
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
       })
       .fail(function(result) {
         console.log("error: " + result.status + " " + result.errorMessage);
@@ -64,9 +89,16 @@ $(document).ready(function() {
     console.log("error: " + result.status + " " + result.errorMessage);
   })
   .always(function() {
+<<<<<<< HEAD
     console.log("complete");
   });
 
+=======
+  });
+
+  // Trigger that handles the bell icon click.
+  // Shows the dropdown and sends a DELETE request to the server informing it that the new requests have been aknowledged.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
   $('.fa-bell').click(function(event) {
     $('.quantity').remove();
     $.ajax({
@@ -80,17 +112,28 @@ $(document).ready(function() {
       }
     })
     .done(function() {
+<<<<<<< HEAD
       //console.log("success");
+=======
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
     })
     .fail(function(result) {
       console.log("error: " + result.status + " " + result.errorMessage);
     })
     .always(function() {
+<<<<<<< HEAD
       //console.log("complete");
+=======
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
     });
 
   });
 
+<<<<<<< HEAD
+=======
+  // Trigger that handles the click on a dropdown item.
+  // Opens the history popup and highlights the clicked request.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
   $('#bell-dropdown').on('click', '.item-in-bell', function(){
     $('#historyModal').modal('toggle');
     var p = $(this).find('p').text();

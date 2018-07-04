@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+/**
+This script is used to populate the dashboard graphs.
+All data are stored in the database and retrieved by RESTful services.
+*/
+
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
 $(document).ready(function() {
   var isAdmin = Cookies.getJSON('relevantData').isAdmin;
   if(isAdmin) {
@@ -21,6 +29,7 @@ $(document).ready(function() {
               //console.log("complete");
           });
 
+<<<<<<< HEAD
       var data = JSON.stringify({
           'teacherID' : Cookies.getJSON('relevantData').teacherID
       });
@@ -32,6 +41,17 @@ $(document).ready(function() {
           headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
+=======
+      var teacherID = Cookies.getJSON('relevantData').teacherID;
+      $.ajax({
+          url: '/horus/requests/handled',
+          type: 'GET',
+          dataType: 'json',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'teacherID' : teacherID
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
           }
       })
           .done(function (result) {
@@ -46,9 +66,14 @@ $(document).ready(function() {
           });
       $.ajax({
           url: '/horus/requests/total',
+<<<<<<< HEAD
           type: 'POST',
           dataType: 'json',
           data: data,
+=======
+          type: 'GET',
+          dataType: 'json',
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
           headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
@@ -65,6 +90,7 @@ $(document).ready(function() {
               //console.log("complete");
           });
   } else {
+<<<<<<< HEAD
       var data = JSON.stringify({
           'teacherID' : Cookies.getJSON('relevantData').teacherID
       });
@@ -76,6 +102,17 @@ $(document).ready(function() {
           headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
+=======
+      var teacherID = Cookies.getJSON('relevantData').teacherID;
+      $.ajax({
+          url: '/horus/requests/pending/user',
+          type: 'GET',
+          dataType: 'json',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'teacherID' : teacherID
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
           }
       })
           .done(function (result) {
@@ -91,12 +128,21 @@ $(document).ready(function() {
 
       $.ajax({
           url: '/horus/requests/accepted',
+<<<<<<< HEAD
           type: 'POST',
           dataType: 'json',
           data: data,
           headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
+=======
+          type: 'GET',
+          dataType: 'json',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'teacherID' : teacherID
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
           }
       })
           .done(function (result) {
@@ -112,12 +158,21 @@ $(document).ready(function() {
 
       $.ajax({
           url: '/horus/requests/cancelled',
+<<<<<<< HEAD
           type: 'POST',
           dataType: 'json',
           data: data,
           headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
+=======
+          type: 'GET',
+          dataType: 'json',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'teacherID' : teacherID
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
           }
       })
           .done(function (result) {

@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 $(document).ready(function() {
 
+=======
+// This file handles the login.
+
+$(document).ready(function() {
+
+  // Check if there is a session cookie active and redirect to the proper webpage.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
   if(Cookies.get('relevantData')){
     var isAdmin = Cookies.getJSON('relevantData').isAdmin;
     if(isAdmin){
@@ -11,6 +19,10 @@ $(document).ready(function() {
     }
   }
 
+<<<<<<< HEAD
+=======
+  // Trigger on form submission.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
   $('.login-form').on('submit', function(event) {
     event.preventDefault();
 
@@ -19,10 +31,18 @@ $(document).ready(function() {
     }
 
     var timestamp = Date.now();
+<<<<<<< HEAD
     console.log(timestamp);
     $.ajax({
       url: '/horus/requests/login', // de completat
       type: 'POST',
+=======
+
+    // Sends a GET request to the sever which authenticates the user.
+    $.ajax({
+      url: '/horus/requests/login', // de completat
+      type: 'GET',
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
       dataType: 'json',
       headers : {
         'username' : $('#email').val(),
@@ -41,6 +61,7 @@ $(document).ready(function() {
           var isAdmin = responseJSON.isAdmin;
           var sessionID = responseJSON.sessionID;
 
+<<<<<<< HEAD
           if($('#remember-me').is(':checked')){
             Cookies.set('relevantData', {name: name, teacherID: teacherID, email: email, sessionID: sessionID, isAdmin: isAdmin}, {expires: 1});
           } else {
@@ -48,6 +69,16 @@ $(document).ready(function() {
           }
           //TODO: make a GET from the server that returns details that has this sesssion
 
+=======
+          // Make a session cookie live longer if the button is checked.
+          if($('#remember-me').is(':checked')){
+            Cookies.set('relevantData', {name: name, teacherID: teacherID, email: email, sessionID: sessionID, isAdmin: isAdmin}, {expires: 10});
+          } else {
+            Cookies.set('relevantData', {name: name, teacherID: teacherID, email: email, sessionID: sessionID, isAdmin: isAdmin}, {expires: 1});
+          }
+
+          // Check if the user is an admin and redirects to the proper webpage.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
           if(isAdmin){
             url='./components/admin.html';
             $(location).attr('href', url);
@@ -55,12 +86,19 @@ $(document).ready(function() {
             url = './components/userView.html';
             $(location).attr('href', url);
           }
+<<<<<<< HEAD
 
 
         } else if(result.status == 500) {
           alert('Username or password incorrect!');
         }else {
           alert('Failed!' + result.status + result.errorMessage);
+=======
+        } else if(result.status == 500) {
+          alert('Username or password incorrect!');
+        }else {
+          //alert('Failed!' + result.status + result.errorMessage);
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
           location.reload();
         }
       }
@@ -69,6 +107,10 @@ $(document).ready(function() {
 
   });
 
+<<<<<<< HEAD
+=======
+  // Redirects to the sign up webpage.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
   $('#sign-up').click(function() {
     url = './register.html';
     $(location).attr('href', url);

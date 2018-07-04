@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+// This file handles the request history of a certain user.
+
+// Checks to see if there is an active session cookie and redirect to the proper webpage.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
 if(!Cookies.get('relevantData')){
   url = '../login.html';
   $(location).attr('href', url);
@@ -8,6 +14,10 @@ if(!Cookies.get('relevantData')){
   }
 }
 
+<<<<<<< HEAD
+=======
+// This template constructs a table row containing a pending request. This will be added to the user's dashboard.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
 function templatePending(oldRoom, oldDate, newDate, type, status, id, courseType, numberOfStudents, notes) {
   var html = '<tr class="tr-shadow request-entry">' +
   '<td>'+oldRoom+'</td>'+
@@ -27,6 +37,10 @@ function templatePending(oldRoom, oldDate, newDate, type, status, id, courseType
   return html;
 }
 
+<<<<<<< HEAD
+=======
+// This template constructs a table row containing an accepted or declined request. This will be added to the history popup.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
 function templateHistory(oldRoom, oldDate, newDate, type, status, id, courseType, numberOfStudents, notes, newRoom, comments) {
   var html = '<tr class="tr-shadow request-entry">' +
   '<td class="h-old-room">'+oldRoom+'</td>'+
@@ -53,6 +67,10 @@ $(document).ready(function() {
   var cookie = Cookies.getJSON('relevantData');
   var name = cookie.name;
 
+<<<<<<< HEAD
+=======
+  //Send a GET request to the server that retrieves all this user's requests.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
   $.ajax({
     url: '/horus/requests/user',
     type: 'GET',
@@ -64,7 +82,10 @@ $(document).ready(function() {
     },
   })
   .done(function(data) {
+<<<<<<< HEAD
     console.log(data);
+=======
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
     for(i = 0; i < data.length; i++){
       var courseType = data[i].courseType;
       var faculty = data[i].faculty;
@@ -82,17 +103,26 @@ $(document).ready(function() {
       var comments = data[i].comments;
       if(data[i].newRoom == null){
         newRoom = 'Not specified';
+<<<<<<< HEAD
       //  console.log(newRoom);
       } else{
         newRoom = data[i].newRoom;
       //console.log(newRoom);
+=======
+      } else{
+        newRoom = data[i].newRoom;
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
       }
 
       var requestTableBody = $('#request-table').find('tbody');
       var historyTableBody = $('#history-table').find('tbody');
 
 
+<<<<<<< HEAD
 
+=======
+      // Check the status of this request and show it to the coresponding place (dashboard or history).
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
       if(status == 'pending') {
         var html = templatePending(oldRoom, oldDate, newDate, type, status, id, courseType, numberOfStudents, notes);
         requestTableBody.append(html);
@@ -104,6 +134,10 @@ $(document).ready(function() {
 
     }
 
+<<<<<<< HEAD
+=======
+    // Trigger that expands a request's information on click.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
     $('.show-info').off().on('click', function(event){
       event.stopPropagation();
       var closest_tr = $(this).closest('tr');
@@ -112,15 +146,24 @@ $(document).ready(function() {
     });
 
     var receivedJson = data;
+<<<<<<< HEAD
   //  console.log(data);
+=======
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
   })
   .fail(function(data) {
     console.log(data.status + ' ' + data.errorMessage);
   })
   .always(function() {
+<<<<<<< HEAD
   //  console.log("complete");
   });
 
+=======
+  });
+
+  // Reset the history popup to the default appearance every time it is not focused.
+>>>>>>> bc2ea251ea2b30ef5e35c06c84b86805db3f9e0f
   $('#historyModal').on('hidden.bs.modal', function(){
     $(this).find('.request-entry').each(function(index){
       $(this).css('border', '0px');
