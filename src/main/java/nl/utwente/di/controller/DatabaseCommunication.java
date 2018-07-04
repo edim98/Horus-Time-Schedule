@@ -549,17 +549,18 @@ public class DatabaseCommunication {
      * @param userID of the user.
      * @return true if the user is connected, false otherwise.
      */
-    public static boolean checkAlreadyConnected(int userID) {
+    public static void checkAlreadyConnected(int userID) {
         String sql = "SELECT user_id FROM cookies WHERE user_id = ?;";
         try (Connection connection = connect();
             PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, userID);
             ResultSet resultSet = pstmt.executeQuery();
-            return resultSet.next();
+            if (resultSet.next()) {
+                deletCookie(userID);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     /**
