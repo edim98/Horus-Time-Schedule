@@ -450,45 +450,45 @@ public class DatabaseCommunication {
         }
     }
 
-    /**
-     * Used to update an entry given a certain string value.
-     * @param sql which is going to be executed.
-     * @param string1 new value.
-     * @param string2 value of the entry.
-     */
-    private static void sql(String sql, String string1, String string2) {
-        try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, string1);
-            pstmt.setString(2, string2);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    /**
+//     * Used to update an entry given a certain string value.
+//     * @param sql which is going to be executed.
+//     * @param string1 new value.
+//     * @param string2 value of the entry.
+//     */
+//    private static void sql(String sql, String string, int integer) {
+//        try (Connection conn = connect();
+//             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+//            pstmt.setString(1, string);
+//            pstmt.setInt(2, integer);
+//            pstmt.executeUpdate();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     /**
      * Changes the email of a user.
      * @param newEmail new email address.
-     * @param name of the user.
+     * @param userID of the user.
      */
-    public static void changeEmail(String newEmail, String name) {
+    public static void changeEmail(String newEmail, int userID) {
         String sql = "UPDATE users SET email = ? WHERE staff_name = ?;";
-        sql(sql, newEmail, name);
+        update(sql, newEmail, userID);
     }
 
     /**
      * Changes the password of the user.
      * @param password new password of the user.
-     * @param name name of the user.
+     * @param userID of the user.
      * @param oldPassword old password of the user.
      */
-    public static void changePassword(String password, String name, String oldPassword) {
-        String sql = "UPDATE users SET password = ? WHERE staff_name = ? AND password = ?;";
+    public static void changePassword(String password, int userID, String oldPassword) {
+        String sql = "UPDATE users SET password = ? WHERE user_id = ? AND password = ?;";
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, password);
-            pstmt.setString(2, name);
+            pstmt.setInt(2, userID);
             pstmt.setString(3, oldPassword);
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -497,14 +497,24 @@ public class DatabaseCommunication {
     }
 
     /**
+     * Changes the name of a user.
+     * @param newName of the user.
+     * @param teacherID of the user.
+     */
+    public static void changeName(String newName, int teacherID) {
+        String sql = "UPDATE users SET staff_name = ? WHERE staff_name = ?";
+        update(sql, newName, teacherID);
+    }
+
+    /**
      * Sets a default faculty for the teacher.
      * @param faculty desired faculty.
-     * @param staffName name of the user.
+     * @param userID name of the user.
      */
-    public static void setDefaultFaculty(String faculty, String staffName) {
+    public static void setDefaultFaculty(String faculty, int userID) {
         String sql = "UPDATE favourites SET default_faculty = ? WHERE id IN " +
-                "(SELECT user_id FROM users WHERE staff_name = ?);";
-        sql(sql, faculty, staffName);
+                "(SELECT user_id FROM users WHERE user_id = ?);";
+        update(sql, faculty, userID);
     }
 
     /**
@@ -674,14 +684,5 @@ public class DatabaseCommunication {
         }
     }
 
-    /**
-     * Changes the name of a user.
-     * @param newName of the user.
-     * @param name of the user.
-     */
-    public static void changeName(String newName, String name) {
-        String sql = "UPDATE users SET staff_name = ? WHERE staff_name = ?";
-        sql(sql, newName, name);
-    }
 
 }

@@ -283,22 +283,22 @@ public class HorusHTTPRequests {
     /**
      * Changes the email of a user.
      * @param newEmail the user wants to have.
-     * @param userName of the user.
+     * @param userID of the user.
      * @return a response if the actions was successful or not.
      */
     @PUT
     @Path("/changeEmail")
     @Consumes("application/json")
     public Response changeEmail(@HeaderParam("newEmail") String newEmail,
-                                @HeaderParam("user") String userName) {
-        DatabaseCommunication.changeEmail(newEmail, userName);
+                                @HeaderParam("user") int userID) {
+        DatabaseCommunication.changeEmail(newEmail, userID);
         return Response.status(Response.Status.OK).build();
     }
 
     /**
      * Changes the password of user.
      * @param newPass the user wants.
-     * @param userName of the user.
+     * @param userID of the user.
      * @param oldPass of the user.
      * @return a response if the actions was successful or not.
      */
@@ -306,24 +306,24 @@ public class HorusHTTPRequests {
     @Path("/changePassword")
     @Consumes("application/json")
     public Response changePassword(@HeaderParam("newPass") String newPass,
-                                   @HeaderParam("user") String userName,
+                                   @HeaderParam("user") int userID,
                                    @HeaderParam("oldPass") String oldPass) {
-        DatabaseCommunication.changePassword(newPass, userName, oldPass);
+        DatabaseCommunication.changePassword(newPass, userID, oldPass);
         return Response.status(Response.Status.OK).build();
     }
 
     /**
      * Sets the default faculty of a teacher.
      * @param faculty which is going to be default.
-     * @param name of the teacher.
+     * @param userID of the teacher.
      * @return a response if the actions was successful or not.
      */
     @PUT
     @Path("/defaultFaculty")
     @Consumes("application/json")
     public Response setDefaultFaculty(@HeaderParam("faculty") String faculty,
-                                      @HeaderParam("user") String name) {
-        DatabaseCommunication.setDefaultFaculty(faculty, name);
+                                      @HeaderParam("user") int userID) {
+        DatabaseCommunication.setDefaultFaculty(faculty, userID);
         return Response.status(Response.Status.OK).build();
     }
 
@@ -395,14 +395,14 @@ public class HorusHTTPRequests {
     /**
      * Changes the name of a user.
      * @param newName which the user wants.
-     * @param userName old name of the user.
+     * @param userID old name of the user.
      * @return a response if the actions was successful or not.
      */
     @PUT
     @Path("/changeName")
     public Response changeName(@HeaderParam("newName") String newName,
-                                @HeaderParam("user") String userName) {
-        DatabaseCommunication.changeName(newName, userName);
+                                @HeaderParam("user") int userID) {
+        DatabaseCommunication.changeName(newName, userID);
         return Response.status(Response.Status.OK).build();
     }
 }
