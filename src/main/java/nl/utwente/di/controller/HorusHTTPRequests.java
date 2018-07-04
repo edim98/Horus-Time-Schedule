@@ -104,7 +104,9 @@ public class HorusHTTPRequests {
         } catch (InvalidKeyException e1) {
             e1.printStackTrace();
         }
-        DatabaseCommunication.checkAlreadyConnected(lecturer.getTeacherId());
+        if (DatabaseCommunication.checkAlreadyConnected(lecturer.getTeacherId())) {
+            throw new AlreadyConnectedException();
+        }
         DatabaseCommunication.addCookie(lecturer.getTeacherId(), sessionID);
         if (lecturer != null) {
             JSONObject jsonObject = new JSONObject().put("teacherID", lecturer.getTeacherId())
