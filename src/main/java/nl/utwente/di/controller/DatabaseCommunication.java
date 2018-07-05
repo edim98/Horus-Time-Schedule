@@ -5,13 +5,11 @@ import nl.utwente.di.model.Request;
 import nl.utwente.di.model.Room;
 import nl.utwente.di.model.Status;
 
+import javax.xml.ws.Response;
 import java.sql.*;
-import java.time.LocalDateTime;
+import java.util.*;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
 
 public class DatabaseCommunication {
 
@@ -85,6 +83,7 @@ public class DatabaseCommunication {
             }
             conn.setAutoCommit(true);
         }
+        conn.close();
         return rooms;
     }
 
@@ -119,6 +118,7 @@ public class DatabaseCommunication {
             request.setComments(comments);
             requests.add(request);
         }
+
         return requests;
     }
 
@@ -159,6 +159,11 @@ public class DatabaseCommunication {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -214,6 +219,11 @@ public class DatabaseCommunication {
                 e.printStackTrace();
             }
         }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -255,6 +265,11 @@ public class DatabaseCommunication {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -299,6 +314,11 @@ public class DatabaseCommunication {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return -1;
     }
@@ -346,6 +366,11 @@ public class DatabaseCommunication {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return -1;
     }
@@ -406,6 +431,11 @@ public class DatabaseCommunication {
                 e.printStackTrace();
             }
         }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -448,6 +478,11 @@ public class DatabaseCommunication {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return false;
     }
@@ -504,6 +539,11 @@ public class DatabaseCommunication {
                 e.printStackTrace();
             }
         }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         sql = "INSERT INTO favourites(id) VALUES (?);";
         try {
             conn = connect();
@@ -534,6 +574,11 @@ public class DatabaseCommunication {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -646,6 +691,11 @@ public class DatabaseCommunication {
                 e.printStackTrace();
             }
         }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -691,14 +741,19 @@ public class DatabaseCommunication {
                 e.printStackTrace();
             }
         }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Returns all the requests of a teacher.
-     * @param user name of the teacher.
+     * @param teacherID of the teacher.
      * @return requests list.
      */
-    public static List<Request> getRequests(int user) {
+    public static List<Request> getRequests(int teacherID) {
         String sql = "SELECT * FROM request WHERE teacherid = ?;";
         Connection connection = null;
         PreparedStatement pstmt = null;
@@ -706,7 +761,7 @@ public class DatabaseCommunication {
             connection = connect();
             connection.setAutoCommit(false);
             pstmt = connection.prepareStatement(sql);
-            pstmt.setInt(1, user);
+            pstmt.setInt(1, teacherID);
             ResultSet result = pstmt.executeQuery();
             connection.commit();
             return createRequestList(result);
@@ -732,6 +787,11 @@ public class DatabaseCommunication {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -776,6 +836,11 @@ public class DatabaseCommunication {
                 e.printStackTrace();
             }
         }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -795,7 +860,7 @@ public class DatabaseCommunication {
      * @param oldPassword old password of the user.
      */
     public static void changePassword(String password, int userID, String oldPassword) {
-        String sql = "UPDATE users SET password = ? WHERE user_id = ? AND password = ?;";
+        String sql = "UPDATE users SET password = ? WHERE user_id = ? AND password LIKE ?;";
         PreparedStatement pstmt = null;
         Connection conn = null;
         try {
@@ -828,6 +893,11 @@ public class DatabaseCommunication {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -912,6 +982,11 @@ public class DatabaseCommunication {
                 e.printStackTrace();
             }
         }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -956,6 +1031,11 @@ public class DatabaseCommunication {
                 e.printStackTrace();
             }
         }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -995,6 +1075,11 @@ public class DatabaseCommunication {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -1037,6 +1122,11 @@ public class DatabaseCommunication {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return 0;
     }
@@ -1095,6 +1185,11 @@ public class DatabaseCommunication {
                 e.printStackTrace();
             }
         }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -1151,6 +1246,11 @@ public class DatabaseCommunication {
                 e.printStackTrace();
             }
         }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return ids;
     }
 
@@ -1191,6 +1291,11 @@ public class DatabaseCommunication {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -1237,6 +1342,11 @@ public class DatabaseCommunication {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }

@@ -25,6 +25,8 @@ $(document).ready(function() {
 
     if(!checkPassword($('#password').val(), $('#confirm-password').val())){
       alert('Passwords do not match!');
+    } else if($('#password').val().length <=5) {
+      alert('Password must have at least 6 characters!');
     } else if(!termsAccepted()) {
       alert('Please accept the terms and conditions!');
     } else {

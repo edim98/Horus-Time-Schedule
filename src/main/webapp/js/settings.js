@@ -4,7 +4,7 @@
 // This functions handles the logout.
 function logout() {
   event.stopPropagation();
-  url = '../login.html';
+  url = './login.html';
 
   // Sends a DELETE request to the server that removes this user's session cookie.
   $.ajax({

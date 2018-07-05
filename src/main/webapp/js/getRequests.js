@@ -1,6 +1,6 @@
 // Prevent users from accessing any unauthorized webpages.
 if(!Cookies.get('relevantData')){
-  url = '../login.html';
+  url = './login.html';
   $(location).attr('href', url);
 } else {
   if(!Cookies.getJSON('relevantData').isAdmin){
@@ -22,6 +22,8 @@ function gaze(requestID) {
   })
   .done(function(data) {
     console.log(data);
+    $('#gaze-rooms').remove();
+    $('#gaze-div').append('<select id="gaze-rooms" size="1"></select>')
     $('#gaze-rooms').append('<option value="99" disabled hidden selected></option>');
     for(i = 0; i < data.length; i++) {
       $('#gaze-rooms').append('<option>'+data[i]+'</option>');

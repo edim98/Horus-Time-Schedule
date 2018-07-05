@@ -6,10 +6,10 @@ $(document).ready(function() {
   if(Cookies.get('relevantData')){
     var isAdmin = Cookies.getJSON('relevantData').isAdmin;
     if(isAdmin){
-      url='./components/admin.html';
+      url='./admin.html';
       $(location).attr('href', url);
     } else {
-      url = './components/userView.html';
+      url = './userView.html';
       $(location).attr('href', url);
     }
   }
@@ -55,10 +55,10 @@ $(document).ready(function() {
 
           // Check if the user is an admin and redirects to the proper webpage.
           if(isAdmin){
-            url='./components/admin.html';
+            url='./admin.html';
             $(location).attr('href', url);
           } else {
-            url = './components/userView.html';
+            url = './userView.html';
             $(location).attr('href', url);
           }
         } else if(result.status == 500) {

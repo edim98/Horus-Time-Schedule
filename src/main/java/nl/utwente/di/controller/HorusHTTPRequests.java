@@ -309,11 +309,13 @@ public class HorusHTTPRequests {
     public Response changePassword(@HeaderParam("newPass") String newPass,
                                    @HeaderParam("user") int userID,
                                    @HeaderParam("oldPass") String oldPass) throws PasswordStorage.InvalidHashException, PasswordStorage.CannotPerformOperationException {
-        DatabaseCommunication.changePassword(newPass, userID, oldPass);
+
         Lecturer lecturer = DatabaseCommunication.getTeacher(userID);
-        if (hashMaster.verifyPassword(oldPass, lecturer.getPassword())) {
+        if (hashMaster.verifyPassword(oldPass, new String(Base64.getDecoder().decode(lecturer.getPassword())))) {
             String newHash = hashMaster.createHash(newPass);
-            lecturer.setPassowrd(newHash);
+            newHash = Base64.getEncoder().encodeToString(newHash.getBytes());
+            DatabaseCommunication.changePassword(newHash, userID, lecturer.getPassword());
+            System.out.println(newHash);
         }
         return Response.status(Response.Status.OK).build();
     }
@@ -352,6 +354,7 @@ public class HorusHTTPRequests {
      */
     @GET
     @Path("/gazeIntoTheAbyss")
+    @Produces("application/json")
     public List<String> startGazeOfHorus(@HeaderParam("requestID") int requestID) throws SQLException {
         return Gaze.lookUpForRooms(requestID);
     }

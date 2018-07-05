@@ -2,7 +2,7 @@
 
 // Checks to see if there is an active session cookie and redirect to the proper webpage.
 if(!Cookies.get('relevantData')){
-  url = '../login.html';
+  url = './login.html';
   $(location).attr('href', url);
 } else{
   if(Cookies.getJSON('relevantData').isAdmin) {
