@@ -23,6 +23,7 @@ public class DatabaseCommunication {
         try {
             Class.forName("org.postgresql.Driver");
             Connection conn = DriverManager.getConnection(URL, "docker", "YCPP2vGfS");
+            conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             return conn;
 
         } catch (SQLException e) {
@@ -37,14 +38,18 @@ public class DatabaseCommunication {
      * Returns a map with all the rooms from the database.
      * @return room map.
      */
-    public static Map<String, Room> getRooms() {
+    public static Map<String, Room> getRooms() throws SQLException {
         Map<String, Room> rooms = new HashMap<>();
         String sql = "SELECT * FROM room";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
 
         try {
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             ResultSet result = pstmt.executeQuery();
+            conn.commit();
             while(result.next()) {
                 String roomNumber = result.getString(1);
                 String building = result.getString(2);
@@ -69,6 +74,14 @@ public class DatabaseCommunication {
             return rooms;
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                conn.rollback();
+            }
+        } finally {
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            conn.setAutoCommit(true);
         }
         return rooms;
     }
@@ -113,12 +126,37 @@ public class DatabaseCommunication {
      */
     public static List<Request> getRequests() {
         String sql = "SELECT * FROM request ORDER BY id DESC;";
-        try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)){
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             ResultSet result = pstmt.executeQuery();
+            conn.commit();
             return createRequestList(result);
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -130,8 +168,12 @@ public class DatabaseCommunication {
     public static void addNewRequest(Request request) {
         String sql = "INSERT INTO request(oldroom, olddate, newdate, teacherid, teachername, numberofstudents, requesttype, notes, coursetype, faculty, status, newroom, comms)" +
                 " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try(Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, request.getOldRoom().getRoomNumber());
             pstmt.setString(2, request.getOldDate());
             pstmt.setString(3, request.getNewDate());
@@ -146,8 +188,29 @@ public class DatabaseCommunication {
             pstmt.setString(12, request.getNewRoom());
             pstmt.setString(13, request.getComments());
             pstmt.executeUpdate();
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -158,13 +221,38 @@ public class DatabaseCommunication {
      */
     public static void addNewRequest(int requestID, String teacherID) {
         String sql = "INSERT INTO new_req VALUES(?, ?);";
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, requestID);
             pstmt.setString(2, teacherID);
             pstmt.executeUpdate();
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -175,15 +263,40 @@ public class DatabaseCommunication {
      * otherwise it returns the value.
      */
     private static int getInt(String sql) {
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             ResultSet resultSet = pstmt.executeQuery();
+            conn.commit();
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             }
             return 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return -1;
     }
@@ -196,16 +309,41 @@ public class DatabaseCommunication {
      * otherwise it returns the value.
      */
     private static int getInt(String sql, int id) {
-        try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        PreparedStatement pstmt = null;
+        Connection conn = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, id);
             ResultSet resultSet = pstmt.executeQuery();
+            conn.commit();
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             }
             return 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return -1;
     }
@@ -227,11 +365,16 @@ public class DatabaseCommunication {
      */
     public static Lecturer getUSer(String id) {
         String sql = "SELECT * FROM users  WHERE email = ?;";
+        PreparedStatement pstmt = null;
+        Connection conn = null;
         Lecturer l;
-        try(Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             ResultSet resultSet = pstmt.executeQuery();
+            conn.commit();
             if (resultSet.next()) {
                 l = new Lecturer(resultSet.getInt("user_id"), resultSet.getString("staff_name"), resultSet.getString("email"));
                 l.setPassowrd(resultSet.getString("password"));
@@ -240,6 +383,26 @@ public class DatabaseCommunication {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -251,13 +414,38 @@ public class DatabaseCommunication {
      * @return true if the value exists, false otherwise.
      */
     public static boolean check(String sql, String check) {
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, check);
             ResultSet resultSet = pstmt.executeQuery();
+            conn.commit();
             return resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -278,24 +466,72 @@ public class DatabaseCommunication {
      */
     public static void addNewUser(Lecturer lecturer) {
         String sql = "INSERT INTO users VALUES(?, ?, ?, ?, ?)";
-        try(Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        PreparedStatement pstmt = null;
+        Connection conn = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, lecturer.getTeacherId());
             pstmt.setString(2, lecturer.getEmail());
             pstmt.setString(3, lecturer.getPassword());
             pstmt.setString(4, lecturer.getName());
             pstmt.setBoolean(5, lecturer.isTimetabler());
             pstmt.executeUpdate();
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         sql = "INSERT INTO favourites(id) VALUES (?);";
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, lecturer.getTeacherId());
             pstmt.executeUpdate();
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -308,16 +544,6 @@ public class DatabaseCommunication {
         String sql = "SELECT FROM room WHERE room_number = ?;";
         return check(sql, roomNr);
     }
-
-//    public static void change() {
-//        String sql = "UPDATE request SET status = 'pending'";
-//        try(Connection conn = connect();
-//            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-//                pstmt.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     /**
      * Returns all the request that have pending as status.
@@ -385,13 +611,38 @@ public class DatabaseCommunication {
      */
     public static void changeRequestStatus(Status status, int id) {
         String sql = "UPDATE request SET status = ? WHERE id = ? AND status = 'pending'";
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, status.toString());
             pstmt.setInt(2, id);
             pstmt.executeUpdate();
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -404,14 +655,39 @@ public class DatabaseCommunication {
         String sql = "INSERT INTO request_handling VALUES(?, ?, ?)";
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime now = LocalDateTime.now();
-        try(Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, requestID);
             pstmt.setString(2, dtf.format(now));
             pstmt.setInt(3, userID);
             pstmt.executeUpdate();
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -422,13 +698,38 @@ public class DatabaseCommunication {
      */
     public static List<Request> getRequests(String user) {
         String sql = "SELECT * FROM request WHERE teachername = ?;";
-        try (Connection connection = connect();
-            PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        try {
+            connection = connect();
+            connection.setAutoCommit(false);
+            pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, user);
             ResultSet result = pstmt.executeQuery();
+            connection.commit();
             return createRequestList(result);
         } catch (SQLException e) {
             e.printStackTrace();
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -440,71 +741,113 @@ public class DatabaseCommunication {
      * @param userID id of the entry.
      */
     private static void update(String sql, String change, int userID) {
-        try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, change);
             pstmt.setInt(2, userID);
             pstmt.executeUpdate();
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * Used to update an entry given a certain string value.
-     * @param sql which is going to be executed.
-     * @param string1 new value.
-     * @param string2 value of the entry.
-     */
-    private static void sql(String sql, String string1, String string2) {
-        try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, string1);
-            pstmt.setString(2, string2);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     /**
      * Changes the email of a user.
      * @param newEmail new email address.
-     * @param name of the user.
+     * @param userID of the user.
      */
-    public static void changeEmail(String newEmail, String name) {
+    public static void changeEmail(String newEmail, int userID) {
         String sql = "UPDATE users SET email = ? WHERE staff_name = ?;";
-        sql(sql, newEmail, name);
+        update(sql, newEmail, userID);
     }
 
     /**
      * Changes the password of the user.
      * @param password new password of the user.
-     * @param name name of the user.
+     * @param userID of the user.
      * @param oldPassword old password of the user.
      */
-    public static void changePassword(String password, String name, String oldPassword) {
-        String sql = "UPDATE users SET password = ? WHERE staff_name = ? AND password = ?;";
-        try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    public static void changePassword(String password, int userID, String oldPassword) {
+        String sql = "UPDATE users SET password = ? WHERE user_id = ? AND password = ?;";
+        PreparedStatement pstmt = null;
+        Connection conn = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, password);
-            pstmt.setString(2, name);
+            pstmt.setInt(2, userID);
             pstmt.setString(3, oldPassword);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    /**
+     * Changes the name of a user.
+     * @param newName of the user.
+     * @param teacherID of the user.
+     */
+    public static void changeName(String newName, int teacherID) {
+        String sql = "UPDATE users SET staff_name = ? WHERE staff_name = ?";
+        update(sql, newName, teacherID);
     }
 
     /**
      * Sets a default faculty for the teacher.
      * @param faculty desired faculty.
-     * @param staffName name of the user.
+     * @param userID name of the user.
      */
-    public static void setDefaultFaculty(String faculty, String staffName) {
+    public static void setDefaultFaculty(String faculty, int userID) {
         String sql = "UPDATE favourites SET default_faculty = ? WHERE id IN " +
-                "(SELECT user_id FROM users WHERE staff_name = ?);";
-        sql(sql, faculty, staffName);
+                "(SELECT user_id FROM users WHERE user_id = ?);";
+        update(sql, faculty, userID);
     }
 
     /**
@@ -534,13 +877,38 @@ public class DatabaseCommunication {
      */
     public static void addCookie(int user_id, String cookie) {
         String sql = "INSERT INTO cookies VALUES(?, ?);";
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, user_id);
             pstmt.setString(2, cookie);
             pstmt.executeUpdate();
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -549,17 +917,43 @@ public class DatabaseCommunication {
      * @param userID of the user.
      * @return true if the user is connected, false otherwise.
      */
-    public static boolean checkAlreadyConnected(int userID) {
+    public static void checkAlreadyConnected(int userID) {
         String sql = "SELECT user_id FROM cookies WHERE user_id = ?;";
-        try (Connection connection = connect();
-            PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        try {
+            connection = connect();
+            connection.setAutoCommit(false);
+            pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, userID);
             ResultSet resultSet = pstmt.executeQuery();
-            return resultSet.next();
+            connection.commit();
+            if (resultSet.next()) {
+                deletCookie(userID);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return false;
     }
 
     /**
@@ -568,12 +962,37 @@ public class DatabaseCommunication {
      */
     public static void deletCookie(int userID) {
         String sql = "DELETE FROM cookies WHERE user_id = ?";
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try  {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, userID);
             pstmt.executeUpdate();
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -583,14 +1002,39 @@ public class DatabaseCommunication {
      * @return the id.
      */
     private static int getLastID(String sql) {
-        try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             ResultSet resultSet = pstmt.executeQuery();
+            conn.commit();
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return 0;
     }
@@ -614,15 +1058,40 @@ public class DatabaseCommunication {
      */
     public static void addSupport(int id, String email, String head, String body) {
         String sql = "INSERT INTO support VALUES(?, ?, ?, ?);";
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, id);
             pstmt.setString(2, email);
             pstmt.setString(3, head);
             pstmt.setString(4, body);
             pstmt.executeUpdate();
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -644,16 +1113,41 @@ public class DatabaseCommunication {
     public static List<Integer> getNewRequests(String teacherID) {
         String sql = "SELECT rid FROM new_req WHERE email = ?;";
         List<Integer> ids = new ArrayList<>();
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        PreparedStatement pstmt = null;
+        Connection conn = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, teacherID);
             ResultSet resultSet = pstmt.executeQuery();
+            conn.commit();
             while (resultSet.next()) {
                 ids.add(resultSet.getInt(1));
             }
             return ids;
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return ids;
     }
@@ -664,23 +1158,92 @@ public class DatabaseCommunication {
      */
     public static void deleteNewRequests(String teacherID) {
         String sql = "DELETE FROM new_req WHERE email = ?";
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, teacherID);
             pstmt.executeUpdate();
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    /**
-     * Changes the name of a user.
-     * @param newName of the user.
-     * @param name of the user.
-     */
-    public static void changeName(String newName, String name) {
-        String sql = "UPDATE users SET staff_name = ? WHERE staff_name = ?";
-        sql(sql, newName, name);
+    public static Lecturer getTeacher(int userID) {
+        String sql = "SELECT * FROM users WHERE user_id = ?;";
+        PreparedStatement pstmt = null;
+        Connection conn = null;
+        try {
+            conn = connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, userID);
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                String email = resultSet.getString(2);
+                String password = resultSet.getString(3);
+                String name = resultSet.getString(4);
+                boolean isTimetabler = resultSet.getBoolean(5);
+                Lecturer l = new Lecturer(id, name, email);
+                l.setTimetabler(isTimetabler);
+                l.setPassowrd(password);
+                return l;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        List<Request> requests = DatabaseCommunication.getRequests();
+        for (Request search : requests) {
+            System.out.println(search.getId());
+        }
     }
 
 }
