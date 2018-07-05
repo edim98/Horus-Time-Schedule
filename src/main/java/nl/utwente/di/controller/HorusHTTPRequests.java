@@ -49,7 +49,7 @@ public class HorusHTTPRequests {
     @GET
     @Path("/user")
     @Produces("application/json")
-    public List<Request> getRequest(@HeaderParam("user") String user) {
+    public List<Request> getRequest(@HeaderParam("user") int user) {
         return DatabaseCommunication.getRequests(user);
     }
 
@@ -352,7 +352,7 @@ public class HorusHTTPRequests {
      */
     @GET
     @Path("/gazeIntoTheAbyss")
-    public List<String> startGazeOfHorus(@HeaderParam("requestID") int requestID) {
+    public List<String> startGazeOfHorus(@HeaderParam("requestID") int requestID) throws SQLException {
         return Gaze.lookUpForRooms(requestID);
     }
 

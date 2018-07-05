@@ -89,14 +89,14 @@ $('#settings-button').on('click', function(event){
   if($('#settingsOptions option:selected').text() == 'Password'){
     var oldPassword = $('#old-psw-input').val();
     var newPassword = $('#new-psw-input').val();
-    var user = Cookies.getJSON('relevantData').name;
+    var userID = Cookies.getJSON('relevantData').teacherID;
     $.ajax({
       url: '/horus/requests/changePassword',
       type: 'PUT',
       dataType: 'json',
       headers:{
         'newPass' : newPassword,
-        'user' : user,
+        'user' : userID,
         'oldPass' : oldPassword
       },
       complete: function(result){
@@ -120,7 +120,7 @@ $('#settings-button').on('click', function(event){
       dataType: 'json',
       headers :{
         'newEmail' : email,
-        'user' : Cookies.getJSON('relevantData').name
+        'user' : Cookies.getJSON('relevantData').teacherID
       },
       complete: function(result) {
         if(result.status == 200) {
@@ -145,7 +145,7 @@ $('#settings-button').on('click', function(event){
       dataType: 'json',
       headers :{
         'newName' : name,
-        'user' : Cookies.getJSON('relevantData').name
+        'user' : Cookies.getJSON('relevantData').teacherID
       },
       complete: function(result) {
         if(result.status == 200) {

@@ -9,6 +9,32 @@ if(!Cookies.get('relevantData')){
   }
 }
 
+function gaze(requestID) {
+  $.ajax({
+    url: '/horus/requests/gazeIntoTheAbyss',
+    type: 'GET',
+    dataType: 'json',
+    headers : {
+      'Accept' : 'application/json',
+      'Content-Type' : 'application/json',
+      'requestID' : requestID
+    }
+  })
+  .done(function(data) {
+    console.log(data);
+    $('#gaze-rooms').append('<option value="99" disabled hidden selected></option>');
+    for(i = 0; i < data.length; i++) {
+      $('#gaze-rooms').append('<option>'+data[i]+'</option>');
+    }
+  })
+  .fail(function(error) {
+    console.log("error: " + error.status + " " + error.errorMessage);
+  })
+  .always(function() {
+  });
+
+}
+
 // This template constructs a table row for a new request which will be latter shown in the dashboard.
 function templateNew(teacherName, type, courseType, oldDate, newDate, id, teacherID, oldRoom, numberOfStudents, status, notes) {
   var html = '<tr class="tr-shadow" request-entry>' +
@@ -121,6 +147,7 @@ $(document).ready(function() {
         // Display different modals if the request requires a new room or not.
         if(thisType == 'reschedule'){
           $('#accept-modal').modal('toggle');
+          gaze(thisID);
         } else if(thisType == 'cancel'){
           $('#accept2-modal').modal('toggle');
         }

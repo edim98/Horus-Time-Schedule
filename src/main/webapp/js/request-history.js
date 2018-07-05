@@ -56,7 +56,7 @@ function templateHistory(oldRoom, oldDate, newDate, type, status, id, courseType
 $(document).ready(function() {
 
   var cookie = Cookies.getJSON('relevantData');
-  var name = cookie.name;
+  var userid = cookie.teacherID;
 
   //Send a GET request to the server that retrieves all this user's requests.
   $.ajax({
@@ -66,7 +66,7 @@ $(document).ready(function() {
     headers: {
       'Accept' : 'application/json',
       'Content-Type' : 'application/json',
-      'user' : name
+      'user' : userid
     },
   })
   .done(function(data) {

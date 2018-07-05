@@ -16,7 +16,7 @@ public class Gaze {
      * @param requestID of the request.
      * @return list of strings which are the room number.
      */
-    public static List<String> lookUpForRooms(int requestID) {
+    public static List<String> lookUpForRooms(int requestID) throws SQLException {
         Map<String, Double> map = new HashMap<>();
         String date = null;
         String sql = "SELECT newdate FROM request WHERE id = ?;";

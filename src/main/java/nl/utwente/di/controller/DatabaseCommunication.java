@@ -5,11 +5,13 @@ import nl.utwente.di.model.Request;
 import nl.utwente.di.model.Room;
 import nl.utwente.di.model.Status;
 
-import javax.xml.ws.Response;
 import java.sql.*;
-import java.util.*;
-import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DatabaseCommunication {
 
@@ -696,15 +698,15 @@ public class DatabaseCommunication {
      * @param user name of the teacher.
      * @return requests list.
      */
-    public static List<Request> getRequests(String user) {
-        String sql = "SELECT * FROM request WHERE teachername = ?;";
+    public static List<Request> getRequests(int user) {
+        String sql = "SELECT * FROM request WHERE teacherid = ?;";
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
             connection = connect();
             connection.setAutoCommit(false);
             pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, user);
+            pstmt.setInt(1, user);
             ResultSet result = pstmt.executeQuery();
             connection.commit();
             return createRequestList(result);
@@ -782,7 +784,7 @@ public class DatabaseCommunication {
      * @param userID of the user.
      */
     public static void changeEmail(String newEmail, int userID) {
-        String sql = "UPDATE users SET email = ? WHERE staff_name = ?;";
+        String sql = "UPDATE users SET email = ? WHERE user_id = ?;";
         update(sql, newEmail, userID);
     }
 
@@ -835,7 +837,7 @@ public class DatabaseCommunication {
      * @param teacherID of the user.
      */
     public static void changeName(String newName, int teacherID) {
-        String sql = "UPDATE users SET staff_name = ? WHERE staff_name = ?";
+        String sql = "UPDATE users SET staff_name = ? WHERE user_id = ?";
         update(sql, newName, teacherID);
     }
 
