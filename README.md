@@ -62,10 +62,10 @@ Default version: 1.8.
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details
 
-## Ongoing bugs
+## Latest bug fixes
 
-* "Gaze of Horus" is still under development.
-* The settings are functional, but there is a bug where requests can't be found after changing the name.
-* Unable to change the password do to a security reason.
-* If not logging out, the session cookies will not be deleted from the database and the user will be unable to log in.
+* "Gaze of Horus" was implemented, but it is still in testing phase.
+* User and admin settings have been fixed..
+* The password change security issue has been properly addressed.
+* All the cookies bugs have been fixed. It is now possible to login at all times, even if there is already a connection opened on another client.
 * Small UI tweaks.
