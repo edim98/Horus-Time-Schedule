@@ -55,6 +55,7 @@ public class Gaze {
                 e.printStackTrace();
             }
         }
+        conn.close();
 
         long timestamp = Date.parse(date);
 //        System.out.println(timestamp);
@@ -87,7 +88,6 @@ public class Gaze {
                 list.sort(Map.Entry.comparingByValue());
                 for (Map.Entry<String, Double> search : list) {
                     roomsList.add(search.getKey());
-                    System.out.println(search.getKey());
                 }
                 return roomsList;
             } catch (SQLException e) {
@@ -113,6 +113,7 @@ public class Gaze {
                 e.printStackTrace();
             }
         }
+        conn.close();
         return null;
     }
 }

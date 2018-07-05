@@ -354,6 +354,7 @@ public class HorusHTTPRequests {
      */
     @GET
     @Path("/gazeIntoTheAbyss")
+    @Produces("application/json")
     public List<String> startGazeOfHorus(@HeaderParam("requestID") int requestID) throws SQLException {
         return Gaze.lookUpForRooms(requestID);
     }
