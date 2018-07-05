@@ -21,6 +21,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
+import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -137,7 +138,7 @@ public class HorusHTTPRequests {
      */
     @POST
     @Consumes("application/json")
-    public void addRequest(String requestString) throws InvalidInputException {
+    public void addRequest(String requestString) throws InvalidInputException, SQLException {
         JSONObject jsonObject = new JSONObject(requestString);
         if (!checkValidRequestJSON(jsonObject)) {
             throw new InvalidInputException();
@@ -307,8 +308,13 @@ public class HorusHTTPRequests {
     @Consumes("application/json")
     public Response changePassword(@HeaderParam("newPass") String newPass,
                                    @HeaderParam("user") int userID,
-                                   @HeaderParam("oldPass") String oldPass) {
+                                   @HeaderParam("oldPass") String oldPass) throws PasswordStorage.InvalidHashException, PasswordStorage.CannotPerformOperationException {
         DatabaseCommunication.changePassword(newPass, userID, oldPass);
+        Lecturer lecturer = DatabaseCommunication.getTeacher(userID);
+        if (hashMaster.verifyPassword(oldPass, lecturer.getPassword())) {
+            String newHash = hashMaster.createHash(newPass);
+            lecturer.setPassowrd(newHash);
+        }
         return Response.status(Response.Status.OK).build();
     }
 
