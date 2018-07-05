@@ -16,19 +16,44 @@ public class Gaze {
      * @param requestID of the request.
      * @return list of strings which are the room number.
      */
-    public static List<String> lookUpForRooms(int requestID) {
+    public static List<String> lookUpForRooms(int requestID) throws SQLException {
         Map<String, Double> map = new HashMap<>();
         String date = null;
         String sql = "SELECT newdate FROM request WHERE id = ?;";
-        try (Connection conn = DatabaseCommunication.connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = DatabaseCommunication.connect();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, requestID);
             ResultSet resultSet = pstmt.executeQuery();
+            conn.commit();
             if (resultSet.next()) {
                 date = resultSet.getString(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         long timestamp = Date.parse(date);
@@ -39,11 +64,14 @@ public class Gaze {
                     "(SELECT activity_id FROM activities WHERE location LIKE r.room_number AND startdate = ?)";
             Map<String, Room> roomMap = DatabaseCommunication.getRooms();
             Gps oldRoomCoordinates = null;
-            try (Connection connection = DatabaseCommunication.connect();
-                 PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            try {
+                conn = DatabaseCommunication.connect();
+                conn.setAutoCommit(false);
+                pstmt = conn.prepareStatement(sql);
                 pstmt.setInt(1, requestID);
                 pstmt.setLong(2, timestamp);
                 ResultSet resultSet = pstmt.executeQuery();
+                conn.commit();
                 if (resultSet.next()) {
                     oldRoomCoordinates = roomMap.get(resultSet.getString(3)).getCoordinates();
                 }
@@ -63,8 +91,28 @@ public class Gaze {
                 }
                 return roomsList;
             } catch (SQLException e) {
+            e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
         return null;
     }
 }
