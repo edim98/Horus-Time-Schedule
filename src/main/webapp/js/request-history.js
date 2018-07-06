@@ -19,7 +19,7 @@ function templatePending(oldRoom, oldDate, newDate, type, status, id, courseType
   '<td>'+newDate+'</td>'+
   '<td>'+type+'</td>'+
   '<td>'+status+'</td>'+
-  '<td><button type="button" class="btn btn-secondary show-info">+</button></td></tr>'+
+  '<td><button type="button" class="btn btn-secondary show-info"><i class="fa fa-angle-down"></i></button></td></tr>'+
   '<tr class="tr-shadow hidden-info" style="display: none">'+
   '<td colspan="6">'+
   '<div><ul>'+
@@ -37,7 +37,7 @@ function templateHistory(oldRoom, oldDate, newDate, type, status, id, courseType
   '<td class="h-old-room">'+oldRoom+'</td>'+
   '<td class="h-new-room">'+newRoom+'</td>'+
   '<td class="h-status">'+status+'</td>'+
-  '<td><button type="button" class="btn btn-secondary show-info">+</button></td></tr>'+
+  '<td><button type="button" class="btn btn-secondary show-info"><i class="fa fa-angle-down"></i></button></td></tr>'+
   '<tr class="tr-shadow hidden-info" style="display: none">'+
   '<td colspan="4">'+
   '<div><ul>'+
@@ -132,7 +132,7 @@ $(document).ready(function() {
       $(this).hide();
     });
     $(this).find('.show-info').each(function(index){
-      $(this).text('+');
+    //  $(this).append('<i class="fa fa-angle-down"></i>');
     });
   });
 

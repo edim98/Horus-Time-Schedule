@@ -24,7 +24,7 @@ function gaze(requestID) {
     console.log(data);
     $('#gaze-rooms').remove();
     $('#gaze-div').append('<select id="gaze-rooms" size="1"></select>')
-    $('#gaze-rooms').append('<option value="99" disabled hidden selected></option>');
+    $('#gaze-rooms').append('<option value="99"></option>');
     for(i = 0; i < data.length; i++) {
       $('#gaze-rooms').append('<option>'+data[i]+'</option>');
     }
@@ -45,7 +45,7 @@ function templateNew(teacherName, type, courseType, oldDate, newDate, id, teache
   '<td>'+courseType+'</td>'+
   '<td>'+oldDate+'</td>'+
   '<td>'+newDate+'</td>'+
-  '<td><button type="button" class="btn btn-secondary show-info">+</button></td></tr>' +
+  '<td><button type="button" class="btn btn-secondary show-info"><i class="fa fa-angle-down"></i></button></td></tr>' +
   '<tr class="tr-shadow hidden-info" style="display:none">'+
   '<td colspan="6">'+
   '<div><ul>'+
@@ -69,7 +69,7 @@ function templateHistory(teacherName, type, courseType, oldDate, newDate, id, te
   '<td>'+courseType+'</td>'+
   '<td>'+oldDate+'</td>'+
   '<td>'+newDate+'</td>'+
-  '<td><button type="button" class="btn btn-secondary show-info">+</button></td></tr>' +
+  '<td><button type="button" class="btn btn-secondary show-info"><i class="fa fa-angle-down"></i></button></td></tr>' +
   '<tr class="tr-shadow hidden-info" style="display:none">'+
   '<td colspan="6">'+
   '<div><ul>'+
@@ -165,6 +165,10 @@ $(document).ready(function() {
       $('.accept-request').off().on('click', function(event){
         event.stopPropagation();
         var newRoom = $(this).closest('.modal-content').find('.new-room option:selected').val();
+        var gazeRoom = $('#gaze-rooms option:selected').val();
+        if(gazeRoom != 99) {
+          newRoom = gazeRoom;
+        }
         var otherDetails = $(this).closest('.modal-content').find('.other-details').val();
         var userID = Cookies.getJSON('relevantData').teacherID;
         var teacherID;
